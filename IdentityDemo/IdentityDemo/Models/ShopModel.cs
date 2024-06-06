@@ -6,24 +6,25 @@ namespace IdentityDemo.Models
     [Table("shop")]
     public class ShopModel
     {
+        [Key]
         [Column("id")]
-        [Required]
+        //[Required]
         public int ShopId { get; set; }
         [Column("name")]
-        [Required]
+        //[Required]
         public string ShopName { get; set; }
         [Column("description")]
-        [Required]
+        //[Required]
         public string ShopDescription { get; set; }
         [Column("phone")]
-        [Required]
+        //[Required]
         public string ShopPhone{ get; set; }
         [Column("email")]
-        [Required]
+       // [Required]
         public string ShopEmail{ get; set;}
         [Column("address")]
-        [Required]
-        public string Address { get; set; }
+        //[Required]
+        public string ShopAddress { get; set; }
 
     }
 }

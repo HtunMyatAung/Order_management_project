@@ -1,0 +1,32 @@
+﻿@model UpdateUserViewModel
+
+<h2>Update Profile</h2>
+
+<form asp-action="UpdateProfile" method="post">
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="UserName"></label>
+        <input asp-for="UserName" class="form-control" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="UserPhone"></label>
+        <input asp-for="UserPhone" class="form-control" />
+        <span asp-validation-for="UserPhone" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Useraddress"></label>
+        <input asp-for="Useraddress" class="form-control" />
+        <span asp-validation-for="Useraddress" class="text-danger"></span>
+    </div>
+    <!-- Add other fields as needed -->
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

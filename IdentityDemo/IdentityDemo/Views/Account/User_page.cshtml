@@ -3,11 +3,15 @@
 *@
 @{
 }
-@model IdentityDemo.Models.UserViewModel
+@model IdentityDemo.ViewModels.UserViewModel
 
 @if (User.Identity.IsAuthenticated)
 {
     <p>Welcome, @User.Identity.Name!</p>
+    <form method="post" action="/Account/Logout">
+        <button type="submit">Logout</button>
+    </form>
+
 }
 else
 {

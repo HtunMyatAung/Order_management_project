@@ -1,4 +1,4 @@
-﻿namespace IdentityDemo.Models
+﻿namespace IdentityDemo.ViewModels
 {
     public class UserViewModel
     {

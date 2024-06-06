@@ -1,0 +1,61 @@
+﻿@model IEnumerable<IdentityDemo.Models.ApplicationUser>
+@{
+    Layout = "_Admin_layout";
+    int counter = 1;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Table</title>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+    <style>
+        /* Optional CSS for custom styling */
+        #example_wrapper {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        <table id="shoptable" class="display" style="width:100%">
+            <thead>
+                <tr style="text-align: center;">
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Reset Password</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var shop in Model)
+                {
+                    <tr style="text-align: center;">
+                        <td>@counter</td>
+                        <td>@shop.UserName</td>
+                        <td>
+                            <button class="fas fa-check-circle"></button>
+                            <button class="fas fa-times-circle"></button>
+                        </td>
+                    </tr>
+                    counter += 1;
+                    <!-- Add more rows with data as needed -->
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- DataTables JS -->
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script>
+        // Initialize DataTable
+        $(document).ready(function () {
+            $('#shoptable').DataTable();
+        });
+    </script>
+</body>
+</html>
