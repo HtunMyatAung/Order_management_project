@@ -1,0 +1,19 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IdentityDemo.Models.UserViewModel
+
+@if (User.Identity.IsAuthenticated)
+{
+    <p>Welcome, @User.Identity.Name!</p>
+}
+else
+{
+    <div>
+        <a href="~/Account/Login">Sign In</a>
+        <span> or </span>
+        <a href="~/Account/Register">Register</a>
+    </div>
+}
