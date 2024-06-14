@@ -1,0 +1,196 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Home Page";
+    ApplicationUser currentUser = await UserManager.GetUserAsync(User);
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Shop</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+    @RenderSection("Shopidcss", required: false)
+    <style>
+        /* Reset some default styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        .header {
+            background: #000;
+            color: #fff;
+            padding: 20px 0;
+            position: -webkit-sticky; /* Safari */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+        }
+
+        .logo {
+            float: left;
+        }
+
+        .navbar {
+            float: right;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            margin-right: 0px;
+        }
+
+            .nav-links li {
+                margin-left: 50px;
+                white-space: nowrap;
+            }
+
+            .nav-links a {
+                color: #fff;
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+
+                
+
+        .hero {
+            background: url('hero.jpg') center/cover no-repeat;
+            color: #fff;
+            text-align: center;
+            padding: 100px 0;
+        }
+
+            .hero h2 {
+                font-size: 3em;
+                margin-bottom: 20px;
+            }
+
+        .btn {
+            display: inline-block;           
+            
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+            
+
+        .products {
+            padding: 50px 0;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 20px;
+        }
+
+        .product {
+            text-align: center;
+        }
+
+            .product img {
+                width: 100%;
+                border-radius: 5px;
+                margin-bottom: 10px;
+            }
+
+        .footer {
+            background: #000;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 20px;
+        }
+
+        .user-image {
+            width: 50px; /* Adjust the width as needed */
+            height: 50px; /* Adjust the height as needed */
+            border-radius: 50%; /* Creates a circular shape */
+            object-fit: cover; /* Ensures the image fills the circle without stretching */
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">uab zone</h1>
+            <nav class="navbar">
+                <ul class="nav-links">
+                    @*<li>@User.Identity.Name</li>*@
+                    <li><a href="@Url.Action("Test64","Home")">Home</a></li>
+                    <li><a href="@Url.Action("HomePageItems","Item")">Shop</a></li>
+                    <li><a href="@Url.Action("Privacy","Home")">about</a></li>
+                    <li><a href="@Url.Action("Admin_user_list", "AdminControl")">Contact</a></li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
+                                <img src="../../dist/img/avatar.png" alt="User Image" class="user-image">
+                                
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @if (currentUser.Role == "Admin")
+                                {
+                                    <a class="dropdown-item" href="/AdminControl/Admin_dashboard">Admin Dashboard</a>
+                                }
+                                else if (currentUser.Role == "Owner")
+                                {
+                                    <a class="dropdown-item" href="/Shop/Owner_Index">Owner Dashboard</a>
+                                }
+                                else
+                                {
+                                    <a class="dropdown-item" href="/Account/User_profile">Profile</a>
+                                }
+
+                                <div class="dropdown-divider"></div>
+                                <form asp-controller="Account" asp-action="Logout" method="post">
+                                    <button type="submit" class="dropdown-item">Logout</button>
+                                </form>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        
+                        <li><a href="@Url.Action("Login", "Account")">Login</a></li>
+                    }
+
+                </ul>
+            </nav>
+        </div>
+    </header>
+    @RenderBody()
+    
+    @RenderSection("Scripts", required: false)
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    @*
+    *@
+</body>
+</html>

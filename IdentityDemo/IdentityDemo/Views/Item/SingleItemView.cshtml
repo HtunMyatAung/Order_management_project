@@ -1,0 +1,33 @@
+﻿@model IdentityDemo.Models.ItemModel
+@{
+    Layout = "_Zone_layout";
+}
+
+    <link rel="stylesheet" href="~/css/productdetail.css">
+
+<div class="container-fluid">
+    <div class="container">
+        <div class="box">
+            <div class="images">
+                <div class="img-holder active">
+                    <img src="~/img/bg2.jpg">
+                </div>
+                
+            </div>
+            <div class="basic-info">
+                <h1>@Model.ItemName</h1>
+                
+                <span>$<s>@Model.ItemPrice</s>&nbsp;@Model.ItemChangedPrice</span>
+                <div class="options">
+                    <a href="#">Buy It Now</a>
+                    <a href="#">Cancel</a>
+                </div>
+            </div>
+            <div class="description">
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Natus temporibus corporis repudiandae, consectetur nostrum nisi commodi placeat rerum molestias numquam nihil accusantium deleniti! Enim, nesciunt a quis amet hic officia. Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae nemo accusantium tempora facere doloremque cum iusto, ut neque, fuga omnis libero laborum ullam. At dolorum qui atque labore illo dignissimos.</p>
+            </div>
+        </div>
+    </div>
+    
+</div>
+

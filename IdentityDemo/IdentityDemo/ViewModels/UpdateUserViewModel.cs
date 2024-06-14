@@ -4,18 +4,30 @@ namespace IdentityDemo.ViewModels
 {
     public class UpdateUserViewModel
     {
-        [Required]
+        public string? Id { get; set; }
         [EmailAddress]
         [Display(Name = "Email")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Display(Name = "First Name")]
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
 
         [Display(Name = "phone")]
-        public string UserPhone { get; set; }
-        public string Useraddress { get; set; }
-        public string Password { get; set; }
+        public string? UserPhone { get; set; }
+        public string? Useraddress { get; set; }
+        public string? Role { get; set; }
+        //[Required]
+        [DataType(DataType.Password)]
+        public string? OldPassword { get; set; }
+
+        //[Required]
+        [DataType(DataType.Password)]
+        public string? NewPassword { get; set; }
+
+       // [Required]
+        [DataType(DataType.Password)]
+        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        public string? ConfirmPassword { get; set; }
 
         // Add other properties as needed
     }

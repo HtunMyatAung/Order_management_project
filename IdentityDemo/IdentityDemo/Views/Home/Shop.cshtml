@@ -1,0 +1,57 @@
+﻿@{
+    Layout = "_Zone_layout";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChartJS Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Apply fixed height to chart container */
+        .chart-container {
+            height: 400px; /* Adjust the height as needed */
+        }
+    </style>
+</head>
+<body>
+    <!-- Add the chart container for the Area Chart -->
+    <div class="chart-container">
+        <h2>Area Chart</h2>
+        <canvas id="areaChart"></canvas>
+    </div>
+
+    <!-- Include JavaScript code for the Area Chart only -->
+    <script>
+        // Data for Area Chart
+        const areaChartData = {
+            labels: ["January", "February", "March", "April", "May"],
+            datasets: [
+                {
+                    label: "Dataset",
+                    data: [20, 50, 30, 70, 40],
+                    backgroundColor: "rgba(54, 162, 235, 0.5)",
+                    borderColor: "rgb(54, 162, 235)",
+                    fill: true,
+                },
+            ],
+        };
+
+        // Options for the Area Chart
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            // Add other options here
+        };
+
+        // Create the Area Chart
+        const areaChartCtx = document.getElementById("areaChart").getContext("2d");
+        new Chart(areaChartCtx, {
+            type: "line", // Change to "bar" or other chart types if needed
+            data: areaChartData,
+            options: chartOptions,
+        });
+    </script>
+</body>
+</html>

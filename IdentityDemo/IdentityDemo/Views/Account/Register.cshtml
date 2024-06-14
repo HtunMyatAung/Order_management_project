@@ -1,89 +1,148 @@
 ﻿@model IdentityDemo.ViewModels.RegisterViewModel
 @{
     ViewData["Title"] = "Register";
+    Layout = null;
 }
 
-<h1>Register</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="~/css/style.css"> <!-- Your custom CSS file -->
+    <style>
+        body {
+            margin-top: 0px;
+            background-color: #f8f9fa;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
 
-<hr />
+        .github-login-form {
+            margin-top: 40px; /* Reduced margin-top */
+            padding: 12px; /* Further reduced padding */
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            background-color: #fff;
+            width: 80%;
+            margin: auto; /* Center align */
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1); /* Slightly lighter shadow */
+        }
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-controller="Account" asp-action="Register" method="post">
-    <div class="form-group">
-        <label asp-for="Email">Email</label>
-        <input type="email" class="form-control" asp-for="Email" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-            <div class="form-group">
-                <label asp-for="Address">Address</label>
-                <input type="text" class="form-control" asp-for="Address" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-    <div class="form-group">
-        <label asp-for="Password">Password</label>
-        <input type="password" class="form-control" asp-for="Password" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="ConfirmPassword">Confirm Password</label>
-        <input type="password" class="form-control" asp-for="ConfirmPassword" />
-        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-    </div>
-            <div class="form-group">
-                <label>Register as:</label>
-                <div class="form-check">
-                    <input type="radio" id="user" name="registerAs" value="User" class="form-check-input" checked>
-                    <label for="user" class="form-check-label">User</label>
-                </div>
-                <div class="form-check">
-                    <input type="radio" id="shopOwner" name="registerAs" value="ShopOwner" class="form-check-input">
-                    <label for="shopOwner" class="form-check-label">Shop Owner</label>
-                </div>
-            </div>
-            
-            <div id="shopOwnerFields" style="display: none;">
-                <input asp-for="ShopId" hidden value="1"/>
-                <
-                <div class="form-group">
-                    <label asp-for="ShopName">Shop Name</label>
-                    <input type="text" class="form-control" asp-for="ShopName" />
-                    <span asp-validation-for="ShopName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ShopPhone">Shop Phone</label>
-                    <input type="text" class="form-control" asp-for="ShopPhone" />
-                    <span asp-validation-for="ShopPhone" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ShopDescription">Shop Description</label>
-                    <textarea class="form-control" asp-for="ShopDescription"></textarea>
-                    <span asp-validation-for="ShopDescription" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ShopEmail">Shop Email</label>
-                    <input type="text" class="form-control" asp-for="ShopEmail" />
-                    <span asp-validation-for="ShopEmail" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ShopAddress">Shop Address</label>
-                    <input type="text" class="form-control" asp-for="ShopAddress" />
-                    <span asp-validation-for="ShopAddress" class="text-danger"></span>
-                </div>
-            </div>*
+        .github-label {
+            font-weight: 400;
+            color: #495057;
+            font-size: 13px; /* Smaller font size */
+        }
 
-            <button type="submit" class="btn btn-primary">Register</button>
-        </form>
-    </div>
-</div>
-@section Scripts {
-    <script>
-        $('input[type=radio][name=registerAs]').change(function () {
-            if (this.value === 'ShopOwner') {
-                $('#shopOwnerFields').show();
-            } else {
-                $('#shopOwnerFields').hide();
+        .github-input {
+            margin-bottom: 8px; /* Further reduced margin */
+            padding: 7px; /* Further reduced padding */
+            font-size: 12px; /* Smaller font size */
+            line-height: 1.3; /* Adjusted line height */
+            color: #495057;
+            background-color: #f2f3f5;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+            .github-input:focus {
+                border-color: #28a745;
+                box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+                outline: none;
             }
+
+        .github-btn {
+            padding: 8px 10px; /* Further reduced padding */
+            font-size: 12px; /* Smaller font size */
+            font-weight: 600;
+            color: #fff;
+            background-color: #28a745;
+            border: none;
+            border-radius: 4px;
+            width: 100%;
+            display: block;
+            transition: background-color 0.3s;
+        }
+
+            .github-btn:hover {
+                background-color: #218838;
+            }
+
+        .text-danger {
+            margin-top: 2px; /* Further reduced margin-top */
+            font-size: 10px; /* Smaller font size */
+            color: #dc3545;
+        }
+
+        .form-check-label {
+            font-weight: 400;
+            color: #495057;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form asp-controller="Account" asp-action="Register" method="post" class="github-login-form">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <h1 class="text-center">Register</h1>
+                    <div class="form-group">
+                        <label asp-for="UserName" class="github-label">User Name</label>
+                        <input type="text" class="form-control github-input" asp-for="UserName" id="nameInput" />
+                        <span asp-validation-for="UserName" class="text-danger" id="nameInputValidationMessage"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="github-label">Email</label>
+                        <input type="email" class="form-control github-input" asp-for="Email" id="emailInput" data-error-message="Sample@gmail.com" />
+                        <span asp-validation-for="Email" class="text-danger" id="emailInputValidationMessage"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="PhoneNumber" class="github-label">Phone Number</label>
+                        <input type="text" class="form-control github-input" asp-for="PhoneNumber" pattern="[0-9]*" id="phoneInput" data-error-message="09-xxxxxxxxx" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger" id="phoneInputValidationMessage"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Address" class="github-label">Address</label>
+                        <input type="text" class="form-control github-input" asp-for="Address" id="addressInput" />
+                        <span asp-validation-for="Address" class="text-danger" id="addressInputValidationMessage"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password" class="github-label">Password</label>
+                        <input type="password" class="form-control github-input" asp-for="Password" id="passwordInput" />
+                        <span asp-validation-for="Password" class="text-danger" id="passwordInputValidationMessage"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword" class="github-label">Confirm Password</label>
+                        <input type="password" class="form-control github-input" asp-for="ConfirmPassword" id="confirmPasswordInput" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger" id="confirmPasswordInputValidationMessage"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a href="@Url.Action("Login", "Account")">Login</a>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="submit" class="btn btn-primary btn-block github-btn" id="submitButton">Register</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/js/ValidForm.js"></script> <!-- Your existing JavaScript file -->
+    <script>
+        document.getElementById('phoneInput').addEventListener('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, ''); // Replace any non-numeric characters with an empty string
         });
     </script>
-}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

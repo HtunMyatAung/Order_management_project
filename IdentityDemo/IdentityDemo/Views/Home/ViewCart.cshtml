@@ -1,0 +1,37 @@
+﻿@model List<ItemModel> 
+<!-- Change the model type to List<ItemModel> -->
+
+@{
+    ViewData["Title"] = "View Cart";
+}
+
+<h1>View Cart</h1>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Item ID</th>
+                <th>Item Name</th>
+                <th>Item Price</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ItemId</td> <!-- Item ID -->
+                    <td>@item.ItemName</td> <!-- Item Name -->
+                    <td>@item.ItemPrice</td> <!-- Item Price -->
+                    <td>@item.ItemQuantity</td> <!-- Quantity -->
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No items selected.</p>
+}

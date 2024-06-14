@@ -27,20 +27,40 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Phone</th>
+                    <th>Role</th>
                     <th>Email</th>
                     <th>Address</th>
+                    <th>Action</th>
                     
                 </tr>
             </thead>
             <tbody>
-                @foreach (var shop in Model)
+                @foreach (var user in Model)
                 {
                     <tr style="text-align: center;">
                         <td>@counter</td>
-                        <td>@shop.UserName</td>
-                        <td>@shop.PhoneNumber</td>
-                        <td>@shop.Email</td>
-                        <td>@shop.Address</td>
+                        <td>@user.UserName</td>
+                        <td>@user.PhoneNumber</td>
+                        <td style="color:@(user.Role == "User" ? "green" : user.Role == "Owner" ? "red" : "black");">
+                            <span style="background-color: lightgray; padding: 2px; border-radius: 4px; display: inline-block;">
+                                @user.Role
+                            </span>
+                            
+                        </td>
+
+                        <td>@user.Email</td>
+                        <td>@user.Address</td>
+                        <td>
+                            <a href="@Url.Action("Admin_update_user_info", "AdminControl", new { userId = user.Id })" class="btn btn-link">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <form asp-controller="AdminControl" asp-action="DeleteUser" method="post" style="display:inline;">
+                                <input type="hidden" name="userId" value="@user.Id" />
+                                <button type="submit" class="btn btn-link" style="color:red">
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </button>
+                            </form>
+                        </td>
                         
                     </tr>
                     counter += 1;

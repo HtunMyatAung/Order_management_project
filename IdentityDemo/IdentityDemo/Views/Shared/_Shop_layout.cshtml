@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Profile</title>
+    <!-- Link Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        /* Add your custom CSS styles here */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #333;
+            padding-top: 20px;
+        }
+
+            .sidebar ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .sidebar li {
+                padding: 10px 20px;
+            }
+
+                .sidebar li a {
+                    color: #fff;
+                    text-decoration: none;
+                }
+
+        .main-content {
+            margin-left: 250px; /* Adjust this value to match the width of the sidebar */
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <ul>
+            <li><a href="#items">Items</a></li>
+            <li><a href="#orders">Orders</a></li>
+            <li><a href="#events">Events</a></li>
+        </ul>
+    </div>
+
+    <!-- Main content -->
+    <div class="main-content">
+        <!-- Your content goes here -->
+        <h1>Welcome to Your Shop Profile</h1>
+        <p>This is where you can manage your items, orders, and events.</p>
+    </div>
+
+    <!-- Link Bootstrap JS (Optional, for Bootstrap components) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

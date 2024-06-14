@@ -25,20 +25,27 @@
                 <tr style="text-align: center;">
                     <th>ID</th>
                     <th>Name</th>
+                    <th>Email</th>
                     <th>Reset Password</th>
 
                 </tr>
             </thead>
             <tbody>
-                @foreach (var shop in Model)
+                @foreach (var user in Model)
                 {
                     <tr style="text-align: center;">
                         <td>@counter</td>
-                        <td>@shop.UserName</td>
+                        <td>@user.UserName</td>
+                        <td>@user.Email</td>
                         <td>
-                            <button class="fas fa-check-circle"></button>
-                            <button class="fas fa-times-circle"></button>
+                            <form asp-controller="AdminControl" asp-action="ResetPassword" method="post" style="display:inline;">
+                                <input type="hidden" name="userId" value="@user.Id" />
+                                <button type="submit" class="fas fa-check-circle" style="border:none; background:none;">
+                                </button>
+                            </form>
+                            <button class="fas fa-times-circle" style="border:none; background:none;"></button>
                         </td>
+
                     </tr>
                     counter += 1;
                     <!-- Add more rows with data as needed -->

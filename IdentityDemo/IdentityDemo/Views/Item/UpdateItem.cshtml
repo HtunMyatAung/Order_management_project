@@ -1,0 +1,53 @@
+﻿@model IdentityDemo.Models.ItemModel
+@{
+    Layout = "_OwnerLayout";
+}
+
+
+<div class="container" style="padding-top: 70px;">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Item Update</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="UpdateItem" asp-controller="Item" method="post">
+                        <input type="hidden" asp-for="ItemId" value="1"/>
+                        <input type="hidden" asp-for="Shop_Id" value="1"/>
+                        <input type="hidden" asp-for="ItemCreatedDate" value="@DateTime.Now"/>
+                        <input type="hidden" asp-for="ItemUpdatedDate" value="@DateTime.Now"/>
+                        <div class="form-group">
+                            <label asp-for="ItemName">Name</label>
+                            <input type="text" class="form-control" asp-for="ItemName" placeholder="Enter item name" id="nameInput" data-error-message="Enter valid Name">
+                            <span asp-validation-for="ItemName" class="text-danger" id="nameValidationMessage"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ItemPrice">Price</label>
+                            <input type="number" step="0.01" class="form-control" asp-for="ItemPrice" placeholder="Enter item price" id="priceInput" data-error-message="Enter price number">
+                            <span asp-validation-for="ItemPrice" class="text-danger" id="priceValidationMessage"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ItemQuantity">Quantity</label>
+                            <input type="number" class="form-control" asp-for="ItemQuantity" placeholder="Enter item quantity" id="quantityInput" data-error-message="Enter quantity number">
+                            <span asp-validation-for="ItemQuantity" class="text-danger" id="quantityValidationMessage"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ItemChangedPrice">Discount Price</label>
+                            <input type="number" step="0.01" class="form-control" asp-for="ItemChangedPrice" placeholder="Enter discount price">
+                            <span asp-validation-for="ItemChangedPrice" class="text-danger"></span>
+                        </div>
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary w-25" id="submitButton">Save</button>
+                            <a href="@Url.Action("Index","Item")" class="btn btn-primary w-25">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/itemvalidate.js"></script>
+
+
+

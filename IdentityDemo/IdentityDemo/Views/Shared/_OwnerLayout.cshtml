@@ -1,0 +1,138 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ApplicationUser currentUser = await UserManager.GetUserAsync(User);
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Owner</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+    
+    @RenderSection("Database",false)
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar user panel (optional) -->
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <img src="~/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                    </div>
+                    <div class="info">
+                        @if(currentUser!=null){
+                            <a href="#" class="d-block">@currentUser.UserName</a>
+                        }
+                        else
+                        {
+                            <a href="#" class="d-block">Shop Owner</a>
+                        }
+
+                    </div>
+                </div>
+
+                <!-- SidebarSearch Form -->
+                <div class="form-inline">
+                    <div class="input-group" data-widget="sidebar-search">
+                        <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                        <div class="input-group-append">
+                            <button class="btn btn-sidebar">
+                                <i class="fas fa-search fa-fw"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item menu-open">
+                            <a href="@Url.Action("ItemByShopid", "Item", new { shopId = currentUser.ShopId })" class="nav-link ">
+                                <i class="nav-icon fas fa-store"></i>
+                                <p>
+                                    View Shop
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item menu-open">
+                            <a href="@Url.Action("UpdateShop", "Shop")" class="nav-link ">
+                                <i class="nav-icon fas fa-store"></i>
+                                <p>
+                                    Update Shop Info
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item menu-open">
+                            <a href="@Url.Action("Index", "Item")" class="nav-link ">
+                                <i class="nav-icon fas fa-pizza-slice"></i>
+                                <p>
+                                    Item Detail
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item menu-open">
+                            <a href="@Url.Action("Index", "Order")" class="nav-link ">
+                                <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                                <p>
+                                    Order Detail
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <form method="post" action="@Url.Action("Logout", "Account")" class="logout-form">
+                                <button type="submit" class="logout-button nav-link">
+                                    <i class="nav-icon fas fa-sign-out-alt"></i>
+                                    <p>Log Out</p>
+                                </button>
+                            </form>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+        <div class="content-wrapper ">
+            <!-- Content Header (Page header) -->
+            <div class="content">
+                <div class="container-fluid">
+
+                    
+                        @RenderBody()
+                    
+                </div>
+            </div>
+        </div>
+        <footer class="main-footer">
+            <!-- To the right -->
+            <div class="float-right d-none d-sm-inline">
+                Anything you want
+            </div>
+            <!-- Default to the left -->
+            <strong>Copyright &copy; 2014-2021 <a href="https://www.youtube.com/watch?v=PodDKNZUoSM&t=425s">AdminLTE.io</a>.</strong> All rights reserved.
+        </footer>
+    </div>
+    <!-- ./wrapper -->
+    <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    
+
+
+    <!-- Bootstrap 4 -->
+    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/dist/js/adminlte.min.js"></script>
+    @RenderSection("Scripts",false)
+</body>
+</html>
+
