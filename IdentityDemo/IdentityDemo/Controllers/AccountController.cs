@@ -127,7 +127,7 @@ namespace IdentityDemo.Controllers
                     }
                     else if(isuser.Role== "Owner")
                     {
-                        return RedirectToAction("Owner_Index", "Shop");
+                        return RedirectToAction("Owner_dashboard", "Shop");
                     }
                     else { 
                         return RedirectToAction("Index", "Home");

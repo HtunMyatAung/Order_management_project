@@ -54,6 +54,14 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item menu-open">
+                            <a href="@Url.Action("Owner_dashboard", "Shop", new { shopId = currentUser.ShopId })" class="nav-link ">
+                                <i class="nav-icon fas fa-store"></i>
+                                <p>
+                                    Dashboard
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item menu-open">
                             <a href="@Url.Action("ItemByShopid", "Item", new { shopId = currentUser.ShopId })" class="nav-link ">
                                 <i class="nav-icon fas fa-store"></i>
                                 <p>
@@ -70,7 +78,7 @@
                             </a>
                         </li>
                         <li class="nav-item menu-open">
-                            <a href="@Url.Action("Index", "Item")" class="nav-link ">
+                            <a href="@Url.Action("Owner_Item_List", "Shop")" class="nav-link ">
                                 <i class="nav-icon fas fa-pizza-slice"></i>
                                 <p>
                                     Item Detail

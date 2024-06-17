@@ -188,15 +188,15 @@
                             }
                             else if (currentUser.Role == "Owner")
                             {
-                                <a class="dropdown-item" href="/Item/Index">Owner Dashboard</a>
+                                <a class="dropdown-item" href="/Shop/Owner_dashboard">Owner Dashboard</a>
                             }
                             else
                             {
                                 <a class="dropdown-item" href="/Account/User_profile">Profile</a>
                             }
-                            <div class="dropdown-divider"></div>
+                            
 
-                            <a class="dropdown-item" href="@Url.Action("User_profile", "Account")" class="text-dark">Profile</a>
+                           
                             <div class="dropdown-divider"></div>
                             <form asp-controller="Account" asp-action="Logout" method="post">
                                 <button type="submit" class="dropdown-item">Logout</button>

@@ -28,7 +28,7 @@ namespace IdentityDemo.Controllers
              // Fetch shop data based on userId
              //return await _context.Shops.FirstOrDefaultAsync(s => s.ShopId== shopId);
          }*/
-        public IActionResult Owner_Index()
+        public IActionResult Owner_Item_List()
         {
             var username = User.Identity.Name;
             var user = _context.Users.FirstOrDefault(u => u.UserName == username);
