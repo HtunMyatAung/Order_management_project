@@ -12,8 +12,7 @@
     <title>AdminLTE 3 | Blank Page</title>
     
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">   
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Font Awesome -->
@@ -161,22 +160,7 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
-            @*<section class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1>Admin Page</h1>
-                        </div>
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">Blank Page</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div><!-- /.container-fluid -->
-            </section>*@
-
+           
             <!-- Main content -->
             <section class="content">
 
@@ -200,11 +184,7 @@
                         @RenderSection("LoginSection", required: false)
                     </div>
                     <!-- /.card-body -->
-                    @*<div class="card-footer">
-                        Footer
-                    </div>*@
-                    <!-- /.card-footer-->
-                </div>
+                    
                 <!-- /.card -->
 
             </section>
@@ -233,9 +213,7 @@
     <!-- jQuery UI 1.11.4 -->
     <script src=../../plugins/jquery-ui/jquery-ui.min.js"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-    <script>
-        $.widget.bridge('uibutton', $.ui.button)
-    </script>
+    <script>$.widget.bridge('uibutton', $.ui.button)</script>
     <!-- Bootstrap 4 -->
     <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- ChartJS -->
@@ -262,27 +240,6 @@
     <script src="../../dist/js/demo.js"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="../../dist/js/pages/dashboard.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-    <script>
-        // Add active class to clicked navigation link
-        /*document.addEventListener('DOMContentLoaded', function () {
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', function (event) {
-                    // Remove 'active' class from all nav links
-                    navLinks.forEach(navLink => navLink.classList.remove('active'));
-                    // Add 'active' class to the clicked nav link
-                    this.classList.add('active');
-                    // Check if href is '#' or empty
-                    const href = this.getAttribute('href');
-                    if (href === '#' || href === '') {
-                        event.preventDefault(); // Prevent default action if href is '#' or empty
-                    }
-                });
-            });
-        });*/
-
-
-    </script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>    
 </body>
 </html>

@@ -1,6 +1,7 @@
 ﻿using IdentityDemo.Data;
 using IdentityDemo.Models;
 using IdentityDemo.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,15 +19,20 @@ namespace IdentityDemo.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
         }
+        [Authorize(Roles ="Admin")]
         public IActionResult Index()
         {
             return View();
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult Admin_shop_list()
         {
+            var admin = User.Identity.Name;
+
             var shop = _context.Shops.ToList();
             return View(shop);
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult Admin_forgot_list()
         {
             var forgots = _context.Users.Where(u=>u.Forgot==1). ToList();
@@ -67,6 +73,7 @@ namespace IdentityDemo.Controllers
             byte[] imageData = System.IO.File.ReadAllBytes(imagePath);
             return imageData;
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Admin_update_user_info(UpdateUserViewModel model)
@@ -78,8 +85,24 @@ namespace IdentityDemo.Controllers
             }
             
             var user = await _userManager.FindByIdAsync(model.Id); // Retrieve the user using the provided ID
+            
+            if (model.Role == "Owner")
+            {
+                // Remove the current role from the user
+                var removeResult = await _userManager.RemoveFromRoleAsync(user, "User");
+                // Add the new role to the user
+                var addResult = await _userManager.AddToRoleAsync(user, "Owner");
+            }
+            else
+            {
+                // Remove the current role from the user
+                var removeResult = await _userManager.RemoveFromRoleAsync(user, "Owner");
+                // Add the new role to the user
+                var addResult = await _userManager.AddToRoleAsync(user, "User");
+            }
             if (model.Role=="Owner" && user.ShopId == null)
             {
+
                 int newShopId = 0;
                 int maxShopId = _context.Shops.Any() ? _context.Shops.Max(s => s.ShopId) : 0;
                 newShopId = maxShopId + 1;
@@ -91,7 +114,7 @@ namespace IdentityDemo.Controllers
                     ShopDescription = "nice shop",
                     ShopAddress =user.Address,
                     ShopEmail =user.Email,
-                    ShopImage= "Shop_default.png"
+                    //ShopImage= "Shop_default.png"
                     // Add other shop properties as needed
                 };
                 user.ShopId= newShopId;
@@ -104,10 +127,7 @@ namespace IdentityDemo.Controllers
 
             // Update user properties
             user.Role = model.Role;
-            user.UserName = model.UserName;
-            user.Email = model.Email;
-            user.Address = model.Useraddress;
-            user.PhoneNumber = model.UserPhone;
+            
 
             // Update other properties as needed
 
@@ -128,7 +148,7 @@ namespace IdentityDemo.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Admin_dashboard()
         {
             // Fetch orders from the database
@@ -184,16 +204,19 @@ namespace IdentityDemo.Controllers
             Console.WriteLine("gg"+viewModel.OrderData+"hh");
             return View(viewModel);
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult Admin_user_list()
         {
             var users = _context.Users.Where(u => u.Role != null && u.Role != "Admin").ToList();
             return View(users);
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult Admin_owner_list()
         {
             var owner = _context.Users.Where(u => u.Role != null && u.Role == "ShopOwner"). ToList();
             return View(owner);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> DeleteUser(string userId)
         {
@@ -222,7 +245,7 @@ namespace IdentityDemo.Controllers
 
             return View("Error"); // Or return to the appropriate view with the error messages
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> ResetPassword(string userId)
         {
@@ -260,6 +283,7 @@ namespace IdentityDemo.Controllers
                 return BadRequest("Failed to reset password.");
             }
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Admin_change_password()
         {
@@ -296,6 +320,7 @@ namespace IdentityDemo.Controllers
                 return View(model);
             }
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Logout()
         {

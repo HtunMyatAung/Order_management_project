@@ -2,7 +2,7 @@
 
 @{
     Layout = null;
-    decimal total=0;
+    decimal total = 0;
     decimal taxrate = 0.1m;
 }
 <!DOCTYPE html>
@@ -13,23 +13,22 @@
     <title>Invoice</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        
         /* Custom styles */
         .modal-footer {
             justify-content: flex-end; /* Align buttons to the right */
         }
 
-        /* Style the buttons */
-        .modal-footer button {
-            font-size: 18px; /* Increase font size */
-            padding: 10px 20px; /* Add padding to make buttons bigger */
-        }
-
-            /* Style the Cancel button in red */
-            .modal-footer button.cancel-button {
-                color: red;
+            /* Style the buttons */
+            .modal-footer button {
+                font-size: 18px; /* Increase font size */
+                padding: 10px 20px; /* Add padding to make buttons bigger */
             }
-    
+
+                /* Style the Cancel button in red */
+                .modal-footer button.cancel-button {
+                    color: red;
+                }
+
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
@@ -58,7 +57,7 @@
             .items th, .items td {
                 border: 1px solid #ddd;
                 padding: 8px;
-                text-align:center;
+                text-align: center;
             }
 
         .summary {
@@ -73,76 +72,136 @@
             .summary th, .summary td {
                 padding: 8px;
             }
-            
     </style>
 </head>
 <body>
-    <div class="invoice-header">
-        <div>
-            <h1>@Model.Shop.ShopName</h1>
-            <p>Address :@Model.Shop.ShopAddress<br>Contact Details:@Model.Shop.ShopEmail</p>
+    <!-- Container to capture only the invoice details -->
+    <div id="invoice-container">
+        <div class="invoice-header">
+            <div>
+                <h1>@Model.Shop.ShopName</h1>
+                <p>Address: @Model.Shop.ShopAddress<br>Contact Details: @Model.Shop.ShopEmail</p>
+            </div>
+            <div>
+                <h2>Invoice</h2>
+                <p>Invoice Number: @Model.OrderId<br>Invoice Date: @Model.OrderDate<br></p>
+            </div>
         </div>
-        <div>
-            <h2>Invoice</h2>
-            <p>Invoice Number: @Model.OrderId<br>Invoice Date: @Model.OrderDate<br>
-                @*Due Date: MM/DD/YYYY*@
-                </p>
+        <div class="client-details">
+            <h3>Bill To:</h3>
+            <p>Client Name: @Model.User.UserName<br>Client Address: @Model.User.Address<br>Client Contact Details: @Model.User.PhoneNumber</p>
         </div>
-    </div>
-    <div class="client-details">
-        <h3>Bill To:</h3>
-        <p>Client Name:@Model.User.UserName<br>Client Address:@Model.User.Address<br>Client Contact Details:@Model.User.PhoneNumber</p>
-    </div>
-    <div class="items">
-        <table>
-            <thead>
-                <tr>
-                    <th>Item Description</th>
-                    <th>Quantity</th>
-                    <th>Unit Price</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>       
-                @foreach(var item in Model.Items){
+        <div class="items">
+            <table>
+                <thead>
                     <tr>
-                        <td>@item.ItemName</td>
-                        <td>@item.ItemQuantity</td>
-                        <td>@item.ItemPrice</td>
-                        <td>@(item.ItemQuantity * item.ItemPrice)</td>
+                        <th>Item Description</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
                     </tr>
-                    total +=(item.ItemQuantity * item.ItemPrice);
-                }  
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td>@item.ItemName</td>
+                            <td>@item.ItemQuantity</td>
+                            <td>@item.ItemPrice</td>
+                            <td>@(item.ItemQuantity * item.ItemPrice)</td>
+                        </tr>
+                        total += (item.ItemQuantity * item.ItemPrice);
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="summary">
+            <table>
+                <tr>
+                    <th>Subtotal:</th>
+                    <td>@total</td>
+                </tr>
+                <tr>
+                    <th>Taxes (10%):</th>
+                    <td>@(total * taxrate)</td>
+                </tr>
+                <tr>
+                    <th>Total Amount Due:</th>
+                    <td>@(total + (total * taxrate))</td>
+                </tr>
+            </table>
+        </div>
+        <div class="notes">
+            <h3>Notes:</h3>
+            <p>Thank you for your business!<br>If you have any questions, please contact us at uabzone@gmail.com</p>
+        </div>
+        <div class="invoice-footer">
+            <p>Payment Methods: Bank Transfer (Account Number: XXXXX, SWIFT: XXXXX), PayPal (@Model.Shop.ShopEmail)<br>Payment Terms: Net 30 days</p>
+        </div>
     </div>
-    <div class="summary">
-        <table>
-            <tr>
-                <th>Subtotal:</th>
-                <td>@total</td>
-            </tr>
-            <tr>
-                <th>Taxes (10%):</th>
-                <td>@(total*taxrate)</td>
-            </tr>
-            <tr>
-                <th>Total Amount Due:</th>
-                <td>@(total+(total*taxrate))</td>
-            </tr>
-        </table>
+    <!-- Bootstrap Modal for Thank You Message -->
+    <div class="modal fade" id="thankYouModal" tabindex="-1" role="dialog" aria-labelledby="thankYouModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="thankYouModalLabel">Thank You!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Your order has been saved as Image.<br />Thank you for your business!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="goBackToAnotherPage()">Ok</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="notes">
-        <h3>Notes:</h3>
-        <p>Thank you for your business!<br>If you have any questions, please contact us at uabzone@gmail.com</p>
-    </div>
-    <div class="invoice-footer">
-        <p>Payment Methods: Bank Transfer (Account Number: XXXXX, SWIFT: XXXXX), PayPal (@Model.Shop.ShopEmail)<br>Payment Terms: Net 30 days</p>
-    </div>
+    <!-- Buttons outside of the invoice content -->
     <div class="modal-footer">
-        <a href ="@Url.Action("HomePageItems", "Item")">
-            <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">Cancel</button></a>
-        <button type="button" class="btn btn-primary">Confirm</button>
+
+        <button type="button" class="btn btn-secondary cancel-button" onclick="goBackToAnotherPage()">Cancel</button>
+        
+        <button type="button" class="btn btn-primary" onclick="confirmAndDownload()">Download</button>
     </div>
+
+    <!-- Include the latest version of html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Bootstrap and jQuery scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function confirmAndDownload() {
+            downloadAsImage(); // Download the invoice as an image
+            showThankYouModal(); // Open a popup window with the invoice details and thank you message
+            
+        }
+
+        function downloadAsImage() {
+            // Set the area to capture (excluding the modal-footer)
+            var element = document.getElementById('invoice-container');
+
+            html2canvas(element).then(function (canvas) {
+                var link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'invoice.png';
+                link.click();
+            });
+        }
+        function showThankYouModal() {
+            // Show the "Thank You" modal
+            $('#thankYouModal').modal('show');
+        }
+        function goBackToAnotherPage() {
+            //Console.WriteLine("Redircting");
+            // Redirect to another page after closing the modal
+            window.location.href = '/Order/SaveInvoice';
+        }
+       
+
+    </script>
+
 </body>
 </html>

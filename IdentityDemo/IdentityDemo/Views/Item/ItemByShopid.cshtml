@@ -140,14 +140,14 @@
                 } else {
                     // Item does not exist, add new item to cart
                     $('#cartItemsContainer').append(`
-                                        <div class="cart-item d-flex justify-content-between align-items-center mb-2" data-id="${itemId}" data-price="${itemPrice}">
-                                            <div>${itemName}</div>
-                                            <div class="d-flex align-items-center">
-                                                <input type="number" class="form-control item-quantity mr-2" value="1" min="1">
-                                                <i class="fas fa-trash-alt remove-item ml-2" style="cursor: pointer;"></i>
-                                            </div>
-                                        </div>
-                                    `);
+                                <div class="cart-item d-flex justify-content-between align-items-center mb-2" data-id="${itemId}" data-price="${itemPrice}">
+                                    <div>${itemName}</div>
+                                    <div class="d-flex align-items-center">
+                                        <input type="number" class="form-control item-quantity mr-2" value="1" min="1">
+                                        <i class="fas fa-trash-alt remove-item ml-2" style="cursor: pointer;"></i>
+                                    </div>
+                                </div>
+                            `);
                 }
 
                 // Update total amount and cart badge
@@ -180,23 +180,30 @@
                 $('#sidebarContainer').hide();
             });
 
-            // Submit cart functionality (example)
+            // Submit cart functionality
             $('#submitCart').click(function () {
-                // Example functionality to submit cart
-                var cartItems = [];
+                // Prepare data for submission
+                var cartItems = {};
 
                 // Collect cart items details
                 $('.cart-item').each(function () {
                     var itemId = $(this).data('id');
                     var quantity = parseInt($(this).find('.item-quantity').val());
-                    // Push item details into cartItems array
-                    cartItems.push([itemId, quantity]);
+                    // Add item to cartItems dictionary
+                    cartItems[itemId] = quantity;
                 });
 
-                // Example: Log cart items to console
-                console.log(cartItems);
+                // Create form and submit dynamically
+                var form = $('<form action="@Url.Action("Invoice", "Order")" method="post"></form>');
 
-                
+                // Add each item as a hidden input in the form
+                $.each(cartItems, function (itemId, quantity) {
+                    form.append('<input type="hidden" name="selectedItems[' + itemId + ']" value="' + quantity + '">');
+                });
+
+                // Append form to body and submit
+                $('body').append(form);
+                form.submit();
             });
 
             // Initially hide sidebar and update layout
@@ -205,6 +212,8 @@
             $('#sidebarContainer').hide();
         });
     </script>
+}
+
     <!-- jQuery -->
     <script src="../../plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->

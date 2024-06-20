@@ -1,6 +1,7 @@
 ﻿using IdentityDemo.Data;
 using IdentityDemo.Models;
 using IdentityDemo.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -48,50 +49,69 @@ namespace IdentityDemo.Controllers
         {
             var username = User.Identity.Name;
             var user = _context.Users.FirstOrDefault(u => u.UserName == username);
-            var std = _context.Items.Where(s => s.Shop_Id == user.ShopId).ToList();
-            if (std == null)
+            var item = _context.Items.Where(s => s.Shop_Id == user.ShopId).ToList();
+            if (item == null)
             {
                 return NotFound();
             }
-            return View(std);
+            return View(item);
         }
 
         public IActionResult UpdateItem(int itemid)
         {
-            var std = _context.Items.FirstOrDefault(s => s.ItemId == itemid);
+            var item = _context.Items.FirstOrDefault(s => s.ItemId == itemid);
 
-            if (std == null)
+            if (item== null)
             {
                 return NotFound();
             }
-            return View(std);
+            /*var updateitemviewmodel = new UpdateItemViewModel
+            {
+                ItemId = itemid,
+                Shop_Id=item.Shop_Id,
+                ItemName=item.ItemName,
+                ItemPrice=item.ItemPrice,
+                ItemQuantity=item.ItemQuantity,
+                Discount_price=item.Discount_price,
+                Discount_rate=item.Discount_rate,
+                ItemChangedPrice=item.ItemChangedPrice,                
+                ItemCreatedDate=item.ItemCreatedDate,
+                ItemUpdatedDate=item.ItemUpdatedDate,
+                
+            };*/
+            return View(item);
         }
 
         [HttpPost]
-        public IActionResult UpdateItem(ItemModel item)
+        public IActionResult UpdateItem(ItemModel updateItem)
         {
-
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var std = _context.Items.FirstOrDefault(s => s.ItemId == item.ItemId);
-                if (std == null)
-                {
-                    return NotFound();
-                }
-                std.ItemName = item.ItemName;
-                std.ItemPrice = item.ItemPrice;
-                std.ItemQuantity = item.ItemQuantity;
-                std.ItemChangedPrice = item.ItemChangedPrice;
-                
-                std.ItemUpdatedDate = item.ItemUpdatedDate;
-                _context.Items.Update(std);
-                _context.SaveChanges();
-                return RedirectToAction("Index", "Item");
+                return View(updateItem);
             }
-            return View(item);
+
+            var item = _context.Items.FirstOrDefault(s => s.ItemId == updateItem.ItemId);
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            item.ItemName = updateItem.ItemName;
+            item.ItemPrice = updateItem.ItemPrice;
+            item.ItemQuantity = updateItem.ItemQuantity;
+            item.ItemChangedPrice = updateItem.ItemChangedPrice;
+            item.Discount_rate = updateItem.Discount_rate;
+            item.Discount_price = updateItem.Discount_price;
+            item.ItemUpdatedDate = DateTime.Now;
+
+            _context.Items.Update(item);
+            _context.SaveChanges();
+
+            return RedirectToAction("Owner_Item_List", "Shop");
         }
+
         [HttpGet]
-        public IActionResult DetailItem(int itemid)
+        public IActionResult Item_detail(int itemid)
         {
             var std = _context.Items.FirstOrDefault(s => s.ItemId == itemid);
 
@@ -101,16 +121,16 @@ namespace IdentityDemo.Controllers
             }
             return View(std);
         }
-
+        [Authorize(Roles = "Owner")]
         public IActionResult CreateItem()
         {
-            var std = _context.Items.Max(s => s.ItemId);
-            int stdd = std + 1;
+            var itemid = _context.Items.Max(s => s.ItemId);
+            int newitemid = itemid + 1;
             var username = User.Identity.Name;
             var user = _context.Users.FirstOrDefault(u => u.UserName == username);
             var view = new ItemModel
             {
-                ItemId = stdd,
+                ItemId = newitemid,
                 Shop_Id=user.ShopId
             };
             return View(view);
@@ -121,13 +141,17 @@ namespace IdentityDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                var std = _context.Items.Max(s => s.ItemId);
-                int stdd = std + 1;
+                var itemid = _context.Items.Max(s => s.ItemId);
+                int newitem = itemid + 1;
                 item.ItemCreatedDate = DateTime.Now;
-                item.ItemId = stdd;
+                item.ItemUpdatedDate = DateTime.Now;
+                item.ItemId = newitem;
+                item.ItemChangedPrice = item.ItemPrice;
+                item.Discount_rate = 0;
+                item.Discount_price = 0;
                 _context.Items.Add(item);
                 _context.SaveChanges();
-                return RedirectToAction("Index", "Item");
+                return RedirectToAction("Owner_item_List", "Shop");
             }
             return View(item);
         }

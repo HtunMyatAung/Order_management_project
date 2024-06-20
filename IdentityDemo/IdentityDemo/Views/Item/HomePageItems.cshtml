@@ -71,7 +71,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="submitBuyItem()">Confirm Purchase</button>
+                <button type="submit" class="btn btn-primary" onclick="submitBuyItem()">Confirm Purchase</button>
             </div>
         </div>
     </div>
@@ -116,6 +116,9 @@
         var quantity = document.getElementById('quantity-' + itemId).value;
         document.getElementById('modalItemQuantity').innerText = quantity;
 
+        // Set the hidden form fields with the item ID and quantity
+        document.getElementById('selectedItemId').value = itemId;
+        document.getElementById('selectedItemQuantity').value = quantity;
         // Show the modal
         $('#buyItemModal').modal('show');
     }
@@ -124,9 +127,7 @@
         var itemId = document.getElementById('modalItemId').innerText;
         var quantity = document.getElementById('modalItemQuantity').innerText;
 
-        // Set the hidden form fields with the item ID and quantity
-        document.getElementById('selectedItemId').value = itemId;
-        document.getElementById('selectedItemQuantity').value = quantity;
+        
 
         // Submit the form
         document.getElementById('buyItemForm').submit();

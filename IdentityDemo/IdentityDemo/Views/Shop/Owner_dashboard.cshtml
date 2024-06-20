@@ -1,81 +1,98 @@
 ﻿@using Newtonsoft.Json
-@model IdentityDemo.ViewModels.TableCountsViewModel
+@model IdentityDemo.ViewModels.DashboardViewModel
 @{
-    Layout = "_Admin_layout";
+    Layout = "_Owner_layout";
 }
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/css/adminlte.min.css">
-
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* Apply fixed height to chart container */
-        .chart-container {
-            height: 500px; /* Adjust the height as needed */
+       
+        .chart-container {           
+            height: 300px; /* Adjust the height as needed */
         }
+
     </style>
 </head>
 
 <body>
-    <div class="row">
-        <div class="col-lg-3 col-6">
+    <div class="row" style="padding-top:20px;">
+        <div class="col-lg-4 col-4">
             <!-- small box -->
             <div class="small-box bg-info">
                 <div class="inner">
-                    <h3>@Model.OrderCount</h3>
+                    @{
+                        //Console.WriteLine("count" + Model.OrderCount);
+                        if (Model.OrderCount == null)
+                        {
+                            <h3>0</h3>
+                        }
+                        else
+                        {
+                            <h3>@Model.OrderCount</h3>
+                        }
+                    }
 
-                    <p>New Orders</p>
+                    <p>Orders</p>
                 </div>
                 <div class="icon">
                     <i class="ion ion-bag"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="@Url.Action("Owner_order_list", "Shop")" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-6">
+        <div class="col-lg-4 col-4">
             <!-- small box -->
             <div class="small-box bg-success">
                 <div class="inner">
-                    <h3>@Model.ItemCount</h3>
-
+                    @{
+                       // Console.WriteLine("count"+Model.ItemCount);
+                        if (Model.ItemCount == null)
+                        {
+                            <h3>0</h3>
+                        }
+                        else
+                        {
+                            <h3>@Model.ItemCount</h3>
+                        }
+                    }
                     <p>Items</p>
                 </div>
                 <div class="icon">
                     <i class="ion ion-stats-bars"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="@Url.Action("Owner_item_list", "Shop")" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-6">
+        <div class="col-lg-4 col-4">
             <!-- small box -->
             <div class="small-box bg-warning">
                 <div class="inner">
-                    <h3>@(Model.UserCount - 1)</h3>
+                    @{
+                       /// Console.WriteLine("count" + Model.ItemCount);
+                        if (Model.CustomerCount == null)
+                        {
+                            <h3>0</h3>
+                        }
+                        else
+                        {
+                            <h3>@Model.CustomerCount</h3>
+                        }
+                    }
 
-                    <p>User Registrations</p>
+                    <p>Customers</p>
                 </div>
                 <div class="icon">
-                    <i class="ion ion-person-add"></i>
+                    <i class="ion ion-person"></i>
                 </div>
-                <a href="@Url.Action("Admin_user_list", "AdminControl")" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="@Url.Action("Customer_list", "Shop")" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-danger">
-                <div class="inner">
-                    <h3>@Model.ShopCount</h3>
-
-                    <p>Shops</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-shop"></i>
-                </div>
-                <a href="@Url.Action("Admin_shop_list", "AdminControl")" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-        </div>
+        
         <!-- ./col -->
     </div>
 

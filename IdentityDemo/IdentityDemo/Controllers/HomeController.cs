@@ -26,7 +26,7 @@ namespace IdentityDemo.Controllers
         }
         public IActionResult Test64()
         {
-            Console.WriteLine("gg"+GetDefaultShopImage());
+            //Console.WriteLine("gg"+GetDefaultShopImage());
             return View();
         }
         public IActionResult Index()

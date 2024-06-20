@@ -2,7 +2,10 @@ document.addEventListener('DOMContentLoaded', function () {
     var nameInput = document.getElementById('nameInput');
     var priceInput = document.getElementById('priceInput');
     var quantityInput = document.getElementById('quantityInput');
-
+    var discountpriceInput = document.getElementById('discountpriceInput');
+    var discountrateInput = document.getElementById('discountrateInput');
+    var discountpriceValidationMessage = document.getElementById('discountpriceValidationMessage')
+    var discountrateValidationMessage = document.getElementById('discountrateValidationMessage')
     var nameValidationMessage = document.getElementById('nameValidationMessage');
     var priceValidationMessage = document.getElementById('priceValidationMessage');
     var quantityValidationMessage = document.getElementById('quantityValidationMessage');
@@ -13,6 +16,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var pricePattern = /^\d{1,5}(\.\d{1,2})?$/;
     // Integer pattern for quantity
     var quantityPattern = /^\d+$/;
+    var ratePattern =/^100(\.0{1,2)?$|^\d{1,2}(\.\d{1,2})?$/;
+
 
     function validateInput(input, pattern, validationMessage) {
         if (!pattern.test(input.value.trim())) {
@@ -28,7 +33,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (
             nameInput.value.trim() !== '' &&
             pricePattern.test(priceInput.value) &&
-            quantityPattern.test(quantityInput.value)
+            quantityPattern.test(quantityInput.value) &&
+            quantityPattern.test()
         ) {
             submitButton.disabled = false;
         } else {
@@ -47,7 +53,12 @@ document.addEventListener('DOMContentLoaded', function () {
     quantityInput.addEventListener('input', function () {
         validateInput(quantityInput, quantityPattern, quantityValidationMessage);
     });
-
+    discountpriceInput.addEventListener('input', function () {
+        validateInput(discountpriceInput, pricePattern, discountpriceValidationMessage);
+    });
+    discountrateValidationMessage.addEventListener('input', function () {
+        validateInput(discountrateInput, ratePattern, discountrateValidationMessage);
+    })
     // Initial check on page load
     checkFormValidity();
 });

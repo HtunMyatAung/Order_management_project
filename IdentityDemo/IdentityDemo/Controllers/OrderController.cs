@@ -4,6 +4,7 @@ using IdentityDemo.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace IdentityDemo.Controllers
 {
@@ -17,15 +18,14 @@ namespace IdentityDemo.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
-        {
-            var username = User.Identity.Name;
-            var user = _context.Users.FirstOrDefault(u => u.UserName == username);            
-            var orders = _context.Orders.Where(s=> s.Shop_Id == user.ShopId).ToList();
-            return View(orders);
-        }
+        
+        //[HttpGet]
         public async Task<IActionResult> Invoice(Dictionary<int, int> selectedItems)
         {
+            if (selectedItems == null)
+            {
+                return RedirectToAction("HomePageItems", "Item");
+            }
             int maxorderId = _context.Shops.Any() ? _context.Orders.Max(s => s.OrderID) : 0;
             int neworderId = maxorderId + 1;
             if (selectedItems == null || selectedItems.Count == 0)
@@ -41,9 +41,10 @@ namespace IdentityDemo.Controllers
             // Iterate through the selected item IDs
             foreach (var itemId in selectedItems.Keys)
             {
-                if (tempshopid == 0)
+                var tempitem=_context.Items.FirstOrDefault(i=>i.ItemId == itemId);
+                if (tempshopid == 0 & tempitem !=null)
                 {
-                    tempshopid = itemId;
+                    tempshopid =tempitem.Shop_Id;
                     // Fetch the shop data based on the provided shopId
                 }
 
@@ -86,10 +87,55 @@ namespace IdentityDemo.Controllers
                 OrderDate = DateTime.Now,
                 Items = cartItems // List of items added above
             };
-
+            // Store InvoiceViewModel in TempData
+            TempData["InvoiceViewModel"] = JsonConvert.SerializeObject(invoiceViewModel);
             return View(invoiceViewModel); // Pass the single InvoiceViewModel to the view
         }
+        //[HttpPost]
+        public IActionResult SaveInvoice()
+        {
+            if (TempData["InvoiceViewModel"] == null)
+            {
+                // Handle case where InvoiceViewModel is null
+                return BadRequest("Invalid data received");
+            }
 
+            // Example: Save or process the invoiceViewModel data as needed
+            var invoiceViewModelJson = TempData["InvoiceViewModel"].ToString();
+            InvoiceViewModel invoiceViewModel = JsonConvert.DeserializeObject<InvoiceViewModel>(invoiceViewModelJson);
+            // Calculate the sum of the total item prices
+            decimal totalSum = invoiceViewModel.Items.Sum(item => item.ItemPrice * item.ItemQuantity);
+            var itemidlist= invoiceViewModel.Items.ToList();
+            OrderModel orderModel = new OrderModel
+            {
+                OrderID = invoiceViewModel.OrderId,
+               User_Id=invoiceViewModel.User.Id,
+               OrderPrice=totalSum,
+               OrderDate=DateTime.Now,
+               Shop_Id=invoiceViewModel.Shop.ShopId
+            };
+            int maxorderdetailId = _context.OrderDetails.Any() ? _context.OrderDetails.Max(s => s.OrderDetailId) : 0;
+            int neworderdetailId = maxorderdetailId + 1;
+            // Create a list of OrderDetail entities
+            List<OrderDetailModel> orderDetails = invoiceViewModel.Items.Select(item => new OrderDetailModel
+            {
+                OrderDetailId = ++maxorderdetailId,
+                OrderId = invoiceViewModel.OrderId,
+                ItemId = item.ItemId,
+                Item_quantity=item.ItemQuantity,
+                Initial_price=item.ItemPrice,
+                Final_price=item.ItemChangedPrice
+
+            }).ToList();
+            // Add the order details to the database context
+            _context.OrderDetails.AddRange(orderDetails);
+            //Add order to database
+            _context.Orders.Add(orderModel);
+            _context.SaveChanges();
+            //invoiceViewModel.User.Id
+            //return Ok("Invoice data saved successfully");
+            return RedirectToAction("HomePageItems", "Item");
+        }
         [HttpPost]
         public IActionResult DeleteOrder(int orderid)
         {

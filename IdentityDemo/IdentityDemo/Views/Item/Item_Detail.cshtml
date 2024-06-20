@@ -1,6 +1,6 @@
-﻿@model IdentityDemo.Models.ItemModel
+﻿@model IdentityDemo.ViewModels.UpdateItemViewModel
 @{
-    Layout = "_OwnerLayout";
+    Layout = "_Owner_layout";
 }
 <div class="container" style="padding-top: 50px;">
     <div class="row">
@@ -11,9 +11,9 @@
                     <hr />
                     <h3 class ="card-text">Price in $: <span class="ml-3">$@Model.ItemPrice</span></h3>
                     <h3 class="card-text">Quantity: <span class="ml-3">@Model.ItemQuantity</span></h3>
-                    <h3 class="card-text">Created Date: <span class="ml-3">@Model.ItemCreatedDate.ToShortDateString()</span></h3>
-                    <h3 class="card-text">Updated Date: <span class="ml-3">@Model.ItemUpdatedDate.ToShortDateString()</span></h3>
-                    <h3 class ="card-text">Changed Price: <span class="ml-3">$@Model.ItemChangedPrice</span></h3>
+                    <h3 class="card-text">Created Date: <span class="ml-3">@Model.ItemCreatedDate</span></h3>
+                    <h3 class="card-text">Updated Date: <span class="ml-3">@Model.ItemUpdatedDate</span></h3>
+                    <h3 class ="card-text">Final Price: <span class="ml-3">$@Model.ItemChangedPrice</span></h3>
                     <div class="text-xl-center">
                         <a href="@Url.Action("Index","Item")" class="btn btn-primary w-25">Back</a>
                     </div>

@@ -14,16 +14,21 @@ namespace IdentityDemo.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly AppDbContext _context;
-       // private readonly IEmailSender _emailSender; // Implement an email sender service
+        private readonly RoleManager<IdentityRole> _roleManager;
+        // private readonly IEmailSender _emailSender; // Implement an email sender service
         public Accountcontroller(UserManager<ApplicationUser> userManager,
-                                  SignInManager<ApplicationUser> signInManager,AppDbContext context)
+                                  SignInManager<ApplicationUser> signInManager,AppDbContext context, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
+            _roleManager = roleManager;
             //_emailSender = emailSender;
         }
-
+        public IActionResult Admin_contact()
+        {
+            return View();
+        }
         [HttpGet]
         public IActionResult Register()
         {
@@ -40,54 +45,21 @@ namespace IdentityDemo.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
-                {
-                    
-                    // If registering as a shop owner, create the shop profile
-                    if (model.RegisterAs == "ShopOwner")
-                    {
-                        int newShopId = 0;
-                        int maxShopId = _context.Shops.Any() ? _context.Shops.Max(s => s.ShopId) : 0;
-                        newShopId = maxShopId + 1;
-                        var shop = new ShopModel
-                        {
-                            ShopId= newShopId,
-                            ShopName = model.ShopName,
-                            ShopPhone = model.ShopPhone,
-                            ShopDescription = model.ShopDescription,
-                            ShopAddress=model.ShopAddress,
-                            ShopEmail=model.Email,
-                            // Add other shop properties as needed
-                        };
-                        
-                        
-                        user.Role = model.RegisterAs;
-                        user.ShopId =newShopId;
-                        // Save the shop profile
-                        _context.Shops.Add(shop);
-                        
-
-                        // Associate the shop with the user, if needed
-                        //user.ShopId = shop.Id;
-                        
-                    }
-                    else
-                    {
-                        user.Role=model.RegisterAs;
-                        
-                    }
+                {          
                     user.Role = "User";
                     user.PhoneNumber= model.PhoneNumber;
                     user.PhoneNumberConfirmed = true;
                     user.EmailConfirmed = true;
                     user.Address = model.Address;
                     user.Forgot = 0;
+                    user.ShopId = 0;
                     await _context.SaveChangesAsync();
                     await _userManager.UpdateAsync(user);
                     // Sign in the user
                     await _signInManager.SignInAsync(user, isPersistent: false);
-
+                    var adduserole = await _userManager.AddToRoleAsync(user, "User");
                     // Redirect to appropriate page
-                    return RedirectToAction("UpdatePassword", "Account");
+                    return RedirectToAction("User_profile", "Account");
                 }
 
                 foreach (var error in result.Errors)
@@ -270,20 +242,29 @@ namespace IdentityDemo.Controllers
             {
                 return BadRequest();
             }
-            //Console.WriteLine(user.Role);
-            var model = new ProfileViewModel
-            {
-                
-                // Add the user ID to the model
-                UserId=user.Id,
-                UserName = user.UserName,
-                UserEmail = user.Email,
-                UserPhone = user.PhoneNumber,                 
-                Address = user.Address,
-                //Order= ordercount
-            };
+            // Fetch orders for the logged-in owner
+            var orders = _context.Orders
+                                 .Where(o => o.User_Id == user.Id)
+                                 .ToList();
 
-            return View(model);
+            // Create a list of OrderViewModel with User_Name
+            var orderViewModels = orders.Select(o => new OrderViewModel
+            {
+                OrderID = o.OrderID,
+                OrderDate = o.OrderDate,
+                OrderPrice = o.OrderPrice,                
+                Shop_Name = _context.Shops.FirstOrDefault(u => u.ShopId == o.Shop_Id)?.ShopName
+            }).ToList();
+            var profileViewModel = new ProfileViewModel
+            {
+                UserId = user.Id,
+                UserEmail = user.Email,
+                UserPhone=user.PhoneNumber,
+                UserName=user.UserName,
+                Address=user.Address,
+                Orders = orderViewModels
+            };
+            return View(profileViewModel);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]

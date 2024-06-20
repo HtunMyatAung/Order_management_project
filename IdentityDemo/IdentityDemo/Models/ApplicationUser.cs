@@ -9,7 +9,7 @@ namespace IdentityDemo.Models
          {
              var userIdentity =await manager.CreateIdentityAsync(this,DefaultAuthenticationTypes.ApplicationCookie);
          }*/
-        public int? ShopId { get; set; }
+        public int ShopId { get; set; }
         public string? Role { get; set; }
         public string? Address {  get; set; }
         public int? Forgot {  get; set; }
