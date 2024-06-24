@@ -1,36 +1,41 @@
 ﻿using IdentityDemo.Data;
+using IdentityDemo.Filters;
 using IdentityDemo.Models;
 using IdentityDemo.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Org.BouncyCastle.Bcpg;
 
 namespace IdentityDemo.Controllers
 {
+    [ServiceFilter(typeof(LogActionFilter))]
     public class Accountcontroller : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly AppDbContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IWebHostEnvironment _environment;
         // private readonly IEmailSender _emailSender; // Implement an email sender service
         public Accountcontroller(UserManager<ApplicationUser> userManager,
-                                  SignInManager<ApplicationUser> signInManager,AppDbContext context, RoleManager<IdentityRole> roleManager)
+                                  SignInManager<ApplicationUser> signInManager,AppDbContext context, RoleManager<IdentityRole> roleManager, IWebHostEnvironment environment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
             _roleManager = roleManager;
+            _environment = environment;
             //_emailSender = emailSender;
         }
         public IActionResult Admin_contact()
         {
             return View();
         }
-        [HttpGet]
-        public IActionResult Register()
+        //[HttpGet]
+        public async Task<IActionResult> Register()
         {
             return View();
         }
@@ -53,13 +58,26 @@ namespace IdentityDemo.Controllers
                     user.Address = model.Address;
                     user.Forgot = 0;
                     user.ShopId = 0;
-                    await _context.SaveChangesAsync();
+                    user.UserImageName = "male_default.png";
+                    //user.UserImageName = "male_default.png";
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        // Log or handle the exception
+                        Console.WriteLine("Error saving changes: " + ex.Message);
+                        Console.WriteLine("Inner exception: " + ex.InnerException?.Message);
+                        throw; // rethrow or handle the exception as needed
+                    }
+
                     await _userManager.UpdateAsync(user);
                     // Sign in the user
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     var adduserole = await _userManager.AddToRoleAsync(user, "User");
                     // Redirect to appropriate page
-                    return RedirectToAction("User_profile", "Account");
+                    return RedirectToAction("Index", "Home");
                 }
 
                 foreach (var error in result.Errors)
@@ -114,7 +132,7 @@ namespace IdentityDemo.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
         
         public IActionResult User_page()
@@ -207,14 +225,40 @@ namespace IdentityDemo.Controllers
                 // Handle user not found error
                 return NotFound();
             }
+            string uniqueFileName = model.Id + "_" + Path.GetFileName(user.UserImageName);
 
+            // Set the uploads folder path
+            string uploadsFolder = Path.Combine(_environment.WebRootPath, "img/users");
+
+            // Delete the old image if it exists
+            if (!string.IsNullOrEmpty(user.UserImageName))
+            {
+                string oldImagePath = Path.Combine(uploadsFolder, user.UserImageName);
+
+                if (System.IO.File.Exists(oldImagePath))
+                {
+                    System.IO.File.Delete(oldImagePath);
+                }
+            }
+
+            // Ensure the folder exists
+            Directory.CreateDirectory(uploadsFolder);
+
+            // Combine folder path and updated file name
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            // Copy the uploaded file to the specified path
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await model.UserImagePath.CopyToAsync(fileStream);
+            }   
             // Update user properties
             user.Role= model.Role;
             user.UserName=model.UserName;
             user.Email = model.Email;
             user.Address = model.Useraddress;
             user.PhoneNumber = model.UserPhone;
-
+            user.UserImageName = uniqueFileName;
             // Update other properties as needed
 
             var result = await _userManager.UpdateAsync(user);
@@ -237,50 +281,97 @@ namespace IdentityDemo.Controllers
         [HttpGet]
         public async Task<IActionResult> User_profile()
         {
-            var user= await _userManager.GetUserAsync(User);       
+            var username = User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
+
             if (user == null)
             {
                 return BadRequest();
             }
+
             // Fetch orders for the logged-in owner
-            var orders = _context.Orders
+            var orders = await _context.Orders
                                  .Where(o => o.User_Id == user.Id)
-                                 .ToList();
+                                 .ToListAsync();
 
             // Create a list of OrderViewModel with User_Name
             var orderViewModels = orders.Select(o => new OrderViewModel
             {
                 OrderID = o.OrderID,
                 OrderDate = o.OrderDate,
-                OrderPrice = o.OrderPrice,                
+                OrderPrice = o.OrderPrice,
                 Shop_Name = _context.Shops.FirstOrDefault(u => u.ShopId == o.Shop_Id)?.ShopName
             }).ToList();
+
             var profileViewModel = new ProfileViewModel
             {
+                OrderCount = orders.Count,
                 UserId = user.Id,
                 UserEmail = user.Email,
-                UserPhone=user.PhoneNumber,
-                UserName=user.UserName,
-                Address=user.Address,
-                Orders = orderViewModels
+                UserPhone = user.PhoneNumber,
+                UserName = user.UserName,
+                Address = user.Address,
+                Orders = orderViewModels,
+                //UserImageName = user.UserImageName
             };
+
             return View(profileViewModel);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> User_profile(ProfileViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByIdAsync(model.UserId); // Use FindByIdAsync to get the user
+                var user = await _userManager.FindByIdAsync(model.UserId);
 
                 if (user == null)
                 {
                     return NotFound();
                 }
 
-                // Update user properties based on the model
-                user.Id= model.UserId;
+                // Delete old image if it exists
+                if (!string.IsNullOrEmpty(user.UserImageName))
+                {
+                    string oldImagePath = Path.Combine(_environment.WebRootPath, "img/users", user.UserImageName);
+
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
+
+                // Set the uploads folder path
+                string uploadsFolder = Path.Combine(_environment.WebRootPath, "img/users");
+
+                // Ensure the folder exists
+                Directory.CreateDirectory(uploadsFolder);
+
+                // Generate a unique file name
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.UserImage.FileName);
+
+                if (model.UserImage != null)
+                {
+                    // Combine folder path and updated file name
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    // Copy the uploaded file to the specified path
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.UserImage.CopyToAsync(fileStream);
+                    }
+
+                    // Update user image name in the model
+                    user.UserImageName = uniqueFileName;
+                }
+                else
+                {
+                    // Handle case where model.UserImage is null
+                    return BadRequest("No file uploaded.");
+                }
+
+                // Update other user properties
                 user.UserName = model.UserName;
                 user.PhoneNumber = model.UserPhone;
                 user.Email = model.UserEmail;
@@ -306,6 +397,8 @@ namespace IdentityDemo.Controllers
             // If model state is not valid, return the view with validation errors
             return View(model);
         }
+
+
 
         /* [HttpGet]
          public IActionResult ForgotPassword()
@@ -387,6 +480,6 @@ namespace IdentityDemo.Controllers
          {
              return View();
          }*/
-
+        
     }
 }

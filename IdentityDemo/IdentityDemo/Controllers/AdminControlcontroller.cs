@@ -100,7 +100,7 @@ namespace IdentityDemo.Controllers
                 // Add the new role to the user
                 var addResult = await _userManager.AddToRoleAsync(user, "User");
             }
-            if (model.Role=="Owner" && user.ShopId == null)
+            if (model.Role=="Owner" && user.ShopId == 0)
             {
 
                 int newShopId = 0;
@@ -325,7 +325,7 @@ namespace IdentityDemo.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
         private string GenerateDefaultPassword(string userId)
         {

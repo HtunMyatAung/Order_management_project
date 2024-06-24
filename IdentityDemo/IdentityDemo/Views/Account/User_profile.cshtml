@@ -1,7 +1,12 @@
-﻿@model IdentityDemo.ViewModels.ProfileViewModel
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model IdentityDemo.ViewModels.ProfileViewModel
 @{
     Layout = null;
     int counter = 1;
+    ApplicationUser currentUser = await UserManager.GetUserAsync(User);
+
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -49,15 +54,16 @@
                             <!-- Profile Image -->
                             <div class="card card-primary card-outline">
                                 <div class="card-body box-profile">
+                                    
                                     <div class="text-center">
                                         <img class="profile-user-img img-fluid img-circle"
-                                             src="../../dist/img/user4-128x128.jpg"
+                                             src="../../img/users/@currentUser.UserImageName"
                                              alt="User profile picture">
                                     </div>
 
                                     <h3 class="profile-username text-center">@Model.UserName</h3>
 
-                                    <p class="text-muted text-center">Software Engineer</p>
+                                    <!--<p class="text-muted text-center">Software Engineer</p>-->
 
                                     <ul class="list-group list-group-unbordered mb-3">
                                         <li class="list-group-item">
@@ -70,7 +76,7 @@
                                             <b>Address</b> <a class="float-right">@Model.Address</a>
                                         </li>
                                         <li class="list-group-item">
-                                            <b>Orders</b><a class="float-right">11</a>
+                                            <b>Orders</b><a class="float-right">@Model.OrderCount</a>
                                         </li>
                                     </ul>
                                     <form asp-controller="Account" asp-action="Logout" method="post">
@@ -105,7 +111,7 @@
                                                 <div class="row">
                                                     <div class="col-12">
                                                         <div style="max-height: 600px; overflow-y: auto; text-align:center">    
-                                                           @{ if (!Model.Orders.Any()){
+                                                           @{ if (Model.Orders ==null ||!Model.Orders.Any()){
                                                                 <label>Oops! you haven't ordered anything yet!</label>
                                                             }
                                                             else{
@@ -145,8 +151,17 @@
                                         <!-- /.tab-pane -->
 
                                         <div class="tab-pane" id="settings">
-                                            <form asp-controller="Account" asp-action="User_profile" method="post" class="form-horizontal">
+                                            <form asp-controller="Account" asp-action="User_profile" method="post" enctype="multipart/form-data" runat="server" class="form-horizontal" >
                                                 <input type="hidden" asp-for="UserId" />
+                                                <img id="blah" class="image-preview" src="~/img/users/@currentUser.UserImageName" alt="Preview Image" style="max-width: 100%; max-height: 200px; display: block; margin-top: 10px;" />
+                                                <!-- Image Preview Section -->
+                                                <div class="form-group row">
+                                                    <label for="UserImage" class="col-sm-2 col-form-label">User Profile</label>
+                                                    <div class="col-sm-10">
+                                                        <input asp-for="UserImage" class="form-control-file" accept="image/*" type="file" id="imgInp" name="UserImage" onchange="previewImage(event)" />
+                                                        <span asp-validation-for="UserImage" class="text-danger"></span>
+                                                    </div>
+                                                </div>
                                                 <div class="form-group row">
                                                     <label asp-for="UserName" class="col-sm-2 col-form-label"></label>
                                                     <div class="col-sm-10">
@@ -164,11 +179,17 @@
                                                 <div class="form-group row">
                                                     <label  class="col-sm-2 col-form-label">Phone</label>
                                                     <div class="col-sm-10">
-                                                        <input asp-for="UserPhone" class="form-control" placeholder="Skills">
+                                                        <input asp-for="UserPhone" class="form-control" placeholder="Phone number">
                                                         <span asp-validation-for="UserPhone" class="text-danger"></span>
                                                     </div>
                                                 </div>
-                                                
+                                                <div class="form-group row">
+                                                    <label class="col-sm-2 col-form-label">Address</label>
+                                                    <div class="col-sm-10">
+                                                        <input asp-for="Address" class="form-control" placeholder="Address">
+                                                        <span asp-validation-for="UserPhone" class="text-danger"></span>
+                                                    </div>
+                                                </div>
                                                 <div class="form-group row">
                                                     <div class="offset-sm-2 col-sm-10">
                                                         <button type="submit" class="btn btn-danger">Submit</button>
@@ -223,6 +244,18 @@
         $(document).ready(function () {
             $('#Order_list').DataTable();
         });
+        function previewImage(event) {
+            const imgInp = event.target;
+            const file = imgInp.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('blah').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
     </script>
 </body>
 </html>

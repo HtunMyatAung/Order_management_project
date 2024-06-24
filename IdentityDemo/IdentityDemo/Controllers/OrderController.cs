@@ -18,79 +18,84 @@ namespace IdentityDemo.Controllers
             _userManager = userManager;
         }
 
-        
+
         //[HttpGet]
         public async Task<IActionResult> Invoice(Dictionary<int, int> selectedItems)
         {
-            if (selectedItems == null)
+            try
             {
-                return RedirectToAction("HomePageItems", "Item");
-            }
-            int maxorderId = _context.Shops.Any() ? _context.Orders.Max(s => s.OrderID) : 0;
-            int neworderId = maxorderId + 1;
-            if (selectedItems == null || selectedItems.Count == 0)
-            {
-                // Handle case where selectedItems is null or empty
-                // For example, redirect to a different action or return a view with an error message
-                return RedirectToAction("Index", "Home"); // Redirect to home page as an example
-            }
-            // Initialize a list to store item details
-            List<ItemModel> cartItems = new List<ItemModel>();
-            int tempshopid = 0;
-
-            // Iterate through the selected item IDs
-            foreach (var itemId in selectedItems.Keys)
-            {
-                var tempitem=_context.Items.FirstOrDefault(i=>i.ItemId == itemId);
-                if (tempshopid == 0 & tempitem !=null)
+                if (selectedItems == null || selectedItems.Count == 0)
                 {
-                    tempshopid =tempitem.Shop_Id;
-                    // Fetch the shop data based on the provided shopId
+                    return RedirectToAction("HomePageItems", "Item");
                 }
 
-                // Retrieve the item details from the database based on the item ID
-                var item = await _context.Items.FirstOrDefaultAsync(i => i.ItemId == itemId);
+                int newOrderId = _context.Orders.Any() ? _context.Orders.Max(s => s.OrderID) + 1 : 1;
 
-                // If the item is found, add it to the list with its quantity
-                if (item != null)
+                List<ItemModel> cartItems = new List<ItemModel>();
+                int tempShopId = 0;
+
+                // Fetch all item IDs to minimize database round-trips
+                var itemIds = selectedItems.Keys.ToList();
+                var items = await _context.Items.Where(i => itemIds.Contains(i.ItemId)).ToListAsync();
+
+                foreach (var itemId in itemIds)
                 {
-                    cartItems.Add(new ItemModel
+                    var tempItem = items.FirstOrDefault(i => i.ItemId == itemId);
+                    if (tempItem != null)
                     {
-                        ItemId = item.ItemId,
-                        ItemName = item.ItemName,
-                        ItemPrice = item.ItemPrice,
-                        ItemQuantity = selectedItems[itemId] // Quantity from the selectedItems dictionary
-                                                             // Add more item details as needed
-                    });
+                        if (tempShopId == 0)
+                        {
+                            tempShopId = tempItem.Shop_Id;
+                        }
+
+                        cartItems.Add(new ItemModel
+                        {
+                            ItemId = tempItem.ItemId,
+                            ItemName = tempItem.ItemName,
+                            ItemPrice = tempItem.ItemPrice,
+                            ItemChangedPrice = tempItem.ItemChangedPrice,
+                            ItemQuantity = selectedItems[itemId]
+                        });
+                    }
                 }
-            }
 
-            // Fetch the shop data based on the temporary shop ID
-            ShopModel shopData = await _context.Shops.FirstOrDefaultAsync(s => s.ShopId == tempshopid);
-            ApplicationUser currentUser = await _userManager.GetUserAsync(User);
-            if (currentUser == null)
-            {
-                return Unauthorized();
-            }
+                var shopData = await _context.Shops.FindAsync(tempShopId);
+                if (shopData == null)
+                {
+                    return NotFound(); // Handle case where shop data is not found
+                }
 
-            if (shopData == null)
-            {
-                return NotFound(); // Handle case where shop data is not found
-            }
+                var currentUser = await _userManager.GetUserAsync(User);
+                if (currentUser == null)
+                {
+                    return Unauthorized();
+                }
 
-            // Create the InvoiceViewModel instance
-            InvoiceViewModel invoiceViewModel = new InvoiceViewModel
+                var invoiceViewModel = new InvoiceViewModel
+                {
+                    User = currentUser,
+                    OrderId = newOrderId,
+                    Shop = shopData,
+                    OrderDate = DateTime.Now,
+                    Items = cartItems
+                };
+
+                // Store InvoiceViewModel in TempData
+                TempData["InvoiceViewModel"] = JsonConvert.SerializeObject(invoiceViewModel);
+
+                return View(invoiceViewModel); // Pass the InvoiceViewModel to the view
+            }
+            catch (Exception ex)
             {
-                User = currentUser,
-                OrderId=neworderId,
-                Shop = shopData,
-                OrderDate = DateTime.Now,
-                Items = cartItems // List of items added above
-            };
-            // Store InvoiceViewModel in TempData
-            TempData["InvoiceViewModel"] = JsonConvert.SerializeObject(invoiceViewModel);
-            return View(invoiceViewModel); // Pass the single InvoiceViewModel to the view
+                // Log the exception
+                //_logger.LogError(ex, "Error generating invoice");
+
+                // Optionally, return a specific error view or redirect
+                return RedirectToAction("Error", "Home");
+            }
         }
+
+
         //[HttpPost]
         public IActionResult SaveInvoice()
         {
@@ -104,7 +109,7 @@ namespace IdentityDemo.Controllers
             var invoiceViewModelJson = TempData["InvoiceViewModel"].ToString();
             InvoiceViewModel invoiceViewModel = JsonConvert.DeserializeObject<InvoiceViewModel>(invoiceViewModelJson);
             // Calculate the sum of the total item prices
-            decimal totalSum = invoiceViewModel.Items.Sum(item => item.ItemPrice * item.ItemQuantity);
+            decimal totalSum = invoiceViewModel.Items.Sum(item => item.ItemChangedPrice * item.ItemQuantity);
             var itemidlist= invoiceViewModel.Items.ToList();
             OrderModel orderModel = new OrderModel
             {
@@ -146,7 +151,7 @@ namespace IdentityDemo.Controllers
             }
             _context.Orders.Remove(std);
             _context.SaveChanges();
-            return RedirectToAction("Index","Order");
+            return RedirectToAction("Owner_order_list","Shop");
         }
         
     }

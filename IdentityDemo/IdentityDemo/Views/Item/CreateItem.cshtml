@@ -1,9 +1,7 @@
-﻿@model IdentityDemo.Models.ItemModel
+﻿@model IdentityDemo.ViewModels.SingleItemViewModel
 @{
     Layout = "_Owner_layout";
 }
-
-
 <div class="container" style="padding-top: 70px;">
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -12,9 +10,18 @@
                     <h2>Item Update</h2>
                 </div>
                 <div class="card-body">
-                    <form asp-action="CreateItem" asp-controller="Item" method="post">
+                    <form asp-action="CreateItem" asp-controller="Item" method="post" enctype="multipart/form-data" runat="server">
                         <input type="hidden" asp-for="ItemId" value="1"/>
-                        <input type="hidden" asp-for="Shop_Id" value="1"/>
+                        <input type="hidden" asp-for="Shop_Id" />
+                        <div class="form-group row">
+                            <div class="col-sm-10">
+                                <label for="profileImage" class="col-sm-2 col-form-label">Shop Profile</label>
+                                <!--<img id="blah" class="image-preview" src="#" alt="Preview Image" style="max-width: 100%; max-height: 200px; display: block; margin-top: 10px;" />-->
+                                <input asp-for="ItemImage" class="form-control-file" accept="image/*" type="file" id="imgInp" name="ItemImage" onchange="previewImage(event)" />
+                                <span asp-validation-for="ItemImage" class="text-danger"></span>
+
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label asp-for="ItemName">Name</label>
                             <input type="text" class="form-control" asp-for="ItemName" placeholder="Enter item name" id="nameInput" data-error-message="Enter valid Name">
@@ -41,7 +48,24 @@
         </div>
     </div>
 </div>
-<script src="~/js/itemvalidate.js">
+<script src="~/js/itemvalidat.js"></script>
+<script>
+    document.getElementById('phoneInput').addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9]/g, ''); // Replace any non-numeric characters with an empty string
+    });
+
+    function previewImage(event) {
+        const imgInp = event.target;
+        const file = imgInp.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('blah').src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    }
 
 </script>
 

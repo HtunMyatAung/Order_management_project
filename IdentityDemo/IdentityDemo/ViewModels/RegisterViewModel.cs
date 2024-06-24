@@ -28,6 +28,7 @@ namespace IdentityDemo.ViewModels
         public string ConfirmPassword { get; set; }
         [Display(Name = "User Photo")]
         public IFormFile? UserPhoto { get; set; }
+        public string? UserImageName {  get; set; }
         // Property to indicate whether the user is registering as a shop owner
         [Display(Name = "Register As")]
         public string? RegisterAs { get; set; }

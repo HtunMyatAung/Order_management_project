@@ -1,10 +1,10 @@
-﻿@model IdentityDemo.Models.ItemModel
+﻿@model IdentityDemo.ViewModels.SingleItemViewModel
 @{
     Layout = "_Owner_layout";
 }
 
 
-<div class="container" style="padding-top: 70px;">
+<div class="container" style="padding-top: 30px;">
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
@@ -12,8 +12,19 @@
                     <h2>Item Update</h2>
                 </div>
                 <div class="card-body">
-                    <form asp-action="UpdateItem" asp-controller="Item" method="post">
+                    <form asp-action="UpdateItem" asp-controller="Item" method="post" enctype="multipart/form-data" runat="server">
                         <input type="hidden" asp-for="ItemId" />
+                        <!-- Image Preview Section -->
+                        <div class="form-group row">
+                            <div class="col-sm-10">
+                                <label for="profileImage" class="col-sm-2 col-form-label">Shop Profile</label>
+                                <!--<img id="blah" class="image-preview" src="#" alt="Preview Image" style="max-width: 100%; max-height: 200px; display: block; margin-top: 10px;" />-->
+                                <input asp-for="ItemImage" class="form-control-file" accept="image/*" type="file" id="imgInp" name="ItemImage" onchange="previewImage(event)" />
+                                <span asp-validation-for="ItemImage" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                        <!--item update form-->
                         <div class="form-group">
                             <label asp-for="ItemName">Name</label>
                             <input type="text" class="form-control" asp-for="ItemName" placeholder="Enter item name" id="nameInput" />
@@ -85,6 +96,69 @@
         discountPriceInput.addEventListener("input", calculateFinalPrice);
         discountRateInput.addEventListener("input", calculateFinalPrice);
         priceInput.addEventListener("input", calculateFinalPrice);
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        var nameInput = document.getElementById('nameInput');
+        var priceInput = document.getElementById('priceInput');
+        var quantityInput = document.getElementById('quantityInput');
+        var discountpriceInput = document.getElementById('discountpriceInput');
+        var discountrateInput = document.getElementById('discountrateInput');
+        var discountpriceValidationMessage = document.getElementById('discountpriceValidationMessage')
+        var discountrateValidationMessage = document.getElementById('discountrateValidationMessage')
+        var nameValidationMessage = document.getElementById('nameValidationMessage');
+        var priceValidationMessage = document.getElementById('priceValidationMessage');
+        var quantityValidationMessage = document.getElementById('quantityValidationMessage');
+
+        var submitButton = document.getElementById('submitButton');
+
+        // Decimal(7,2): Up to 7 digits in total, with up to 2 decimal places.
+        var pricePattern = /^\d{1,5}(\.\d{1,2})?$/;
+        // Integer pattern for quantity
+        var quantityPattern = /^\d+$/;
+        var ratePattern = /^100(\.0{1,2)?$|^\d{1,2}(\.\d{1,2})?$/;
+
+
+        function validateInput(input, pattern, validationMessage) {
+            if (!pattern.test(input.value.trim())) {
+                validationMessage.innerText = input.getAttribute('data-error-message');
+                submitButton.disabled = true;
+            } else {
+                validationMessage.innerText = '';
+                checkFormValidity();
+            }
+        }
+
+        function checkFormValidity() {
+            if (
+                nameInput.value.trim() !== '' &&
+                pricePattern.test(priceInput.value) &&
+                quantityPattern.test(quantityInput.value)
+            ) {
+                submitButton.disabled = false;
+            } else {
+                submitButton.disabled = true;
+            }
+        }
+
+        nameInput.addEventListener('input', function () {
+            validateInput(nameInput, /.+/, nameValidationMessage);
+        });
+
+        priceInput.addEventListener('input', function () {
+            validateInput(priceInput, pricePattern, priceValidationMessage);
+        });
+
+        quantityInput.addEventListener('input', function () {
+            validateInput(quantityInput, quantityPattern, quantityValidationMessage);
+        });
+        discountpriceInput.addEventListener('input', function () {
+            validateInput(discountpriceInput, pricePattern, discountpriceValidationMessage);
+        });
+        discountrateValidationMessage.addEventListener('input', function () {
+            validateInput(discountrateInput, ratePattern, discountrateValidationMessage);
+        })
+        // Initial check on page load
+        checkFormValidity();
     });
 </script>
 

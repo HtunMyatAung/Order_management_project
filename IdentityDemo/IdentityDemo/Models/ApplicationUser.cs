@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Claims;
 
 namespace IdentityDemo.Models
@@ -13,5 +14,7 @@ namespace IdentityDemo.Models
         public string? Role { get; set; }
         public string? Address {  get; set; }
         public int? Forgot {  get; set; }
+        [Column("user_image")]
+        public string UserImageName { get; set; }
     }
 }

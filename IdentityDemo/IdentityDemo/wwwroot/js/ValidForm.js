@@ -3,17 +3,18 @@ document.addEventListener('DOMContentLoaded', function () {
     var addressInput = document.getElementById('addressInput');
     var emailInput = document.getElementById('emailInput');
     var phoneInput = document.getElementById('phoneInput');
+    var passwordInput = document.getElementById('passwordInput');
+    var confirmPasswordInput = document.getElementById('confirmPasswordInput');
     var nameValidationMessage = document.getElementById('nameInputValidationMessage');
     var addressValidationMessage = document.getElementById('addressInputValidationMessage');
     var emailValidationMessage = document.getElementById('emailInputValidationMessage');
     var phoneValidationMessage = document.getElementById('phoneInputValidationMessage');
-    var passwordInput = document.getElementById('passwordInput');
-    var confirmPasswordInput = document.getElementById('confirmPasswordInput');
     var passwordValidationMessage = document.getElementById('passwordInputValidationMessage');
     var confirmPasswordValidationMessage = document.getElementById('confirmPasswordInputValidationMessage');
     var submitButton = document.getElementById('submitButton');
 
     var emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    var passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{6,}$/;
     var phonePattern = /^09\d{9}$/; // Simple pattern for a 10-digit phone number
 
     function validatePasswordMatch() {
@@ -29,31 +30,54 @@ document.addEventListener('DOMContentLoaded', function () {
     function validateInput(input, pattern, validationMessage) {
         if (!pattern.test(input.value)) {
             validationMessage.innerText = input.getAttribute('data-error-message');
-            submitButton.disabled = true;
+            return false;
         } else {
             validationMessage.innerText = '';
-            if (nameInput.value.trim() !== '' && emailPattern.test(emailInput.value) && phonePattern.test(phoneInput.value) && addressInput.value.trim() !== '' && validatePasswordMatch()) {
-                submitButton.disabled = false;
-            }
+            return true;
         }
     }
 
+    function validateForm() {
+        var isFormValid =
+            validateInput(nameInput, /.+/, nameValidationMessage) &&
+            validateInput(emailInput, emailPattern, emailValidationMessage) &&
+            validateInput(phoneInput, phonePattern, phoneValidationMessage) &&
+            validateInput(addressInput, /.+/, addressValidationMessage) &&
+            validateInput(passwordInput, passwordPattern, passwordValidationMessage) &&
+            validatePasswordMatch();
+
+        submitButton.disabled = !isFormValid;
+    }
+
     nameInput.addEventListener('input', function () {
-        validateInput(nameInput, /.+/, nameValidationMessage); // Accepts any non-empty input for name
+        validateInput(nameInput, /.+/, nameValidationMessage);
+        validateForm();
     });
 
     emailInput.addEventListener('input', function () {
         validateInput(emailInput, emailPattern, emailValidationMessage);
+        validateForm();
     });
 
     phoneInput.addEventListener('input', function () {
         validateInput(phoneInput, phonePattern, phoneValidationMessage);
+        validateForm();
     });
 
     addressInput.addEventListener('input', function () {
-        validateInput(addressInput, /.+/, addressValidationMessage); // Accepts any non-empty input for address
+        validateInput(addressInput, /.+/, addressValidationMessage);
+        validateForm();
     });
 
-    passwordInput.addEventListener('input', validatePasswordMatch);
-    confirmPasswordInput.addEventListener('input', validatePasswordMatch);
+    passwordInput.addEventListener('input', function () {
+        validateInput(passwordInput, passwordPattern, passwordValidationMessage);
+        validateForm();
+    });
+
+    confirmPasswordInput.addEventListener('input', function () {
+        validatePasswordMatch();
+        validateForm();
+    });
+
+    validateForm(); // Initial validation
 });

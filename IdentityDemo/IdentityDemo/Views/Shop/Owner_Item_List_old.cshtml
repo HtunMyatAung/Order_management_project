@@ -1,0 +1,128 @@
+﻿@model IEnumerable<IdentityDemo.Models.ItemModel>
+
+@{
+    Layout = "_Owner_layout";
+    int counter = 1;
+}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+@section Database {
+    <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.0.8/fh-4.0.1/sb-1.7.1/datatables.min.css" rel="stylesheet">
+}
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.0.8/fh-4.0.1/sb-1.7.1/datatables.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#example1').DataTable({
+                responsive: true,
+                lengthChange: false,
+                autoWidth: false,
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search...",
+                }
+            });
+        });
+
+        function openPopup(itemName, itemPrice, itemQuantity, createdDate, updatedDate) {
+            $('#modalItemName').text(itemName);
+            $('#modalItemPrice').text(itemPrice);
+            $('#modalItemQuantity').text(itemQuantity);
+            $('#modalCreatedDate').text(createdDate);
+            $('#modalUpdatedDate').text(updatedDate);
+
+            $('#popup').modal('show');
+        }
+
+        function closePopup() {
+            $('#popup').modal('hide');
+        }
+
+        
+    </script>
+}
+
+<div style="padding-top: 15px; align: left;">
+    <div class="card-body">
+        @foreach (var item in Model)
+        {
+            ViewBag.id = item.Shop_Id;
+        }
+        <a href="@Url.Action("CreateItem","Item",new{shopid = @ViewBag.id})" class="btn btn-primary"><i class="fa fa-circle-plus"></i> New Item</a>
+        <table id="example1" class="table table-bordered table-striped">
+            <thead class="bg-gray">
+                <tr style="text-align: center;">
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Discount Price</th>
+                    <th>Edit</th>
+                    <th>View</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr style="text-align: center;">
+                        <td>@counter</td>
+                        <td>@item.ItemName</td>
+                        <td>@item.ItemPrice</td>
+                        <td>@item.ItemQuantity</td>
+                        <td>@item.ItemChangedPrice</td>
+                        <td>
+                            <a href="@Url.Action("UpdateItem", "Item", new { itemid = @item.ItemId })">
+                                <i class="fas fa-edit sm pr-1"></i> Edit
+                            </a>
+                        </td>
+                        <td>
+                            <a onclick="openPopup('@item.ItemName', '@item.ItemPrice', '@item.ItemQuantity', '@item.ItemCreatedDate', '@item.ItemUpdatedDate')" href="#">
+                                <i class="fas fa-eye pr-1"></i> View
+                            </a>
+                        </td>
+                        <td>
+                            <form asp-action="DeleteItem" asp-controller="Item" method="post" onsubmit="return confirm('Are you sure you want to delete this Item?');">
+                                <input type="hidden" name="itemid" value="@item.ItemId" />
+                                <button type="submit" class="btn btn-link" style="color:red">
+                                    <i class="fas fa-trash sm pr-1"></i> Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    counter += 1;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="popup" tabindex="-1" role="dialog" aria-labelledby="buyItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="buyItemModalLabel">Item Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Item Name:</strong> <span id="modalItemName"></span></p>
+                <p><strong>Price:</strong> <span id="modalItemPrice"></span></p>
+                <p><strong>Quantity:</strong> <span id="modalItemQuantity"></span></p>
+                <p><strong>Created Date:</strong> <span id="modalCreatedDate"></span></p>
+                <p><strong>Updated Date:</strong> <span id="modalUpdatedDate"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                
+            </div>
+        </div>
+    </div>
+</div>

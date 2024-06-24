@@ -24,8 +24,10 @@ namespace IdentityDemo.Models
 
         [Column("address")]
         public string ShopAddress { get; set; }
+        [Column("shopimage")]
+        public string ProfileImagePath { get; set; }
+        
 
-        //[Column("shopimage")]
-       // public string ShopImage { get; set; }
+        
     }
 }

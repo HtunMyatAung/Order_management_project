@@ -17,12 +17,12 @@ namespace IdentityDemo.Controllers
             _shopService = shopService;
         }*/
         private readonly AppDbContext _context;
-        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IWebHostEnvironment _environment;
 
-        public ShopController(AppDbContext context, IWebHostEnvironment webHostEnvironment)
+        public ShopController(AppDbContext context, IWebHostEnvironment environment)
         {
             _context = context;
-            _webHostEnvironment = webHostEnvironment;
+            _environment = environment;
         }
         /* public async Task<ShopModel> GetShopDataAsync(string shopId)
          {
@@ -78,15 +78,26 @@ namespace IdentityDemo.Controllers
             var username = User.Identity.Name;
             var user = _context.Users.FirstOrDefault(u => u.UserName == username);
             var shop = _context.Shops.FirstOrDefault(s => s.ShopId ==user.ShopId );
+            var shopview = new ShopViewModel()
+            {
+                ShopId=shop.ShopId,
+                ShopName=shop.ShopName,
+                ShopEmail=shop.ShopEmail,
+                ShopAddress=shop.ShopAddress,
+                ShopPhone=shop.ShopPhone,
+                ShopDescription=shop.ShopDescription,
+                //ShopImageName=shop.ProfileImagePath
+            };
+            
             if (shop == null)
             {
                 return NotFound();
             }
-            return View(shop);
+            return View(shopview);
         }
         [Authorize(Roles = "Owner")]
         [HttpPost]
-        public async Task<IActionResult> UpdateShop(ShopModel shop)
+        public async Task<IActionResult> UpdateShop(ShopViewModel shop)
         {
             if (ModelState.IsValid)
             {
@@ -104,52 +115,58 @@ namespace IdentityDemo.Controllers
                 {
                     return NotFound(); // Handle case where shop is not found
                 }
+                string uniqueFileName = shop.ShopId + "_" + Path.GetFileName(shopToUpdate.ProfileImagePath);
 
+                // Set the uploads folder path
+                string uploadsFolder = Path.Combine(_environment.WebRootPath, "img/shop");
+
+                // Delete the old image if it exists
+                if (!string.IsNullOrEmpty(shopToUpdate.ProfileImagePath))
+                {
+                    string oldImagePath = Path.Combine(uploadsFolder, shopToUpdate.ProfileImagePath);
+
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
+
+                // Ensure the folder exists
+                Directory.CreateDirectory(uploadsFolder);
+
+                // Combine folder path and updated file name
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                // Copy the uploaded file to the specified path
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await shop.ProfileImage.CopyToAsync(fileStream);
+                }
+
+                // Update the shop profile image name with the new file name
+                
+
+                // Update other shop details
                 shopToUpdate.ShopName = shop.ShopName;
                 shopToUpdate.ShopPhone = shop.ShopPhone;
                 shopToUpdate.ShopDescription = shop.ShopDescription;
                 shopToUpdate.ShopAddress = shop.ShopAddress;
                 shopToUpdate.ShopEmail = shop.ShopEmail;
+                shopToUpdate.ProfileImagePath = uniqueFileName;
 
-                // Handle ShopImage update
-                /*if (profileImage != null && profileImage.Length > 0)
-                {
-                    // Generate a unique file name for the image
-                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(profileImage.FileName);
-
-                    // Define the folder where the image will be stored (wwwroot/img/shop)
-                    var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "img", "shop");
-
-                    // Ensure the directory exists
-                    if (!Directory.Exists(uploadsFolder))
-                    {
-                        Directory.CreateDirectory(uploadsFolder);
-                    }
-
-                    // Combine the uploads folder with the unique file name
-                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                    // Copy the uploaded file to the file path
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await profileImage.CopyToAsync(fileStream);
-                    }
-
-                    // Update the ShopImage property in the shopToUpdate object
-                    shopToUpdate.ShopImage = uniqueFileName; // Store only the file name or relative path
-                }
-                */
-                // Update the shop entity in the database
                 _context.Shops.Update(shopToUpdate);
                 await _context.SaveChangesAsync();
 
-                // Redirect to Owner_Index action in Shop controller after successful update
+                // Redirect to Owner_dashboard action in Shop controller after successful update
                 return RedirectToAction("Owner_dashboard", "Shop");
             }
-
+            
             // If ModelState is not valid, return to the view with validation errors
             return View(shop);
         }
+
+
+
         [Authorize(Roles = "Owner")]
         public IActionResult DeleteShop(int shopid)
         {
@@ -239,6 +256,63 @@ namespace IdentityDemo.Controllers
             };
 
             return View(ownerdashboardViewModel);
+        }
+        public IActionResult CreateTest()
+        {
+            return View();
+        }
+        // POST: Save Shop with Image
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateTest(ShopViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string uniqueFileName = null;
+
+                // Check if an image is uploaded
+                if (model.ProfileImage != null)
+                {
+                    // Set the uploads folder path
+                    string uploadsFolder = Path.Combine(_environment.WebRootPath, "img/shop");
+
+                    // Ensure the folder exists
+                    Directory.CreateDirectory(uploadsFolder);
+
+                    // Generate a unique file name to avoid collisions
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.ProfileImage.FileName);
+
+                    // Combine folder path and file name
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    // Copy the uploaded file to the specified path
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.ProfileImage.CopyToAsync(fileStream);
+                    }
+                }
+
+                // Create a new ShopModel object
+                var shop = new ShopModel
+                {
+                    ShopName = model.ShopName,
+                    ShopPhone = model.ShopPhone,
+                    ShopEmail = model.ShopEmail,
+                    ShopAddress = model.ShopAddress,
+                    ShopDescription = model.ShopDescription,
+                    ProfileImagePath = uniqueFileName  // Assign the file name to the model property
+                };
+
+                // Add the shop to the database
+                _context.Add(shop);
+                await _context.SaveChangesAsync();
+
+                // Redirect to a success page or another action
+                return RedirectToAction("Owner_dashboard", "Shop");
+            }
+
+            // If model state is not valid, return to the view with errors
+            return View(model);
         }
 
     }

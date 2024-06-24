@@ -2,71 +2,182 @@
 @{
     Layout = "_Zone_layout";
 }
-@section Shopidcss {
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+
+
+@*<link href="~/css/oneshoponeitem.css" rel="stylesheet" />*@
+<style>
+    .main-container {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .container1 {
+        width: 65%;
+        margin-left: 60px;
+    }
+
+    .container2 {
+        border-style: solid;
+        width: 27%;
+        margin-left: 30px;
+        margin-right: 60px;
+        height: 85vh; /* You can adjust the height as needed */
+        border-color: gray;
+        border-radius: 10px;
+        border-width: 2px;
+        flex-grow: 1; /* Take up all remaining space */
+        display: flex;
+        flex-direction: column;
+        overflow: hidden; /* Hide overflow for flex child (to prevent scrollbar on this container) */
+        position: sticky; /* Make the container sticky */
+        top: 80px; /* Stick 100px from the top of the viewport */
+    }
+
+    .sticky {
+        margin-top: 9px;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 80px;
+    }
+
+    .card-custom {
+        width: 30rem;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+
+        .card-custom img {
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            height: 200px;
+            object-fit: cover;
+        }
+
+    .card-body {
+        padding: 1.35rem;
+        height: 100px;
+    }
+
+    .btn-primary {
+        border-radius: 20px;
+        float: right;
+    }
+
+    .card-title {
+        font-size: 16px;
+    }
+
+    .card-text {
+        font-size: 14px;
+    }
+
+    .formargin {
+        margin-top: 10px;
+    }
+
+    .buttonshop {
+        width: 400px;
+        border-style: none;
+        border-radius: 20px;
+        background-color: white;
+        color: gray;
+        margin-bottom: 8px;
+    }
+
+        .buttonshop:hover {
+            width: 400px;
+            border-style: solid;
+            border-color: dimgray;
+            border-width: 1px;
+            border-radius: 20px;
+            background-color: white;
+            color: gray;
+            margin-bottom: 8px;
+        }
+
+    .purchasebutton {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 10%;
+        background-color: blue;
+    }
+
+    .buttonsize {
+        width: 300px;
+        height: 50px;
+    }
+
+    .stickyyy {
+        position: sicky;
+        top: 90%;
+        left: 10%;
+    }
+
+    .purchaseitem {
+        background-color: lightgray;
+        border-radius: 10px;
+        margin: 10px;
+        padding: 10px;
+        margin-top;
+        15px;
+        font-size: 20px;
+        width: 96%;
+    }
+
+    .marginname {
+        margin-left: 10px;
+    }
+
+    .marginname2 {
+        margin-right: 10px;
+    }
+
+    .list-container {
+        height: 100%; /* Ensure the list container fills its parent */
+        overflow-y: auto; /* Enable vertical scrolling for overflowing content */
+    }
+
+    .scrollable-list {
+        height: 100%; /* Ensure the list container fills its parent */
+        padding: 10px; /* Padding for aesthetics */
+    }
+
+    .sticky-button-container {
+        height: 10%; /* 10% height for the sticky button */
+        position: sticky;
+        bottom: 0;
+        background-color: white; /* Ensures the button is on top of scrollable content */
+        box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1); /* Optional: add shadow for separation effect */
+    }
+
+    .buttonsize {
+        width: 100%; /* Full width button */
+    }
+
+</style>
+<section class="py-3">
     
-    <style>
-        .sidebar-open #itemListContainer {
-            width: 75%;
-        }
-
-        .sidebar-open #sidebarContainer {
-            width: 25%;
-            display: block !important; /* Ensure sidebar is visible when open */
-        }
-
-        .sidebar-closed #itemListContainer {
-            width: 100%;
-        }
-
-        .sidebar-closed #sidebarContainer {
-            display: none; /* Hide sidebar when closed */
-        }
-    </style>
-}
-<div class="container-fluid bg-light">
-    <div class="row">
-        <div class="col-sm-6">
-            <h3 class="text-left my-4">Welcome to (Our @Model.Shop.ShopName)</h3>
-        </div>
-        <div class="col-sm-6 d-flex justify-content-end align-items-center">
-            <a href="#" class="btn btn-outline-secondary cart-icon" id="cartButton">
-                <i class="fas fa-shopping-cart" style="font-size: 1.5rem;"></i>
-                <span class="badge">0</span>
-            </a>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-9" id="itemListContainer">
-            <div class="row">
+    <div class="main-container">
+        <div class="container1">
+            <div class="row justify-content-left formargin">
                 @foreach (var item in Model.Items)
                 {
-                    <div class="col-md-4 mb-4">
-                        <div class="card shadow-sm h-100">
-                            <img src="~/img/product1.jpg" class="card-img-top" alt="Product Image">
+                    <div class="col-lg-6 col-md-12 d-flex justify-content-center">
+                        <div class="card card-custom" data-id="@item.ItemId">
+                            <img src="~/img/items/@item.ItemImageName" class="card-img-top" alt="Product 1">
                             <div class="card-body">
-                                <h5 class="card-title">@item.ItemName</h5>
-                                <p class="card-text"></p>
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="card-title">@item.ItemName</h5>
+                                    <p class="card-text" style="padding-right: 23px;">@item.ItemChangedPrice</p>
+                                </div>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-outline-secondary add-to-cart-btn"
-                                                data-id="@item.ItemId"
-                                                data-name="@item.ItemName"
-                                                data-price="@item.ItemChangedPrice"
-                                                data-img="~/img/bg2.jpg">
-                                            Add to Cart
-                                        </button>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        Amount: <span class="px-2 count" id="supercount">1</span>
                                     </div>
-                                    <div>
-                                        <small class="text-muted"><s>$@item.ItemPrice</s></small>
-                                        <small class="text-muted">$@item.ItemChangedPrice</small>
-                                    </div>
+                                    <a href="#" class="btn btn-secondary btn-sm add-to-cart-btn" data-id="@item.ItemId" style="margin-right: 15px;">Add cart</a>
                                 </div>
                             </div>
                         </div>
@@ -74,152 +185,142 @@
                 }
             </div>
         </div>
-       
-        <div class="col-md-3" id="sidebarContainer">
-            <div class="right-sidebar">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="header1">
-                        <h5>Shopping Cart</h5>
-                    </div>
-                    <div>
-                        <i class="fas fa-times close-btn" id="closeSidebar"></i>
+        <!-- Your existing HTML code -->
+        <div class="container2 ">
+            <div class="list-container">
+                <div class="scrollable-list">
+                    <div id="item-names" class="text-center">
+                        <br />
+                        <!-- Item names with quantities will be displayed here -->
                     </div>
                 </div>
-                <div class="body" id="cartItemsContainer">
-                    <!-- Cart items will be listed here dynamically -->
-                </div>
-                <div class="total-price">
-                    Total: $<span id="totalAmount">0.00</span>
-                </div>
-
-                <button class="submit-btn" id="submitCart">Pay Now</button>
             </div>
+            <div class="sticky-button-container">
+                <div class="text-center mx-auto">
+                    <button class="btn btn-primary mb-3 buttonsize" id="submittocart">Purchase</button>
+                </div>
+            </div>
+            
         </div>
-        
     </div>
-</div>
+</section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-@section Scripts {
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            // Function to update total amount and cart badge
-            function updateCart() {
-                var totalAmount = 0;
-                var itemCount = 0;
+<script>
+    $(document).ready(function () {
+        var selectedItems = {}; // Object to store item quantities in the cart
 
-                // Calculate total amount from all cart items
-                $('.cart-item').each(function () {
-                    var itemPrice = parseFloat($(this).data('price'));
-                    var quantity = parseInt($(this).find('.item-quantity').val());
-                    totalAmount += itemPrice * quantity;
-                    itemCount += quantity;
-                });
+        // Disable the Purchase button on page load
+        $('#submittocart').attr('disabled', 'disabled');
 
-                // Update total amount display
-                $('#totalAmount').text(totalAmount.toFixed(2));
-
-                // Update cart badge
-                $('#cartButton .badge').text(itemCount);
-            }
-
-            // Add to cart functionality
-            $(document).on('click', '.add-to-cart-btn', function () {
-                var itemId = $(this).data('id');
-                var itemName = $(this).data('name');
-                var itemPrice = parseFloat($(this).data('price'));
-
-                // Check if item already exists in cart
-                var existingCartItem = $(`#cartItemsContainer .cart-item[data-id="${itemId}"]`);
-
-                if (existingCartItem.length > 0) {
-                    // Item already exists, increment quantity
-                    var quantityInput = existingCartItem.find('.item-quantity');
-                    var currentQuantity = parseInt(quantityInput.val());
-                    quantityInput.val(currentQuantity + 1);
-                } else {
-                    // Item does not exist, add new item to cart
-                    $('#cartItemsContainer').append(`
-                                <div class="cart-item d-flex justify-content-between align-items-center mb-2" data-id="${itemId}" data-price="${itemPrice}">
-                                    <div>${itemName}</div>
-                                    <div class="d-flex align-items-center">
-                                        <input type="number" class="form-control item-quantity mr-2" value="1" min="1">
-                                        <i class="fas fa-trash-alt remove-item ml-2" style="cursor: pointer;"></i>
-                                    </div>
-                                </div>
-                            `);
-                }
-
-                // Update total amount and cart badge
-                updateCart();
-            });
-
-            // Remove item from cart
-            $(document).on('click', '.remove-item', function () {
-                var cartItem = $(this).closest('.cart-item');
-                var itemPrice = parseFloat(cartItem.data('price'));
-
-                cartItem.remove();
-
-                // Update total amount and cart badge
-                updateCart();
-            });
-
-            // Toggle sidebar on cart icon click
-            $('#cartButton').click(function () {
-                $('.right-sidebar').addClass('sidebar-open');
-                $('#itemListContainer').removeClass('col-md-12').addClass('col-md-9');
-                $('#sidebarContainer').show();
-                updateCart(); // Update cart immediately upon opening sidebar
-            });
-
-            // Close sidebar when close button is clicked
-            $('#closeSidebar').click(function () {
-                $('.right-sidebar').removeClass('sidebar-open');
-                $('#itemListContainer').removeClass('col-md-9').addClass('col-md-12');
-                $('#sidebarContainer').hide();
-            });
-
-            // Submit cart functionality
-            $('#submitCart').click(function () {
-                // Prepare data for submission
-                var cartItems = {};
-
-                // Collect cart items details
-                $('.cart-item').each(function () {
-                    var itemId = $(this).data('id');
-                    var quantity = parseInt($(this).find('.item-quantity').val());
-                    // Add item to cartItems dictionary
-                    cartItems[itemId] = quantity;
-                });
-
-                // Create form and submit dynamically
-                var form = $('<form action="@Url.Action("Invoice", "Order")" method="post"></form>');
-
-                // Add each item as a hidden input in the form
-                $.each(cartItems, function (itemId, quantity) {
-                    form.append('<input type="hidden" name="selectedItems[' + itemId + ']" value="' + quantity + '">');
-                });
-
-                // Append form to body and submit
-                $('body').append(form);
-                form.submit();
-            });
-
-            // Initially hide sidebar and update layout
-            $('.right-sidebar').removeClass('sidebar-open');
-            $('#itemListContainer').removeClass('col-md-9').addClass('col-md-12');
-            $('#sidebarContainer').hide();
+        // Function to increment quantity
+        $(document).on('click', '.increment-btn', function () {
+            var itemId = $(this).closest('.purchaseitem').data('id');
+            selectedItems[itemId]++;
+            updateCartDisplay();
         });
-    </script>
-}
 
-    <!-- jQuery -->
-    <script src="../../plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="../../dist/js/adminlte.min.js"></script>
-    <!-- AdminLTE for demo purposes -->
-    <script src="../../dist/js/demo.js"></script>
-}
+        // Function to decrement quantity
+        $(document).on('click', '.decrement-btn', function () {
+            var itemId = $(this).closest('.purchaseitem').data('id');
+            if (selectedItems[itemId] > 1) {
+                selectedItems[itemId]--;
+            } else {
+                delete selectedItems[itemId];
+            }
+            updateCartDisplay();
+        });
+
+        // Function to add item to cart
+        $(document).on('click', '.add-to-cart-btn', function (e) {
+            e.preventDefault();
+            var itemId = $(this).data('id');
+            if (selectedItems[itemId]) {
+                selectedItems[itemId]++;
+            } else {
+                selectedItems[itemId] = 1;
+            }
+            updateCartDisplay();
+        });
+
+        // Function to delete item from cart
+        $(document).on('click', '.delete-item-btn', function () {
+            var itemId = $(this).closest('.purchaseitem').data('id');
+            delete selectedItems[itemId];
+            updateCartDisplay();
+        });
+
+        // Function to update cart display
+        function updateCartDisplay() {
+            var itemNamesDiv = $('#item-names');
+            itemNamesDiv.empty(); // Clear previous content
+
+            // Update display for each item in selectedItems
+            Object.keys(selectedItems).forEach(function (itemId) {
+                var itemName = $('.card[data-id="' + itemId + '"] .card-title').text().trim();
+                var itemQuantity = selectedItems[itemId];
+
+                // Create elements for item display
+                var itemDiv = $('<div></div>').addClass('d-flex justify-content-between align-items-center mb-2 purchaseitem').attr('data-id', itemId);
+
+                // Left container for item name
+                var nameContainer = $('<div></div>').addClass('marginname').text(itemName);
+
+                // Right container for buttons
+                var buttonContainer = $('<div></div>').addClass('d-flex align-items-center marginname2');
+
+                // Decrement button in cart
+                var decrementButtonCart = $('<button>-</button>').addClass('btn btn-primary btn-sm custom-btn mx-1 decrement-btn');
+
+                // Quantity display in cart
+                var quantityDisplayCart = $('<span></span>').addClass('px-2 count').text(itemQuantity);
+
+                // Increment button in cart
+                var incrementButtonCart = $('<button>+</button>').addClass('btn btn-primary btn-sm custom-btn mx-1 increment-btn');
+
+                // Delete button in cart
+                var deleteButtonCart = $('<button><i class="fas fa-trash-alt"></i></button>').addClass('btn btn-danger  ml-1 delete-item-btn');
+
+                // Append buttons to button container
+                buttonContainer.append(decrementButtonCart, quantityDisplayCart, incrementButtonCart, deleteButtonCart);
+
+                // Append name container and button container to item div
+                itemDiv.append(nameContainer, buttonContainer);
+
+                // Append item div to itemNamesDiv
+                itemNamesDiv.append(itemDiv);
+            });
+
+            // Update disabled attribute of Purchase button
+            var submitButton = $('#submittocart');
+            if (Object.keys(selectedItems).length > 0) {
+                submitButton.removeAttr('disabled');
+            } else {
+                submitButton.attr('disabled', 'disabled');
+            }
+        }
+
+        // Placeholder function to get item name by ID (replace with actual function)
+        function getItemNameById(itemId) {
+            return "item" + itemId;
+        }
+
+        // Click event handler for the Purchase button
+        $('#submittocart').click(function () {
+            // Prepare data for submission
+            var form = $('<form action="/Order/Invoice" method="post"></form>');
+
+            // Add each item as a hidden input in the form
+            $.each(selectedItems, function (itemId, quantity) {
+                form.append('<input type="hidden" name="selectedItems[' + itemId + ']" value="' + quantity + '">');
+            });
+
+            // Append form to body and submit
+            $('body').append(form);
+            form.submit();
+        });
+    });
+
+</script>
+
+

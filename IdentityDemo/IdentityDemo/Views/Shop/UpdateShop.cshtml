@@ -1,11 +1,11 @@
-﻿@model IdentityDemo.Models.ShopModel
+﻿@model IdentityDemo.ViewModels.ShopViewModel
 @{
     Layout = "_Owner_layout";
 }
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
 <div class="container" style="padding-top: 60px;">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -14,19 +14,22 @@
                     <h2>Shop Update</h2>
                 </div>
                 <div class="card-body">
-                    
-
-                    <!-- Form for updating shop details -->
-                    <form asp-action="UpdateShop" asp-controller="Shop" method="post" enctype="multipart/form-data">
+                    <form asp-action="UpdateShop" asp-controller="Shop" method="post" enctype="multipart/form-data" runat="server">
                         <input type="hidden" asp-for="ShopId" />
-
+                        <img id="blah" class="image-preview" src="~/img/shop/eda9047e-7587-4d4e-a938-587e3b4c9121_homeimg2.jpg" alt="Preview Image" style="max-width: 100%; max-height: 200px; display: block; margin-top: 10px;" />
+                        <!-- Image Preview Section -->
                         <div class="form-group row">
                             <label for="profileImage" class="col-sm-2 col-form-label">Shop Profile</label>
                             <div class="col-sm-10">
-                                <input type="file" class="form-control-file" id="profileImage" name="profileImage">
+                                
+                                
+                                <input asp-for="ProfileImage" class="form-control-file" accept="image/*" type="file" id="imgInp" name="ProfileImage" onchange="previewImage(event)" />
+                                <span asp-validation-for="ProfileImage" class="text-danger"></span>
+                                
                             </div>
                         </div>
 
+                        <!-- Form Fields -->
                         <div class="form-group">
                             <label asp-for="ShopName">Name</label>
                             <input type="text" class="form-control" asp-for="ShopName" placeholder="Enter name">
@@ -57,21 +60,36 @@
                             <span asp-validation-for="ShopDescription" class="text-danger"></span>
                         </div>
 
+                        <!-- Action Buttons -->
                         <div class="text-right">
                             <button type="submit" class="btn btn-primary">Save</button>
                             <a href="@Url.Action("Owner_Index", "Shop")" class="btn btn-secondary">Cancel</a>
                         </div>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
+
 
 <script src="../../js/Updateshopvalidate.js"></script>
 <script>
     document.getElementById('phoneInput').addEventListener('input', function () {
         this.value = this.value.replace(/[^0-9]/g, ''); // Replace any non-numeric characters with an empty string
     });
+
+    function previewImage(event) {
+        const imgInp = event.target;
+        const file = imgInp.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('blah').src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
 </script>

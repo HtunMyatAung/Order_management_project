@@ -1,5 +1,4 @@
 ﻿@model IdentityDemo.ViewModels.InvoiceViewModel
-
 @{
     Layout = null;
     decimal total = 0;
@@ -11,24 +10,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice</title>
+
+    <!-- Combined and Minimized External Resources -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
     <style>
-        /* Custom styles */
-        .modal-footer {
-            justify-content: flex-end; /* Align buttons to the right */
-        }
-
-            /* Style the buttons */
-            .modal-footer button {
-                font-size: 18px; /* Increase font size */
-                padding: 10px 20px; /* Add padding to make buttons bigger */
-            }
-
-                /* Style the Cancel button in red */
-                .modal-footer button.cancel-button {
-                    color: red;
-                }
-
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
@@ -45,20 +35,16 @@
             padding-bottom: 10px;
         }
 
-        .invoice-details, .client-details, .items, .summary, .notes {
-            margin-bottom: 20px;
+        .items table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-            .items table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-
-            .items th, .items td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: center;
-            }
+        .items th, .items td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
 
         .summary {
             text-align: right;
@@ -75,8 +61,8 @@
     </style>
 </head>
 <body>
-    <!-- Container to capture only the invoice details -->
     <div id="invoice-container">
+        <!-- Invoice Header -->
         <div class="invoice-header">
             <div>
                 <h1>@Model.Shop.ShopName</h1>
@@ -87,10 +73,14 @@
                 <p>Invoice Number: @Model.OrderId<br>Invoice Date: @Model.OrderDate<br></p>
             </div>
         </div>
+
+        <!-- Client Details -->
         <div class="client-details">
             <h3>Bill To:</h3>
             <p>Client Name: @Model.User.UserName<br>Client Address: @Model.User.Address<br>Client Contact Details: @Model.User.PhoneNumber</p>
         </div>
+
+        <!-- Items Table -->
         <div class="items">
             <table>
                 <thead>
@@ -107,14 +97,16 @@
                         <tr>
                             <td>@item.ItemName</td>
                             <td>@item.ItemQuantity</td>
-                            <td>@item.ItemPrice</td>
-                            <td>@(item.ItemQuantity * item.ItemPrice)</td>
+                            <td>@item.ItemChangedPrice</td>
+                            <td>@(item.ItemQuantity * item.ItemChangedPrice)</td>
                         </tr>
-                        total += (item.ItemQuantity * item.ItemPrice);
+                        total += (item.ItemQuantity * item.ItemChangedPrice);
                     }
                 </tbody>
             </table>
         </div>
+
+        <!-- Summary Section -->
         <div class="summary">
             <table>
                 <tr>
@@ -131,14 +123,19 @@
                 </tr>
             </table>
         </div>
+
+        <!-- Notes Section -->
         <div class="notes">
             <h3>Notes:</h3>
             <p>Thank you for your business!<br>If you have any questions, please contact us at uabzone@gmail.com</p>
         </div>
+
+        <!-- Invoice Footer -->
         <div class="invoice-footer">
             <p>Payment Methods: Bank Transfer (Account Number: XXXXX, SWIFT: XXXXX), PayPal (@Model.Shop.ShopEmail)<br>Payment Terms: Net 30 days</p>
         </div>
     </div>
+
     <!-- Bootstrap Modal for Thank You Message -->
     <div class="modal fade" id="thankYouModal" tabindex="-1" role="dialog" aria-labelledby="thankYouModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -158,50 +155,45 @@
             </div>
         </div>
     </div>
-    <!-- Buttons outside of the invoice content -->
-    <div class="modal-footer">
 
-        <button type="button" class="btn btn-secondary cancel-button" onclick="goBackToAnotherPage()">Cancel</button>
-        
+    <!-- Buttons for Download and Cancel -->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary cancel-button" onclick="cancelgoBackToAnotherPage()">Cancel</button>
         <button type="button" class="btn btn-primary" onclick="confirmAndDownload()">Download</button>
     </div>
 
-    <!-- Include the latest version of html2canvas -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <!-- Bootstrap and jQuery scripts -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- JavaScript for Invoice Handling -->
     <script>
         function confirmAndDownload() {
-            downloadAsImage(); // Download the invoice as an image
-            showThankYouModal(); // Open a popup window with the invoice details and thank you message
-            
+            downloadAsImage().then(function () {
+                showThankYouModal();
+            });
         }
 
         function downloadAsImage() {
-            // Set the area to capture (excluding the modal-footer)
             var element = document.getElementById('invoice-container');
 
-            html2canvas(element).then(function (canvas) {
+            return html2canvas(element).then(function (canvas) {
                 var link = document.createElement('a');
                 link.href = canvas.toDataURL('image/png');
                 link.download = 'invoice.png';
                 link.click();
+            }).catch(function (error) {
+                console.error('Error capturing invoice:', error);
+                alert('Error capturing invoice. Please try again.');
             });
         }
+
         function showThankYouModal() {
-            // Show the "Thank You" modal
             $('#thankYouModal').modal('show');
         }
+
         function goBackToAnotherPage() {
-            //Console.WriteLine("Redircting");
-            // Redirect to another page after closing the modal
             window.location.href = '/Order/SaveInvoice';
         }
-       
-
+        function cancelgoBackToAnotherPage() {
+            window.location.href = '/Item/HomePageItems';
+        }
     </script>
-
 </body>
 </html>

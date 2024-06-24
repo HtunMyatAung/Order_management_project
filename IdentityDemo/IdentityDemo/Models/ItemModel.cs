@@ -27,6 +27,7 @@ namespace IdentityDemo.Models
         public int Discount_rate { get; set; }
         [Column("discount_price")]
         public decimal Discount_price { get; set; }
-        //public ShopModel Shop { get; set; }
+        [Column("item_image")]
+        public string ItemImageName { get; set; }
     }
 }

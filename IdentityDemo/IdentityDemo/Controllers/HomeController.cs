@@ -29,6 +29,10 @@ namespace IdentityDemo.Controllers
             //Console.WriteLine("gg"+GetDefaultShopImage());
             return View();
         }
+        public IActionResult About()
+        {
+            return View();
+        }
         public IActionResult Index()
         {
             return View();

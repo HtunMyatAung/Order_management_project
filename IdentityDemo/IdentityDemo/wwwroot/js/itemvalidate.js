@@ -33,8 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (
             nameInput.value.trim() !== '' &&
             pricePattern.test(priceInput.value) &&
-            quantityPattern.test(quantityInput.value) &&
-            quantityPattern.test()
+            quantityPattern.test(quantityInput.value) 
         ) {
             submitButton.disabled = false;
         } else {

@@ -1,0 +1,52 @@
+﻿@model IdentityDemo.ViewModels.ShopViewModel
+@{
+    Layout = "_Owner_layout";
+}
+
+<h2>Create Shop</h2>
+
+<form asp-action="CreateTest" asp-controller="Shop" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="ShopName">Name</label>
+        <input asp-for="ShopName" class="form-control" />
+        <span asp-validation-for="ShopName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ShopPhone">Phone</label>
+        <input asp-for="ShopPhone" class="form-control" />
+        <span asp-validation-for="ShopPhone" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ShopEmail">Email</label>
+        <input asp-for="ShopEmail" class="form-control" />
+        <span asp-validation-for="ShopEmail" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ShopAddress">Address</label>
+        <input asp-for="ShopAddress" class="form-control" />
+        <span asp-validation-for="ShopAddress" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ShopDescription">Description</label>
+        <input asp-for="ShopDescription" class="form-control" />
+        <span asp-validation-for="ShopDescription" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ProfileImage">Profile Image</label>
+        <input asp-for="ProfileImage" class="form-control-file" />
+        <span asp-validation-for="ProfileImage" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+@section Scripts {
+    <script>
+        // Optional: Add client-side validation scripts if needed
+    </script>
+}
