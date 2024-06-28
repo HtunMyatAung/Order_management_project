@@ -9,10 +9,10 @@ namespace IdentityDemo.ViewModels
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
-        [Required]
+       
         
         [Display(Name = "Address")]
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
         [StringLength(11)]
         public string PhoneNumber { get; set; }

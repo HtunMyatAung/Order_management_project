@@ -23,7 +23,7 @@ namespace IdentityDemo.ViewModels
         //[Required]
         [DataType(DataType.Password)]
         public string? NewPassword { get; set; }
-        public IFormFile UserImagePath { get; set; }
+        public IFormFile? UserImagePath { get; set; }
        // [Required]
         [DataType(DataType.Password)]
         [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]

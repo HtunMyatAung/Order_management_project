@@ -1,0 +1,84 @@
+﻿.card-custom {
+    position: relative;
+    height: 400px;
+    width: 300px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.img-box {
+    height: 280px;
+    align-content: center;
+    
+}
+
+.card-custom img {
+    width: 100%;
+    height: 250; /* Ensures image fits container height */
+    object-fit: fill;
+    border-radius: 15px 15px 0 0;
+}
+
+.card-body {
+    padding: 1.35rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    height: 120px; /* Ensures card body fills available space */
+}
+
+.card-title {
+    font-size: 13px;
+    margin-bottom: 5px; /* Adjust margin between title and text */
+    height: 10; /* Ensures text height fits dynamically */
+}
+
+.card-text {
+    font-size: 13px;
+    padding-right: 10px;
+    margin-bottom: 5px; /* Adjust margin between text and buttons */
+    height: 50; /* Ensures text height fits dynamically */
+}
+
+
+.shop-name {
+    font-weight: bold;
+    color: #333; /* Adjust text color */
+    margin-bottom: 8px; /* Add margin below shop name */
+}
+
+
+
+.btn-primary {
+    border-radius: 20px;
+}
+
+.custom-btn {
+    margin-right: 8px; /* Adjust margin between buttons */
+}
+
+.count {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0 8px; /* Add padding to quantity display */
+}
+
+/* Fix image size for carousel */
+.carousel-item img {
+    width: 500px;
+    height: 350px; /* Adjust height to make carousel shorter */
+    object-fit: contain; /* Maintain aspect ratio and ensure the image fits within the carousel */
+    border-radius: 15px;
+}
+
+/* Center align carousel controls */
+.carousel-control-prev, .carousel-control-next {
+    top: 45%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+

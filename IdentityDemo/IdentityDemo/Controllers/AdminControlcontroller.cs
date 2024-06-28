@@ -27,14 +27,28 @@ namespace IdentityDemo.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Admin_shop_list()
         {
+            TempData["title"] = "Shop list";
             var admin = User.Identity.Name;
 
-            var shop = _context.Shops.ToList();
-            return View(shop);
+            var shopViewModels = (from shop in _context.Shops
+                                  join user in _context.Users
+                                  on shop.ShopId equals user.ShopId // Assuming Shop has a ShopOwnerId property
+                                  select new ShopViewModel
+                                  {
+                                      ShopId = shop.ShopId,
+                                      ShopName = shop.ShopName,
+                                      ShopPhone = shop.ShopPhone,
+                                      ShopEmail = shop.ShopEmail,
+                                      ShopAddress = shop.ShopAddress,
+                                      ShopDescription = shop.ShopDescription,
+                                      ShopOwnerName = user.UserName // Assuming User has a UserName property
+                                  }).ToList();
+            return View(shopViewModels);
         }
         [Authorize(Roles = "Admin")]
         public IActionResult Admin_forgot_list()
         {
+            TempData["title"] = "Forgot password list";
             var forgots = _context.Users.Where(u=>u.Forgot==1). ToList();
             return View(forgots);
         }
@@ -42,6 +56,7 @@ namespace IdentityDemo.Controllers
         [HttpGet]
         public async Task<IActionResult> Admin_update_user_info(string userId)
         {
+            TempData["titel"] = "Update User information";
             if (string.IsNullOrEmpty(userId))
             {
                 return BadRequest("User ID cannot be null or empty.");
@@ -114,7 +129,7 @@ namespace IdentityDemo.Controllers
                     ShopDescription = "nice shop",
                     ShopAddress =user.Address,
                     ShopEmail =user.Email,
-                    //ShopImage= "Shop_default.png"
+                    ProfileImagePath= "shop_default.png"
                     // Add other shop properties as needed
                 };
                 user.ShopId= newShopId;
@@ -151,6 +166,7 @@ namespace IdentityDemo.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Admin_dashboard()
         {
+            TempData["title"] = "Dashboard";
             // Fetch orders from the database
             var orders = _context.Orders.ToList();
             
@@ -207,6 +223,7 @@ namespace IdentityDemo.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Admin_user_list()
         {
+            TempData["title"] = "User list";
             var users = _context.Users.Where(u => u.Role != null && u.Role != "Admin").ToList();
             return View(users);
         }
@@ -249,6 +266,7 @@ namespace IdentityDemo.Controllers
         [HttpPost]
         public async Task<IActionResult> ResetPassword(string userId)
         {
+            TempData["title"] = "Reset password";
             if (string.IsNullOrEmpty(userId))
             {
                 return BadRequest("User ID cannot be null or empty.");
@@ -287,6 +305,7 @@ namespace IdentityDemo.Controllers
         [HttpGet]
         public IActionResult Admin_change_password()
         {
+            TempData["title"] = "Change Admin Password";
             return View();
         }
         [HttpPost]

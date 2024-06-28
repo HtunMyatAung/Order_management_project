@@ -12,130 +12,85 @@
     <title>Invoice</title>
 
     <!-- Combined and Minimized External Resources -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        .invoice-header, .invoice-footer {
-            margin-bottom: 20px;
-        }
-
-        .invoice-header {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 2px solid #000;
-            padding-bottom: 10px;
-        }
-
-        .items table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .items th, .items td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
-
-        .summary {
-            text-align: right;
-        }
-
-            .summary table {
-                width: 50%;
-                float: right;
-            }
-
-            .summary th, .summary td {
-                padding: 8px;
-            }
-    </style>
+    <link rel="stylesheet" href="~/css/download_css/4_5_3_bootstrap.min.css" />
+    <script src="~/js/download_js/jquery-3.5.1.slim.min.js"></script>    
+    <script src="~/js/download_js/2_5_4_popper.min.js"></script>
+    <script src="~/js/download_js/4_5_3_bootstrap.min.js"></script>
+    <script src="~/js/download_js/1_4_1_html2canvas.min.js"></script>
 </head>
-<body>
-    <div id="invoice-container">
+<body style="font-family: Arial, sans-serif; margin: 20px;background-color:#f0f0f0">
+    <div id="invoice-container" >
         <!-- Invoice Header -->
-        <div class="invoice-header">
-            <div>
-                <h1>@Model.Shop.ShopName</h1>
-                <p>Address: @Model.Shop.ShopAddress<br>Contact Details: @Model.Shop.ShopEmail</p>
+        <div class="invoice-header" style="margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px;">
+            <div style="display: inline-block; width: 48%; vertical-align: top;">
+                <h1 style="margin: 0;">@Model.Shop.ShopName</h1>
+                <p style="margin: 0;">Address: @Model.Shop.ShopAddress<br>Contact Details: @Model.Shop.ShopEmail</p>
             </div>
-            <div>
-                <h2>Invoice</h2>
-                <p>Invoice Number: @Model.OrderId<br>Invoice Date: @Model.OrderDate<br></p>
+            <div style="display: inline-block; width: 48%; vertical-align: top; text-align: right;">
+                <h3 style="margin: 0;">Invoice</h3>
+                <p style="margin: 0;">Invoice Number: @Model.OrderId<br>Invoice Date: @Model.OrderDate<br></p>
             </div>
         </div>
 
         <!-- Client Details -->
-        <div class="client-details">
-            <h3>Bill To:</h3>
-            <p>Client Name: @Model.User.UserName<br>Client Address: @Model.User.Address<br>Client Contact Details: @Model.User.PhoneNumber</p>
+        <div class="client-details" style="margin-bottom: 20px;">
+            <h2 style="margin: 0 0 10px 0;">Bill To:</h2>
+            <p style="margin: 0;">Client Name: @Model.User.UserName<br>Client Address: @Model.User.Address<br>Client Contact Details: @Model.User.PhoneNumber</p>
         </div>
 
         <!-- Items Table -->
-        <div class="items">
-            <table>
+        <div class="items" style="margin-bottom: 20px;">
+            <table style="width: 100%; border-collapse: collapse;">
                 <thead>
-                    <tr>
-                        <th>Item Description</th>
-                        <th>Quantity</th>
-                        <th>Unit Price</th>
-                        <th>Total</th>
+                    <tr style="background-color: #f2f2f2;">
+                        <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Item Description</th>
+                        <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Quantity</th>
+                        <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Unit Price</th>
+                        <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model.Items)
                     {
                         <tr>
-                            <td>@item.ItemName</td>
-                            <td>@item.ItemQuantity</td>
-                            <td>@item.ItemChangedPrice</td>
-                            <td>@(item.ItemQuantity * item.ItemChangedPrice)</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">@item.ItemName</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">@item.ItemQuantity</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">@item.ItemChangedPrice</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">@(item.ItemQuantity * item.ItemChangedPrice)</td>
                         </tr>
                         total += (item.ItemQuantity * item.ItemChangedPrice);
                     }
                 </tbody>
             </table>
         </div>
+        <div>
+            <!-- Summary Section -->
+            <div class="summary" style="text-align: right; margin-bottom: 20px;">
+                <table style="width: 50%; float: right;">
+                    <tr>
+                        <th style="padding: 8px;">Subtotal:</th>
+                        <td style="text-align: right; padding: 8px;">@total</td>
+                    </tr>
+                    <tr>
+                        <th style=" padding: 8px;">Taxes (10%):</th>
+                        <td style="text-align: right; padding: 8px;">@(total * taxrate)</td>
+                    </tr>
+                    <tr>
+                        <th style=" padding: 8px;">Total Amount Due:</th>
+                        <td style="text-align: right; padding: 8px;">@(total + (total * taxrate))</td>
+                    </tr>
+                </table>
+            </div>
 
-        <!-- Summary Section -->
-        <div class="summary">
-            <table>
-                <tr>
-                    <th>Subtotal:</th>
-                    <td>@total</td>
-                </tr>
-                <tr>
-                    <th>Taxes (10%):</th>
-                    <td>@(total * taxrate)</td>
-                </tr>
-                <tr>
-                    <th>Total Amount Due:</th>
-                    <td>@(total + (total * taxrate))</td>
-                </tr>
-            </table>
+            <!-- Notes Section -->
+            <div class="notes" style="margin-bottom: 20px;">
+                <h3 style="margin: 0 0 10px 0;">Notes:</h3>
+                <p style="margin: 0;">Thank you for your business!<br>If you have any questions, please contact us at uabzone@gmail.com</p>
+            </div>
         </div>
-
-        <!-- Notes Section -->
-        <div class="notes">
-            <h3>Notes:</h3>
-            <p>Thank you for your business!<br>If you have any questions, please contact us at uabzone@gmail.com</p>
-        </div>
-
-        <!-- Invoice Footer -->
-        <div class="invoice-footer">
-            <p>Payment Methods: Bank Transfer (Account Number: XXXXX, SWIFT: XXXXX), PayPal (@Model.Shop.ShopEmail)<br>Payment Terms: Net 30 days</p>
-        </div>
+        
     </div>
-
+    
     <!-- Bootstrap Modal for Thank You Message -->
     <div class="modal fade" id="thankYouModal" tabindex="-1" role="dialog" aria-labelledby="thankYouModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -150,7 +105,11 @@
                     <p>Your order has been saved as Image.<br />Thank you for your business!</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="goBackToAnotherPage()">Ok</button>
+                    
+                    <form method="post" action="/Order/SendInvoiceEmail">
+                        <input type="hidden" name="htmlContent" id="htmlContent" />
+                        <button type="submit" class="btn btn-primary">Ok</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -158,21 +117,28 @@
 
     <!-- Buttons for Download and Cancel -->
     <div class="modal-footer">
-        <button type="button" class="btn btn-secondary cancel-button" onclick="cancelgoBackToAnotherPage()">Cancel</button>
+        <button type="button" class="btn btn-secondary cancel-button" onclick="cancelgoBackToAnotherPage()">Cancel</button>        
         <button type="button" class="btn btn-primary" onclick="confirmAndDownload()">Download</button>
     </div>
-
+    
     <!-- JavaScript for Invoice Handling -->
     <script>
+        // Example of targeting body indirectly through JavaScript
+        document.body.style.backgroundColor = '#f0f0f0'; // Setting background color
+        // Capture HTML content of the invoice for sending via email
+        var invoiceHtml = document.getElementById('invoice-container').innerHTML;
+        document.getElementById('htmlContent').value = invoiceHtml;
+        
         function confirmAndDownload() {
             downloadAsImage().then(function () {
-                showThankYouModal();
+                showThankYouModal();                   
+                
             });
         }
 
         function downloadAsImage() {
             var element = document.getElementById('invoice-container');
-
+            
             return html2canvas(element).then(function (canvas) {
                 var link = document.createElement('a');
                 link.href = canvas.toDataURL('image/png');
@@ -189,11 +155,14 @@
         }
 
         function goBackToAnotherPage() {
+           
             window.location.href = '/Order/SaveInvoice';
         }
         function cancelgoBackToAnotherPage() {
             window.location.href = '/Item/HomePageItems';
         }
+        
+    
     </script>
 </body>
 </html>

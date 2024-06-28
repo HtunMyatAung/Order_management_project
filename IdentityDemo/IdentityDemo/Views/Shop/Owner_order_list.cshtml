@@ -3,30 +3,29 @@
     Layout = "_Owner_layout";
     int counter=1;
 }
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 @section Database {
-    <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.0.8/fh-4.0.1/sb-1.7.1/datatables.min.css" rel="stylesheet">
+    <link href="~/css/download_css/sb_1_7_1_datatables.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="~/css/download_css/1_10_24_jquery.dataTables.min.css" />
+    <script src="~/js/download_js/sb_1_7_1_datatables.min.js"></script>
 }
 @section Scripts {
-    <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.0.8/fh-4.0.1/sb-1.7.1/datatables.min.js"></script>
     
+    <!-- jQuery -->
+    <script src="~/js/download_js/3_5_1_jquery.min.js"></script>
+    <!-- DataTables JS -->
+    <script type="text/javascript" src="~/js/download_js/1_10_24_jquery.dataTables.min.js"></script>
     <script>
+        // Initialize DataTable
         $(document).ready(function () {
-            $('#example1').DataTable({
-                responsive: true,
-                lengthChange: false,
-                autoWidth: false,
-                language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search...",
-                }
-            });
+            $('#ordertable').DataTable();
         });
     </script>
 }
 <div style="padding-top: 15px;">
     <h1 class="">Order List</h1>
     <div class="card-body">
-        <table id="example1" class="table table-bordered table-striped">
+        <table id="ordertable" class="table table-bordered table-striped">
             <thead class="bg-gray">
 
                 <tr style="text-align: center;">

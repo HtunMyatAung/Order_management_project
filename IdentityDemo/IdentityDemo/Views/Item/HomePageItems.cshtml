@@ -4,7 +4,7 @@
     int counter = 1;
 }
 <link href="~/css/bootstrap.min.css" rel="stylesheet" />
-<link href="~/css/allitemlist.css" rel="stylesheet" />
+<link href="~/css/custom_css/allitemlist.css" rel="stylesheet"/>
 
 <section class="py-5">
     <div class="container">
@@ -54,7 +54,9 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
+
     </div>
+
 </section>
 
 <div class="container">
@@ -63,12 +65,14 @@
         @foreach (var item in Model.Items)
         {
             var shop = Model.Shops.FirstOrDefault(s => s.ShopId == item.Shop_Id);
-            <div class="col-lg-4 col-md-6 d-flex justify-content-center">
+            <div class="col-lg-3 col-md-4 d-flex justify-content-center">
                 <div class="card card-custom">
+                    <div class="img-box">
                     <img src="~/img/items/@item.ItemImageName" class="card-img-top" alt="Product 1">
+                    </div>
                     <div class="card-body">
                         <div class="shop-name mb-2">
-                            <i class="fas fa-store"></i> Shop: <span class="card-title"><a href="@Url.Action("ItemByShopid", "Item", new { shopId = shop.ShopId })">@shop.ShopName</a></span>
+                            <i class="fas fa-store"></i>: <span class="card-title"><a href="@Url.Action("ItemByShopid", "Item", new { shopId = shop.ShopId })">@shop.ShopName</a></span>
                         </div>
                         <div class="d-flex justify-content-between">
                             <h5 class="card-title">@item.ItemName</h5>
@@ -88,7 +92,7 @@
         }
     </div>
 
-    <form id="buyItemForm" method="post" action="@Url.Action("Invoice", "Order")" style="display:none;">
+    <form id="buyItemForm" method="post" action="@Url.Action("Order_confirm", "Order")" style="display:none;">
         <input type="hidden" name="selectedItems[0].Key" id="selectedItemId" />
         <input type="hidden" name="selectedItems[0].Value" id="selectedItemQuantity" />
     </form>
@@ -103,7 +107,7 @@
             </div>
             <div class="modal-body">
                 <p>You are about to buy:</p>
-                <p><strong>Item ID:</strong> <span id="modalItemId"></span></p>
+                <p hidden><strong >Item ID:</strong> <span id="modalItemId"></span></p>
                 <p><strong>Item Name:</strong> <span id="modalItemName"></span></p>
                 <p><strong>Item Price:</strong> $<span id="modalItemPrice"></span></p>
                 <p>Quantity: <span id="modalItemQuantity"></span></p>

@@ -1,42 +1,101 @@
-﻿@{
-    Layout = "_Zone_layout";
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Upload and Preview</title>
+    <title>Swiper.js Carousel with Mouse Wheel and Image Scroll Action</title>
+
+    <!-- Include Swiper CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
+    <!-- Custom CSS for styling -->
     <style>
-        /* Optional: CSS for styling the image preview */
-        img {
-            max-width: 100%;
-            max-height: 200px;
-            border: 1px solid #ccc;
-            padding: 5px;
-            margin-top: 10px;
+        .swiper-container {
+            width: 100%;
+            height: 400px; /* Adjust height as needed */
         }
+
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+            .swiper-slide img {
+                max-width: 100%; /* Ensure images fit within the slide */
+                height: auto; /* Maintain aspect ratio */
+                display: block; /* Remove any inline spacing */
+                margin: 0 auto; /* Center images horizontally */
+            }
     </style>
 </head>
 <body>
-    <form runat="server">
-        <input accept="image/*" type="file" id="imgInp" onchange="previewImage(event)" />
-        <img id="blah" src="#" alt="Preview Image" />
-    </form>
 
+    <div class="swiper-container" id="carouselExampleControls">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <img src="img/welcome_top.png" alt="Welcome Image">
+            </div>
+            <div class="swiper-slide">
+                <img src="img/shop1.jpg" alt="Shop 1">
+                <div class="slide-caption">
+                    <h5>Shop 1</h5>
+                    <p>Phone: 123-456-7890</p>
+                    <p>Address: 123 Main St</p>
+                    <a href="#" class="btn btn-outline-secondary rounded">See Detail >></a>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <img src="img/shop2.jpg" alt="Shop 2">
+                <div class="slide-caption">
+                    <h5>Shop 2</h5>
+                    <p>Phone: 987-654-3210</p>
+                    <p>Address: 456 Elm St</p>
+                    <a href="#" class="btn btn-outline-secondary rounded">See Detail >></a>
+                </div>
+            </div>
+            <!-- Add more swiper-slide items as needed -->
+        </div>
+
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+
+        <!-- Add Navigation Buttons -->
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+    </div>
+
+    <!-- Include Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <!-- Custom JavaScript -->
     <script>
-        function previewImage(event) {
-            const imgInp = event.target;
-            const file = imgInp.files[0];
+        var swiper = new Swiper('#carouselExampleControls', {
+            direction: 'horizontal',
+            loop: true,
+            mousewheel: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
 
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    document.getElementById('blah').src = e.target.result;
-                }
-                reader.readAsDataURL(file);
-            }
-        }
+        // Additional scroll action on images within slides
+        document.querySelectorAll('.swiper-slide img').forEach(function (img) {
+            img.addEventListener('wheel', function (event) {
+                event.preventDefault();
+                var delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
+                img.scrollLeft -= (delta * 40); // Adjust scrolling speed as needed
+            });
+        });
     </script>
+
 </body>
 </html>

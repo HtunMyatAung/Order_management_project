@@ -2,7 +2,19 @@
 @{
     Layout = "_Owner_layout";
 }
+<style>
+    .discount_dropdown select {
+        padding: 5px;
+    }
 
+        .discount_dropdown select option {
+            padding: 5px;
+        }
+
+    .discount-group {
+        display: none;
+    }
+</style>
 
 <div class="container" style="padding-top: 30px;">
     <div class="row justify-content-center">
@@ -20,8 +32,6 @@
                                 <label for="profileImage" class="col-sm-2 col-form-label">Shop Profile</label>
                                 <!--<img id="blah" class="image-preview" src="#" alt="Preview Image" style="max-width: 100%; max-height: 200px; display: block; margin-top: 10px;" />-->
                                 <input asp-for="ItemImage" class="form-control-file" accept="image/*" type="file" id="imgInp" name="ItemImage" onchange="previewImage(event)" />
-                                <span asp-validation-for="ItemImage" class="text-danger"></span>
-
                             </div>
                         </div>
                         <!--item update form-->
@@ -40,15 +50,22 @@
                             <input type="number" class="form-control" asp-for="ItemQuantity" placeholder="Enter item quantity" id="quantityInput" />
                             <span asp-validation-for="ItemQuantity" class="text-danger" id="quantityValidationMessage"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="discount_dropdown">
+                            <select id="discountSelect">
+                                <option value="">Select Discount Type</option>
+                                <option value="Discount_price">Discount Price (mmk)</option>
+                                <option value="Discount_rate">Discount Rate (%)</option>
+                            </select>
+                        </div>
+                        <div class="form-group discount-group" id="discountPriceGroup">
                             <label asp-for="Discount_price">Discount by Price</label>
                             <input type="number" class="form-control" asp-for="Discount_price" placeholder="Enter discount price" id="discountpriceInput" />
-                            <span asp-validation-for="Discount_price" class="text-danger" id="discountpriceValidationMessage"></span>
+                            <span asp-validation-for="Discount_price" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group discount-group" id="discountRateGroup">
                             <label asp-for="Discount_rate">Discount Rate</label>
                             <input type="number" class="form-control" asp-for="Discount_rate" placeholder="Enter discount rate" id="discountrateInput" />
-                            <span asp-validation-for="Discount_rate" class="text-danger" id="discountrateValidationMessage"></span>
+                            <span asp-validation-for="Discount_rate" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="ItemChangedPrice">Final price</label>
@@ -162,6 +179,22 @@
     });
 </script>
 
+<script>
+    document.getElementById('discountSelect').addEventListener('change', function () {
+        var discountPriceGroup = document.getElementById('discountPriceGroup');
+        var discountRateGroup = document.getElementById('discountRateGroup');
 
+        // Hide both groups initially
+        discountPriceGroup.style.display = 'none';
+        discountRateGroup.style.display = 'none';
+
+        // Show the selected group
+        if (this.value === 'Discount_price') {
+            discountPriceGroup.style.display = 'block';
+        } else if (this.value === 'Discount_rate') {
+            discountRateGroup.style.display = 'block';
+        }
+    });
+</script>
 
 

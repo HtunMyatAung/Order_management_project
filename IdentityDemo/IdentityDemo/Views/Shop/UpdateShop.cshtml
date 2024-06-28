@@ -2,10 +2,9 @@
 @{
     Layout = "_Owner_layout";
 }
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
-
+<script src="~/js/download_js/jquery-3.6.0.min.js"></script>
+<script src="~/js/download_js/1_19_3_jquery.validate.min.js"></script>
+<script src="~/js/download_js/3_2_12_jquery.validate.unobtrusive.min.js"></script>
 <div class="container" style="padding-top: 60px;">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -21,11 +20,7 @@
                         <div class="form-group row">
                             <label for="profileImage" class="col-sm-2 col-form-label">Shop Profile</label>
                             <div class="col-sm-10">
-                                
-                                
-                                <input asp-for="ProfileImage" class="form-control-file" accept="image/*" type="file" id="imgInp" name="ProfileImage" onchange="previewImage(event)" />
-                                <span asp-validation-for="ProfileImage" class="text-danger"></span>
-                                
+                                <input asp-for="ProfileImage" class="form-control-file" accept="image/*" type="file" id="imgInp" name="ProfileImage" onchange="previewImage(event)" />                                
                             </div>
                         </div>
 
@@ -93,3 +88,4 @@
     }
 
 </script>
+ 

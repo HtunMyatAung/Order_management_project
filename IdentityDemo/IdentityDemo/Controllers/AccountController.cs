@@ -330,29 +330,26 @@ namespace IdentityDemo.Controllers
                 {
                     return NotFound();
                 }
-
-                // Delete old image if it exists
-                if (!string.IsNullOrEmpty(user.UserImageName))
-                {
-                    string oldImagePath = Path.Combine(_environment.WebRootPath, "img/users", user.UserImageName);
-
-                    if (System.IO.File.Exists(oldImagePath))
+                if(model.UserImage != null) {
+                    // Delete old image if it exists
+                    if (!string.IsNullOrEmpty(user.UserImageName) && user.UserImageName!= "male_default.png")
                     {
-                        System.IO.File.Delete(oldImagePath);
+                        string oldImagePath = Path.Combine(_environment.WebRootPath, "img/users", user.UserImageName);
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
                     }
-                }
+                    // Set the uploads folder path
+                    string uploadsFolder = Path.Combine(_environment.WebRootPath, "img/users");
 
-                // Set the uploads folder path
-                string uploadsFolder = Path.Combine(_environment.WebRootPath, "img/users");
+                    // Ensure the folder exists
+                    Directory.CreateDirectory(uploadsFolder);
 
-                // Ensure the folder exists
-                Directory.CreateDirectory(uploadsFolder);
+                    // Generate a unique file name
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.UserImage.FileName);
 
-                // Generate a unique file name
-                string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.UserImage.FileName);
 
-                if (model.UserImage != null)
-                {
                     // Combine folder path and updated file name
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
@@ -364,12 +361,9 @@ namespace IdentityDemo.Controllers
 
                     // Update user image name in the model
                     user.UserImageName = uniqueFileName;
+
                 }
-                else
-                {
-                    // Handle case where model.UserImage is null
-                    return BadRequest("No file uploaded.");
-                }
+
 
                 // Update other user properties
                 user.UserName = model.UserName;

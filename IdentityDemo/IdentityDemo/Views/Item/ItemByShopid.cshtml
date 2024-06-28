@@ -1,10 +1,9 @@
 ﻿@model IdentityDemo.ViewModels.ItemsViewModel
 @{
     Layout = "_Zone_layout";
+    var isitem = TempData["items"];
 }
 
-
-@*<link href="~/css/oneshoponeitem.css" rel="stylesheet" />*@
 <style>
     .main-container {
         display: flex;
@@ -22,16 +21,16 @@
         width: 27%;
         margin-left: 30px;
         margin-right: 60px;
-        height: 85vh; /* You can adjust the height as needed */
+        height: 85vh;
         border-color: gray;
         border-radius: 10px;
         border-width: 2px;
-        flex-grow: 1; /* Take up all remaining space */
+        flex-grow: 1;
         display: flex;
         flex-direction: column;
-        overflow: hidden; /* Hide overflow for flex child (to prevent scrollbar on this container) */
-        position: sticky; /* Make the container sticky */
-        top: 80px; /* Stick 100px from the top of the viewport */
+        overflow: hidden;
+        position: sticky;
+        top: 80px;
     }
 
     .sticky {
@@ -42,21 +41,37 @@
     }
 
     .card-custom {
-        width: 30rem;
+        position: relative;
+        height: 400px;
+        width:300px;
         border-radius: 15px;
         margin-bottom: 30px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 
+    .img-box{
+        height:300px;
+        align-content:center;
+        
+    }
         .card-custom img {
-            border-top-left-radius: 15px;
-            border-top-right-radius: 15px;
-            height: 200px;
-            object-fit: cover;
+           
+            width: 100%;
+            height: 250; /* Ensures image fits container height */
+            object-fit: fill;
+            border-radius: 15px 15px 0 0;
         }
 
     .card-body {
         padding: 1.35rem;
-        height: 100px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        
+        height: 100px; /* Ensures card body fills available space */
     }
 
     .btn-primary {
@@ -66,10 +81,15 @@
 
     .card-title {
         font-size: 16px;
+        margin-bottom: 5px; /* Adjust margin between title and text */
+        height: 10; /* Ensures text height fits dynamically */
     }
 
     .card-text {
         font-size: 14px;
+        padding-right: 10px;
+        margin-bottom: 5px; /* Adjust margin between text and buttons */
+        height:50; /* Ensures text height fits dynamically */
     }
 
     .formargin {
@@ -111,7 +131,7 @@
     }
 
     .stickyyy {
-        position: sicky;
+        position: sticky;
         top: 90%;
         left: 10%;
     }
@@ -121,10 +141,9 @@
         border-radius: 10px;
         margin: 10px;
         padding: 10px;
-        margin-top;
-        15px;
         font-size: 20px;
         width: 96%;
+        height: auto; /* Ensures variable height based on content */
     }
 
     .marginname {
@@ -136,75 +155,81 @@
     }
 
     .list-container {
-        height: 100%; /* Ensure the list container fills its parent */
-        overflow-y: auto; /* Enable vertical scrolling for overflowing content */
+        height: 100%;
+        overflow-y: auto;
     }
 
     .scrollable-list {
-        height: 100%; /* Ensure the list container fills its parent */
-        padding: 10px; /* Padding for aesthetics */
+        height: 100%;
+        padding: 10px;
     }
 
     .sticky-button-container {
-        height: 10%; /* 10% height for the sticky button */
+        height: 10%;
         position: sticky;
         bottom: 0;
-        background-color: white; /* Ensures the button is on top of scrollable content */
-        box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1); /* Optional: add shadow for separation effect */
+        background-color: white;
+        box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
     }
 
     .buttonsize {
-        width: 100%; /* Full width button */
+        width: 100%;
     }
-
 </style>
-<section class="py-3">
-    
-    <div class="main-container">
-        <div class="container1">
-            <div class="row justify-content-left formargin">
-                @foreach (var item in Model.Items)
-                {
-                    <div class="col-lg-6 col-md-12 d-flex justify-content-center">
-                        <div class="card card-custom" data-id="@item.ItemId">
-                            <img src="~/img/items/@item.ItemImageName" class="card-img-top" alt="Product 1">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="card-title">@item.ItemName</h5>
-                                    <p class="card-text" style="padding-right: 23px;">@item.ItemChangedPrice</p>
+
+@if (isitem != null)
+{
+    <img src="~/img/no_item.png" style="width:100%; max-height: 50vh; object-fit: contain;">
+    <h3 style="height:50vh; text-align:center;padding:auto;justify-content:center;align-items:center;">No item yet!</h3>
+}
+else
+{
+    <section class="py-3">
+        <div class="main-container">
+            <div class="container1">
+                <div class="row justify-content-left formargin">
+                    @foreach (var item in Model.Items)
+                    {
+                        <div class="col-lg-4 col-md-6 d-flex justify-content-center">
+                            <div class="card card-custom" data-id="@item.ItemId">
+                                <div class="img-box">
+                                <img src="~/img/items/@item.ItemImageName" class="card-img-top" alt="Product 1">
                                 </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        Amount: <span class="px-2 count" id="supercount">1</span>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="card-title">@item.ItemName</h5>
+                                        <p class="card-text">@item.ItemChangedPrice</p>
                                     </div>
-                                    <a href="#" class="btn btn-secondary btn-sm add-to-cart-btn" data-id="@item.ItemId" style="margin-right: 15px;">Add cart</a>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            Amount: <span class="px-2 count" id="supercount">1</span>
+                                        </div>
+                                        <a href="#" class="btn btn-secondary btn-sm add-to-cart-btn" data-id="@item.ItemId" style="margin-right: 15px;">Add cart</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                }
+                    }
+                </div>
             </div>
-        </div>
-        <!-- Your existing HTML code -->
-        <div class="container2 ">
-            <div class="list-container">
-                <div class="scrollable-list">
-                    <div id="item-names" class="text-center">
-                        <br />
-                        <!-- Item names with quantities will be displayed here -->
+            <div class="container2">
+                <div class="list-container">
+                    <div class="scrollable-list">
+                        <div id="item-names" class="text-center">
+                            <!-- Item names with quantities will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="sticky-button-container">
+                    <div class="text-center mx-auto">
+                        <button class="btn btn-primary mb-3 buttonsize" id="submittocart">Purchase</button>
                     </div>
                 </div>
             </div>
-            <div class="sticky-button-container">
-                <div class="text-center mx-auto">
-                    <button class="btn btn-primary mb-3 buttonsize" id="submittocart">Purchase</button>
-                </div>
-            </div>
-            
         </div>
-    </div>
-</section>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </section>
+}
+<script src="~/js/download_js/jquery-3.6.0.min.js"></script>
 
 <script>
     $(document).ready(function () {
@@ -279,7 +304,7 @@
                 var incrementButtonCart = $('<button>+</button>').addClass('btn btn-primary btn-sm custom-btn mx-1 increment-btn');
 
                 // Delete button in cart
-                var deleteButtonCart = $('<button><i class="fas fa-trash-alt"></i></button>').addClass('btn btn-danger  ml-1 delete-item-btn');
+                var deleteButtonCart = $('<button><i class="fas fa-trash-alt"></i></button>').addClass('btn btn-danger ml-1 delete-item-btn');
 
                 // Append buttons to button container
                 buttonContainer.append(decrementButtonCart, quantityDisplayCart, incrementButtonCart, deleteButtonCart);
@@ -320,7 +345,4 @@
             form.submit();
         });
     });
-
 </script>
-
-

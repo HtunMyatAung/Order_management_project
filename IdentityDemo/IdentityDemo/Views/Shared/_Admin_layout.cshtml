@@ -3,6 +3,7 @@
 @inject UserManager<ApplicationUser> UserManager
 @{
     ApplicationUser currentUser = await UserManager.GetUserAsync(User);
+     //TempData["title"] = "Dashboard";
 }
 <!DOCTYPE html>
 <!--
@@ -16,27 +17,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <title>uab zone</title>
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="~/css/download_css/css_family.css" />
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/download_css/1_10_24_jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="~/css/download_css/5_15_4_all.min.css" />
+    <link rel="stylesheet" href="~/css/download_css/6_0_0_beta3_all.min.css" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="~/css/download_css/css_family.css" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
     <!-- Ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="~/css/download_css/2_0_1_ionicons.min.css" />
     <!-- Tempusdominus Bootstrap 4 -->
     <link rel="stylesheet" href="../../plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
     <!-- iCheck -->
@@ -64,29 +65,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
             </ul>
-            <ul class="navbar-nav ml-auto">
-                <!-- Navbar Search -->
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-                        <i class="fas fa-search"></i>
-                    </a>
-                    <div class="navbar-search-block">
-                        <form class="form-inline">
-                            <div class="input-group input-group-sm">
-                                <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-                                <div class="input-group-append">
-                                    <button class="btn btn-navbar" type="submit">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                    <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </li>
-            </ul>
+            <h5>@TempData["title"]</h5>
         </nav>
         <!-- /.navbar -->
 
@@ -131,7 +110,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
-
+                                    
                                 </p>
                             </a>
                         </li>
@@ -141,6 +120,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <p>
                                     Users
                                     @*<span class="right badge badge-danger">New</span>*@
+                                   
                                 </p>
                             </a>
                         </li>
@@ -150,7 +130,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <i class="nav-icon fas fa-store"></i>
                                 <p>
                                     Shops
-
+                                    
                                     @*<span class="badge badge-info right"></span>*@
                                 </p>
                             </a>
@@ -160,7 +140,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <i class="nav-icon fas fa-sync"></i>
                                 <p>
                                     Reset password
-
+                                    
                                     @*<span class="badge badge-info right"></span>*@
                                 </p>
                             </a>
@@ -216,7 +196,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- AdminLTE App -->
     <script src="~/dist/js/adminlte.min.js"></script>
      <!-- ./wrapper -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <script src="~/js/download_js/2_9_4_Chart.min.js"></script>
     <!-- jQuery -->
     <script src="../../plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
@@ -256,7 +236,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="../../dist/js/demo.js"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="../../dist/js/pages/dashboard.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>   
+    <script type="text/javascript" src="~/js/download_js/1_10_24_jquery.dataTables.min.js"></script>
     @RenderSection("Datatablescript",false)
     @RenderSection("Scripts",false)
 </body>

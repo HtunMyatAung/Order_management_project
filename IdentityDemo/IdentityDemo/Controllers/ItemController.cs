@@ -36,6 +36,10 @@ namespace IdentityDemo.Controllers
         {
             ShopModel shop  = _context.Shops.SingleOrDefault(s=>s.ShopId == shopid);
             var items = await _context.Items.Where(s=>s.Shop_Id== shopid).ToListAsync();
+            if (!items.Any())
+            {
+                TempData["items"] = "hello";
+            }
             var itembyshopid = new ItemsViewModel
             {
                 Shop = shop,
@@ -100,11 +104,19 @@ namespace IdentityDemo.Controllers
             {
                 return NotFound();
             }
-            string uniqueFileName = null;
-
-            // Check if an image is uploaded
-            if (updateItem.ItemImage != null)
+            if (updateItem.ItemImage!=null)
             {
+                string uniqueFileName = null;
+
+                // Delete old image if it exists
+                if (!string.IsNullOrEmpty(item.ItemImageName) && item.ItemImageName != "item_default.png")
+                {
+                    string oldImagePath = Path.Combine(_environment.WebRootPath, "img/items", item.ItemImageName);
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
                 // Set the uploads folder path
                 string uploadsFolder = Path.Combine(_environment.WebRootPath, "img/items");
 
@@ -122,7 +134,11 @@ namespace IdentityDemo.Controllers
                 {
                     await updateItem.ItemImage.CopyToAsync(fileStream);
                 }
+
+
+                item.ItemImageName = uniqueFileName;
             }
+            
             item.ItemName = updateItem.ItemName;
             item.ItemPrice = updateItem.ItemPrice;
             item.ItemQuantity = updateItem.ItemQuantity;
@@ -130,7 +146,7 @@ namespace IdentityDemo.Controllers
             item.Discount_rate = updateItem.Discount_rate;
             item.Discount_price = updateItem.Discount_price;
             item.ItemUpdatedDate = DateTime.Now;
-            item.ItemImageName = uniqueFileName;
+            
             _context.Items.Update(item);
             _context.SaveChanges();
 

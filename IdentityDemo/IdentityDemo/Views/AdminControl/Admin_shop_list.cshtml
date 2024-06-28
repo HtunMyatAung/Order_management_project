@@ -1,7 +1,7 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@model IEnumerable<IdentityDemo.Models.ShopModel>
+@model IEnumerable<IdentityDemo.ViewModels.ShopViewModel>
 @{
     Layout = "_Admin_layout";
     int counter = 1;
@@ -13,12 +13,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sample Table</title>
     <!-- DataTables CSS -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/download_css/1_10_24_jquery.dataTables.min.css" />
     <style>
         /* Optional CSS for custom styling */
-        #example_wrapper {
-            margin: 20px;
-        }
+       
     </style>
 </head>
 <body>
@@ -27,6 +25,7 @@
             <thead>
                 <tr style ="text-align: center;">
                     <th>ID</th>
+                    <th>Owner</th>
                     <th>Name</th>
                     <th>Phone</th>
                     <th>Email</th>
@@ -39,6 +38,7 @@
                 {
                     <tr style ="text-align: center;">
                         <td>@counter</td>
+                        <td>@shop.ShopOwnerName</td>
                         <td>@shop.ShopName</td>
                         <td>@shop.ShopPhone</td>
                         <td>@shop.ShopEmail</td>
@@ -53,9 +53,9 @@
     </div>
 
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="~/js/download_js/3_5_1_jquery.min.js"></script>
     <!-- DataTables JS -->
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="~/js/download_js/1_10_24_jquery.dataTables.min.js"></script>
     <script>
         // Initialize DataTable
         $(document).ready(function () {

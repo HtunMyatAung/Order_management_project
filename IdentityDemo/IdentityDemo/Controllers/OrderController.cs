@@ -1,9 +1,13 @@
 ﻿using IdentityDemo.Data;
 using IdentityDemo.Models;
+using IdentityDemo.Services;
 using IdentityDemo.ViewModels;
+using MailKit.Net.Smtp;
+using MailKit.Security;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MimeKit;
 using Newtonsoft.Json;
 
 namespace IdentityDemo.Controllers
@@ -11,13 +15,72 @@ namespace IdentityDemo.Controllers
     public class OrderController : Controller
     {
         public readonly AppDbContext _context;
-        public readonly UserManager<ApplicationUser> _userManager;
-        public OrderController(AppDbContext context, UserManager<ApplicationUser> userManager)
+        public readonly UserManager<ApplicationUser> _userManager;       
+        private readonly IEmailService _emailService;
+        
+        public OrderController(AppDbContext context, UserManager<ApplicationUser> userManager, IEmailService emailService)
         {
             _context = context;
             _userManager = userManager;
+            _emailService = emailService;
+            
+        }
+        public IActionResult Hello()
+        {
+            return View();
+        }
+        [HttpGet]
+        public IActionResult SendEmail()
+        {
+            TempData["test"] = "test";
+            var shops=_context.Shops.ToList();
+            return View(shops);
+        }
+        [HttpPost]
+        public async Task<IActionResult> SendEmail(string htmlContent)
+        {
+            try
+            {
+                Console.WriteLine(htmlContent);
+                string toEmail = "htunmyataung643@gmail.com";
+                string subject = "Test Subject";
+                
+                await _emailService.SendEmailAsync(toEmail, subject, htmlContent);
+                TempData["test"] = "hahaha";
+                ViewBag.Message = "Email sent successfully!";
+                return RedirectToAction("Hello", "Order");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Error sending email: {ex.Message}";
+                return View();
+            }
+        }
+       
+        [HttpPost]
+        public async Task<IActionResult> SendInvoiceEmail(string htmlContent)
+        {
+            try
+            {
+                Console.WriteLine(htmlContent);
+                string toEmail = "htunmyataung643@gmail.com";
+                string subject = "uab invoice";
+
+                await _emailService.SendEmailAsync(toEmail, subject, htmlContent);
+                TempData["test"] = "hahaha";
+                ViewBag.Message = "Email sent successfully!";
+                return RedirectToAction("SaveInvoice", "Order");
+            }
+            catch(Exception ex)
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
+        public async Task<IActionResult> Order_confirm()
+        {
+            return View();
+        }
 
         //[HttpGet]
         public async Task<IActionResult> Invoice(Dictionary<int, int> selectedItems)

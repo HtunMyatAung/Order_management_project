@@ -4,9 +4,9 @@
     Layout = "_Owner_layout";
 }
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/css/adminlte.min.css">
+    <link rel="stylesheet" href="~/css/download_css/3_1_0_adminlte.min.css" />
     <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/js/download_js/npm_chart.js"></script>
     <style>
         /* Apply fixed height to chart container */
        
@@ -89,7 +89,7 @@
                 <div class="icon">
                     <i class="ion ion-person"></i>
                 </div>
-                <a href="@Url.Action("Customer_list", "Shop")" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="@Url.Action("Owner_dashboard", "Shop")" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         
@@ -133,8 +133,5 @@
             });
         </script>
     }
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/js/adminlte.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+    <script src="~/js/download_js/3_5_1_chart.min.js"></script>
 </body>

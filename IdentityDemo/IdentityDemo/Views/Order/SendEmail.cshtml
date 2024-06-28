@@ -1,0 +1,76 @@
+﻿@model IEnumerable<IdentityDemo.Models.ShopModel>
+@{
+    Layout = null;
+    ViewData["Title"] = "Send Email";
+    var invoiceItems = Model;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Voucher</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div id="test">
+        <div id="invoice-container" style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd;">
+            <h2 style="text-align: center;">Invoice from Our Company</h2>
+
+            <div>
+                <p>Date: @DateTime.Now.ToString("MMMM dd, yyyy")</p>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                    <thead>
+                        <tr style="background-color: #f2f2f2;">
+                            <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Item Name</th>
+                            <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Quantity</th>
+                            <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Unit Price</th>
+                            <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in invoiceItems)
+                        {
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px;">@item.ShopName</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">@item.ShopPhone</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">$@item.ShopAddress</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">$@item.ProfileImagePath </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            
+
+            <div style="margin-top: 20px;">
+                <p>Thank you for your business!</p>
+                <p>&copy; @DateTime.Now.Year Our Company. All rights reserved.</p>
+            </div>
+        </div>
+
+    </div>
+    <form method="post" action="/Order/SendInvoiceEmail">
+        <input type="hidden" name="htmlContent" id="htmlContent" />
+        <button type="submit" class="btn btn-primary"> Send Invoice </button>
+    </form>
+    <script>
+        // Example of targeting body indirectly through JavaScript
+        document.body.style.backgroundColor = '#f0f0f0'; // Setting background color
+        // Capture HTML content of the invoice for sending via email
+        var invoiceHtml = document.getElementById('test').innerHTML;
+        document.getElementById('htmlContent').value = invoiceHtml;
+    </script>
+</body>
+</html>
+
+
+

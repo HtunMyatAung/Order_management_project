@@ -41,6 +41,21 @@ namespace IdentityDemo.Controllers
             }
             return View(std);
         }
+        public async Task<IActionResult> Shop_view(int shopid)
+        {
+            ShopModel shop = _context.Shops.SingleOrDefault(s => s.ShopId == shopid);
+            var items = await _context.Items.Where(s => s.Shop_Id == shopid).ToListAsync();
+            if (!items.Any())
+            {
+                TempData["items"] = "hello";
+            }
+            var itembyshopid = new ItemsViewModel
+            {
+                Shop = shop,
+                Items = items
+            };
+            return View(itembyshopid);
+        }
         public IActionResult Owner_order_list()
         {
             var username = User.Identity.Name;
@@ -115,44 +130,47 @@ namespace IdentityDemo.Controllers
                 {
                     return NotFound(); // Handle case where shop is not found
                 }
-                string uniqueFileName = shop.ShopId + "_" + Path.GetFileName(shopToUpdate.ProfileImagePath);
-
-                // Set the uploads folder path
-                string uploadsFolder = Path.Combine(_environment.WebRootPath, "img/shop");
-
-                // Delete the old image if it exists
-                if (!string.IsNullOrEmpty(shopToUpdate.ProfileImagePath))
+                if (shop.ProfileImage != null)
                 {
-                    string oldImagePath = Path.Combine(uploadsFolder, shopToUpdate.ProfileImagePath);
+                    string uniqueFileName = null;
 
-                    if (System.IO.File.Exists(oldImagePath))
+                    // Delete old image if it exists
+                    if (!string.IsNullOrEmpty(shopToUpdate.ProfileImagePath) && shopToUpdate.ProfileImagePath != "shop_default.png")
                     {
-                        System.IO.File.Delete(oldImagePath);
+                        string oldImagePath = Path.Combine(_environment.WebRootPath, "img/shop", shopToUpdate.ProfileImagePath);
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
                     }
+                    // Set the uploads folder path
+                    string uploadsFolder = Path.Combine(_environment.WebRootPath, "img/shop");
+
+                    // Ensure the folder exists
+                    Directory.CreateDirectory(uploadsFolder);
+
+                    // Generate a unique file name to avoid collisions
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(shop.ProfileImage.FileName);
+
+                    // Combine folder path and file name
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    // Copy the uploaded file to the specified path
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await shop.ProfileImage.CopyToAsync(fileStream);
+                    }
+                    shopToUpdate.ProfileImagePath = uniqueFileName;
                 }
 
-                // Ensure the folder exists
-                Directory.CreateDirectory(uploadsFolder);
 
-                // Combine folder path and updated file name
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                // Copy the uploaded file to the specified path
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await shop.ProfileImage.CopyToAsync(fileStream);
-                }
-
-                // Update the shop profile image name with the new file name
-                
-
-                // Update other shop details
-                shopToUpdate.ShopName = shop.ShopName;
+                    // Update other shop details
+                    shopToUpdate.ShopName = shop.ShopName;
                 shopToUpdate.ShopPhone = shop.ShopPhone;
                 shopToUpdate.ShopDescription = shop.ShopDescription;
                 shopToUpdate.ShopAddress = shop.ShopAddress;
                 shopToUpdate.ShopEmail = shop.ShopEmail;
-                shopToUpdate.ProfileImagePath = uniqueFileName;
+                
 
                 _context.Shops.Update(shopToUpdate);
                 await _context.SaveChangesAsync();

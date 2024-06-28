@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var passwordInput = document.getElementById('passwordInput');
     var confirmPasswordInput = document.getElementById('confirmPasswordInput');
     var nameValidationMessage = document.getElementById('nameInputValidationMessage');
-    var addressValidationMessage = document.getElementById('addressInputValidationMessage');
+    
     var emailValidationMessage = document.getElementById('emailInputValidationMessage');
     var phoneValidationMessage = document.getElementById('phoneInputValidationMessage');
     var passwordValidationMessage = document.getElementById('passwordInputValidationMessage');
@@ -41,8 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var isFormValid =
             validateInput(nameInput, /.+/, nameValidationMessage) &&
             validateInput(emailInput, emailPattern, emailValidationMessage) &&
-            validateInput(phoneInput, phonePattern, phoneValidationMessage) &&
-            validateInput(addressInput, /.+/, addressValidationMessage) &&
+            validateInput(phoneInput, phonePattern, phoneValidationMessage) &&            
             validateInput(passwordInput, passwordPattern, passwordValidationMessage) &&
             validatePasswordMatch();
 
@@ -63,12 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
         validateInput(phoneInput, phonePattern, phoneValidationMessage);
         validateForm();
     });
-
-    addressInput.addEventListener('input', function () {
-        validateInput(addressInput, /.+/, addressValidationMessage);
-        validateForm();
-    });
-
+    
     passwordInput.addEventListener('input', function () {
         validateInput(passwordInput, passwordPattern, passwordValidationMessage);
         validateForm();
