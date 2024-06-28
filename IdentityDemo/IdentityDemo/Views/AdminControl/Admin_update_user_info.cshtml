@@ -9,11 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Change Password</title>
     <style>
-        body{
-            background-color: #45a049;
-        }
         .github-login-form {
-            margin-top: 50px;
+            
             padding: 30px;
             border: 1px solid #e1e4e8;
             border-radius: 6px;
@@ -44,9 +41,10 @@
             }
 
         .github-btn {
+            
+            width:160px;
             padding: 10px 16px;
-            font-size: 14px;
-            font-weight: 600;
+            font-weight: 400;
             color: #fff;
             background-color: #28a745;
             border-color: rgba(27, 31, 35, 0.15);
@@ -65,8 +63,8 @@
     </style>
 </head>
 <body>
-    <div class="row justify-content-center" style="background-color:#4CAF50">
-        <div class="col-md-4">
+    <div class="row justify-content-center py-3">
+        <div class="col-md-6">
             <form asp-controller="AdminControl" asp-action="Admin_update_user_info" method="post" class="github-login-form">
                 <h1 class="text-center">Change User Info</h1>
                 <input type="hidden" asp-for="Id" />
@@ -98,18 +96,11 @@
                     </select>
                     <span asp-validation-for="Role" class="text-danger"></span>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block github-btn">Submit</button>
-
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary btn-block github-btn">Submit</button>
+                </div>
             </form>
         </div>
-
     </div>
 </body>
 </html>
-
-@*
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}*@

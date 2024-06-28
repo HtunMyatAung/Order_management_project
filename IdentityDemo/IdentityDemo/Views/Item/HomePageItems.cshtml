@@ -4,10 +4,10 @@
     int counter = 1;
 }
 <link href="~/css/bootstrap.min.css" rel="stylesheet" />
-<link href="~/css/allitemlist.css" rel="stylesheet" />
+<link href="~/css/custom_css/allitemlist.css" rel="stylesheet" />
 
 <section class="py-5">
-    <div class="container">
+    <div class="container carousel-container">
         <div id="carouselExampleControls" class="carousel slide carousel-dark" data-bs-ride="carousel">
             <ol class="carousel-indicators">
                 <li data-bs-target="#carouselExampleControls" data-bs-slide-to="0" class="active"></li>
@@ -58,7 +58,7 @@
 </section>
 
 <div class="container">
-    <br />
+    
     <div class="row justify-content-left formargin">
         @foreach (var item in Model.Items)
         {
@@ -80,7 +80,7 @@
                                 <span id="quantity-display-@item.ItemId" class="count">1</span>
                                 <button class="btn btn-primary btn-sm custom-btn" onclick="incrementQuantity(@item.ItemId)">+</button>
                             </div>
-                            <a href="#" class="btn btn-primary btn-sm" onclick="prepareBuyItem(@item.ItemId, '@item.ItemName', '@item.ItemChangedPrice')">Buy Now</a>
+                            <a href="#" class="btn btn-primary btn-sm buy-btn" onclick="prepareBuyItem(@item.ItemId, '@item.ItemName', '@item.ItemChangedPrice')">Buy Now</a>
                         </div>
                     </div>
                 </div>
@@ -103,17 +103,17 @@
             </div>
             <div class="modal-body">
                 <p>You are about to buy:</p>
-                <p><strong>Item ID:</strong> <span id="modalItemId"></span></p>
+                <p hidden><span id="modalItemId"></span></p>
                 <p><strong>Item Name:</strong> <span id="modalItemName"></span></p>
                 <p><strong>Item Price:</strong> $<span id="modalItemPrice"></span></p>
                 <p>Quantity: <span id="modalItemQuantity"></span></p>
                 <p>Do you want to proceed?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="submitBuyItem()">Confirm Purchase</button>
+                <button type="button" class="btn btn-secondary w-25" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary w-25" onclick="submitBuyItem()">Confirm</button>
             </div>
         </div>
     </div>
 </div>
-<script src="~/js/Allitemlistbuy.js"></script>
+<script src="~/js/custom_js/Allitemlistbuy.js"></script>

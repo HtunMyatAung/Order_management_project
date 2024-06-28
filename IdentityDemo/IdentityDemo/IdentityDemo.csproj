@@ -11,6 +11,24 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\js\download_js\1_10_24_jquery.dataTables.min.js" />
+    <None Include="wwwroot\js\download_js\1_19_3_jquery.validate.min.js" />
+    <None Include="wwwroot\js\download_js\1_4_1_html2canvas.min.js" />
+    <None Include="wwwroot\js\download_js\2_5_4_popper.min.js" />
+    <None Include="wwwroot\js\download_js\2_9_4_Chart.min.js" />
+    <None Include="wwwroot\js\download_js\3_2_12_jquery.validate.unobtrusive.min.js" />
+    <None Include="wwwroot\js\download_js\3_5_1_chart.min.js" />
+    <None Include="wwwroot\js\download_js\3_5_1_jquery.min.js" />
+    <None Include="wwwroot\js\download_js\4_5_3_bootstrap.min.js" />
+    <None Include="wwwroot\js\download_js\5_2_3_bootstrap.bundle.min.js" />
+    <None Include="wwwroot\js\download_js\jquery-3.5.1.slim.min.js" />
+    <None Include="wwwroot\js\download_js\jquery-3.6.0.min.js" />
+    <None Include="wwwroot\js\download_js\npm_chart.js" />
+    <None Include="wwwroot\js\download_js\sb_1_7_1_datatables.min.js" />
+    <None Include="wwwroot\js\download_js\swiper-bundle.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
     <PackageReference Include="MySql.Data" Version="8.4.0" />

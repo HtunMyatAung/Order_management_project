@@ -6,248 +6,235 @@
     Layout = null;
     int counter = 1;
     ApplicationUser currentUser = await UserManager.GetUserAsync(User);
-
 }
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | User Profile</title>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
-    <!-- Google Font: Source Sans Pro -->
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
-    <!-- Theme style -->
     <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+    <style>
+        .bodycontent {
+            height: 95vh;
+        }
+
+        .profile-card {
+            border-radius: 15px;
+            height: 100%;
+        }
+
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .table-responsive {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .form-horizontal .form-group {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .btn-submit {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: #fff;
+        }
+
+            .btn-submit:hover {
+                background-color: #0056b3;
+                border-color: #0056b3;
+            }
+
+        .footer {
+            background-color: rgba(0, 0, 0, 0.05);
+            padding: 10px 0;
+        }
+        body{
+            background-color: lightgray;
+        }
+    </style>
 </head>
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
-        
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>User Profile</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                            <li class="breadcrumb-item active">User Profile</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <section class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1>Profile</h1>
-                        </div>
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
-                                <li class="breadcrumb-item active">User Profile</li>
-                            </ol>
+        <section class="content">
+            <div class="container-fluid bodycontent">
+                <div class="row">
+                    <div class="col-md-3" style="height: 87vh;">
+                        <div class="card card-primary card-outline profile-card">
+                            <div class="card-body box-profile my-3">
+                                <div class="text-center">
+                                    <img class="profile-user-img img-fluid profile-image mb-2"
+                                         src="../../img/users/@currentUser.UserImageName"
+                                         alt="User profile picture">
+                                </div>
+                                <h3 class="profile-username text-center">@Model.UserName</h3>
+                                <ul class="list-group list-group-unbordered mb-5">
+                                    <li class="list-group-item my-1">
+                                        <b>Phone</b> <a class="float-right">@Model.UserPhone</a>
+                                    </li>
+                                    <li class="list-group-item my-1">
+                                        <b>Email</b> <a class="float-right">@Model.UserEmail</a>
+                                    </li>
+                                    <li class="list-group-item my-1">
+                                        <b>Address</b> <a class="float-right">@Model.Address</a>
+                                    </li>
+                                    <li class="list-group-item my-1">
+                                        <b>Orders</b> <a class="float-right">@Model.OrderCount</a>
+                                    </li>
+                                </ul>
+                                <form asp-controller="Account" asp-action="Logout" method="post">
+                                    <button type="submit" class="btn btn-danger btn-block">Logout</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div><!-- /.container-fluid -->
-            </section>
-
-            <!-- Main content -->
-            <section class="content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-3">
-
-                            <!-- Profile Image -->
-                            <div class="card card-primary card-outline">
-                                <div class="card-body box-profile">
-                                    
-                                    <div class="text-center">
-                                        <img class="profile-user-img img-fluid img-circle"
-                                             src="../../img/users/@currentUser.UserImageName"
-                                             alt="User profile picture">
-                                    </div>
-
-                                    <h3 class="profile-username text-center">@Model.UserName</h3>
-
-                                    <!--<p class="text-muted text-center">Software Engineer</p>-->
-
-                                    <ul class="list-group list-group-unbordered mb-3">
-                                        <li class="list-group-item">
-                                            <b>Phone</b> <a class="float-right">@Model.UserPhone</a>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <b>Email</b> <a class="float-right">@Model.UserEmail</a>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <b>Address</b> <a class="float-right">@Model.Address</a>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <b>Orders</b><a class="float-right">@Model.OrderCount</a>
-                                        </li>
-                                    </ul>
-                                    <form asp-controller="Account" asp-action="Logout" method="post">
-                                        <button style="text-align:center; background-color:lightgrey"type="submit" class="dropdown-item">Logout</button>
-                                    
-                                    
-                                    </form>
-                                </div>
-                                <!-- /.card-body -->
+                    <div class="col-md-9">
+                        <div class="card" style="height: 87vh;">
+                            <div class="card-header p-2">
+                                <ul class="nav nav-pills">
+                                    <li class="nav-item"><a class="nav-link active" href="#history" data-toggle="tab">Order History</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+                                </ul>
                             </div>
-                            <!-- /.card -->
-                            <!-- About Me Box -->
-                            
-                            <!-- /.card -->
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-md-9">
-                            <div class="card">
-                                <div class="card-header p-2">
-                                    <ul class="nav nav-pills">
-                                        <li class="nav-item"><a class="nav-link" href="#history" data-toggle="tab">Order History</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
-                                       
-                                    </ul>
-                                </div><!-- /.card-header -->
-                                <div class="card-body">
-                                    <div class="tab-content">
-                                        
-                                        <!-- /.tab-pane -->
-                                        <div class="active tab-pane" id="history">                                            
-                                            <div class="container-fluid mt-4">
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <div style="max-height: 600px; overflow-y: auto; text-align:center">    
-                                                           @{ if (Model.Orders ==null ||!Model.Orders.Any()){
-                                                                <label>Oops! you haven't ordered anything yet!</label>
+                            <div class="card-body">
+                                <div class="tab-content">
+                                    <div class="active tab-pane" id="history">
+                                        <div class="table-responsive mt-4">
+                                            @{
+                                                if (Model.Orders == null || !Model.Orders.Any())
+                                                {
+                                                    <label>Oops! You haven't ordered anything yet!</label>
+                                                }
+                                                else
+                                                {
+                                                    <table class="table table-bordered table-hover" id="Order_list">
+                                                        <thead>
+                                                            <tr style="text-align:center;">
+                                                                <th>#</th>
+                                                                <th>Order Price</th>
+                                                                <th>Shop</th>
+                                                                <th>Order Date</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var order in Model.Orders)
+                                                            {
+                                                                <tr style="text-align: center;">
+                                                                    <td>@counter</td>
+                                                                    <td>@order.OrderPrice</td>
+                                                                    <td>@order.Shop_Name</td>
+                                                                    <td>@order.OrderDate</td>
+                                                                </tr>
+                                                                counter += 1;
                                                             }
-                                                            else{
-                                                            <!--style-->
-                                                            <table class="table table-bordered table-hover" id="Order_list">
-                                                                <thead>
-                                                                    <tr style="text-align:center;">
-                                                                        <th>#</th>
-                                                                        <th>Order Price</th>
-                                                                        <th>Shop</th>
-                                                                        <th>Order Date</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-
-                                                                    @foreach (var order in Model.Orders)
-                                                                    {
-
-                                                                        <tr style="text-align: center;">
-                                                                            <td>@counter</td>
-                                                                            <td>@order.OrderPrice</td>
-                                                                            <td>@order.Shop_Name</td>
-                                                                            <td>@order.OrderDate</td>
-                                                                        </tr>
-                                                                        counter += 1;
-                                                                    }
-                                                                </tbody>
-                                                            </table>
-                                                            }
-                                                           }
-                                                        </div>
-                                                    </div>
+                                                        </tbody>
+                                                    </table>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="settings">
+                                        <form asp-controller="Account" asp-action="User_profile" method="post" enctype="multipart/form-data" class="form-horizontal">
+                                            <input type="hidden" asp-for="UserId" />
+                                            <img id="blah" class="image-preview" src="~/img/users/@currentUser.UserImageName" alt="Preview Image" style="max-width: 100%; max-height: 200px; display: block; margin-top: 10px;" />
+                                            <div class="form-group row">
+                                                <label for="UserImage" class="col-sm-2 col-form-label">Profile Image</label>
+                                                <div class="col-sm-10">
+                                                    <input asp-for="UserImage" class="form-control-file" accept="image/*" type="file" id="imgInp" name="UserImage" onchange="previewImage(event)" />
+                                                    <span asp-validation-for="UserImage" class="text-danger"></span>
                                                 </div>
                                             </div>
-                                            <!-- /.post -->
-                                        </div>
-                                        <!-- /.tab-pane -->
-
-                                        <div class="tab-pane" id="settings">
-                                            <form asp-controller="Account" asp-action="User_profile" method="post" enctype="multipart/form-data" runat="server" class="form-horizontal" >
-                                                <input type="hidden" asp-for="UserId" />
-                                                <img id="blah" class="image-preview" src="~/img/users/@currentUser.UserImageName" alt="Preview Image" style="max-width: 100%; max-height: 200px; display: block; margin-top: 10px;" />
-                                                <!-- Image Preview Section -->
-                                                <div class="form-group row">
-                                                    <label for="UserImage" class="col-sm-2 col-form-label">User Profile</label>
-                                                    <div class="col-sm-10">
-                                                        <input asp-for="UserImage" class="form-control-file" accept="image/*" type="file" id="imgInp" name="UserImage" onchange="previewImage(event)" />
-                                                        <span asp-validation-for="UserImage" class="text-danger"></span>
-                                                    </div>
+                                            <div class="form-group row">
+                                                <label asp-for="UserName" class="col-sm-2 col-form-label">Name</label>
+                                                <div class="col-sm-10">
+                                                    <input asp-for="UserName" class="form-control" placeholder="Name">
+                                                    <span asp-validation-for="UserName" class="text-danger"></span>
                                                 </div>
-                                                <div class="form-group row">
-                                                    <label asp-for="UserName" class="col-sm-2 col-form-label"></label>
-                                                    <div class="col-sm-10">
-                                                        <input asp-for="UserName" class="form-control" placeholder="Name">
-                                                        <span asp-validation-for="UserName" class="text-danger"></span>
-                                                    </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label asp-for="UserEmail" class="col-sm-2 col-form-label">Email</label>
+                                                <div class="col-sm-10">
+                                                    <input asp-for="UserEmail" class="form-control" placeholder="Email">
+                                                    <span asp-validation-for="UserEmail" class="text-danger"></span>
                                                 </div>
-                                                <div class="form-group row">
-                                                    <label  class="col-sm-2 col-form-label">Email</label>
-                                                    <div class="col-sm-10">
-                                                        <input asp-for="UserEmail" class="form-control" placeholder="Email">
-                                                        <span asp-validation-for="UserEmail" class="text-danger"></span>
-                                                    </div>
-                                                </div>         
-                                                <div class="form-group row">
-                                                    <label  class="col-sm-2 col-form-label">Phone</label>
-                                                    <div class="col-sm-10">
-                                                        <input asp-for="UserPhone" class="form-control" placeholder="Phone number">
-                                                        <span asp-validation-for="UserPhone" class="text-danger"></span>
-                                                    </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label asp-for="UserPhone" class="col-sm-2 col-form-label">Phone</label>
+                                                <div class="col-sm-10">
+                                                    <input asp-for="UserPhone" class="form-control" placeholder="Phone number">
+                                                    <span asp-validation-for="UserPhone" class="text-danger"></span>
                                                 </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 col-form-label">Address</label>
-                                                    <div class="col-sm-10">
-                                                        <input asp-for="Address" class="form-control" placeholder="Address">
-                                                        <span asp-validation-for="UserPhone" class="text-danger"></span>
-                                                    </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label asp-for="Address" class="col-sm-2 col-form-label">Address</label>
+                                                <div class="col-sm-10">
+                                                    <input asp-for="Address" class="form-control" placeholder="Address">
+                                                    <span asp-validation-for="Address" class="text-danger"></span>
                                                 </div>
-                                                <div class="form-group row">
-                                                    <div class="offset-sm-2 col-sm-10">
-                                                        <button type="submit" class="btn btn-danger">Submit</button>
-                                                    </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="offset-sm-2 col-sm-10">
+                                                    <button type="submit" class="btn btn-submit">Submit</button>
                                                 </div>
-                                            </form>
-
-                                        </div>
-                                        <!-- /.tab-pane -->
+                                            </div>
+                                        </form>
                                     </div>
-                                    <!-- /.tab-content -->
-                                </div><!-- /.card-body -->
+                                </div>
                             </div>
-                            <!-- /.card -->
                         </div>
-                        <!-- /.col -->
                     </div>
-                    <!-- /.row -->
-                </div><!-- /.container-fluid -->
-            </section>
-            <!-- /.content -->
-        </div>
-        <!-- /.content-wrapper -->
-        <footer class="main-footer">
-            <div class="float-right d-none d-sm-block">
-                <b>Version</b> 3.2.0
+                </div>
             </div>
-            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
-        </footer>
+        </section>
 
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
-        <!-- /.control-sidebar -->
+        <footer class="footer text-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>© 2024 <a href="https://adminlte.io/">adminlte.io</a></p>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </div>
-    <!-- ./wrapper -->
-    <!-- jQuery -->
-    <script src="../../plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="../../dist/js/adminlte.min.js"></script>
-    <!-- AdminLTE for demo purposes -->
-    <script src="../../dist/js/demo.js"></script>
-    <!-- jQuery -->
+
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <!-- DataTables JS -->
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../dist/js/adminlte.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
     <script>
-        // Initialize DataTable
         $(document).ready(function () {
             $('#Order_list').DataTable();
         });
         function previewImage(event) {
             const imgInp = event.target;
             const file = imgInp.files[0];
-
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function (e) {

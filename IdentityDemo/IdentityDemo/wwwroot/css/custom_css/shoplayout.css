@@ -20,13 +20,18 @@
     .login-button:hover {
         background-color: #f29c33;
         color: black;
+        margin-right: 0px;
         font-size: 14px;
         padding: 8px 25px;
         border-radius: 45px;
         text-decoration: none;
+        transition: 0.3s background-color;
     }
-.navbar-toggler{
-    border:none;
+
+
+
+.navbar-toggler {
+    border: none;
     font-size: 1.25rem;
 }
 .navbar-togger:focus, .btn-close:focus{

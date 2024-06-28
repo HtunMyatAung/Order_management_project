@@ -1,6 +1,8 @@
 ﻿@model IdentityDemo.ViewModels.ItemsViewModel
 @{
     Layout = "_Zone_layout";
+    ViewData["Message"] = Model.Shop.ShopName;
+    ViewData["Address"] = Model.Shop.ShopAddress;
 }
 
 
@@ -23,9 +25,9 @@
         margin-left: 30px;
         margin-right: 60px;
         height: 85vh; /* You can adjust the height as needed */
-        border-color: gray;
+        border-color: lightgray;
         border-radius: 10px;
-        border-width: 2px;
+        border-width: 1px;
         flex-grow: 1; /* Take up all remaining space */
         display: flex;
         flex-direction: column;
@@ -51,7 +53,8 @@
             border-top-left-radius: 15px;
             border-top-right-radius: 15px;
             height: 200px;
-            object-fit: cover;
+            width: 100%;
+            object-fit: fill;
         }
 
     .card-body {
@@ -96,33 +99,12 @@
             margin-bottom: 8px;
         }
 
-    .purchasebutton {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 10%;
-        background-color: blue;
-    }
-
-    .buttonsize {
-        width: 300px;
-        height: 50px;
-    }
-
-    .stickyyy {
-        position: sicky;
-        top: 90%;
-        left: 10%;
-    }
-
     .purchaseitem {
         background-color: lightgray;
         border-radius: 10px;
         margin: 10px;
         padding: 10px;
-        margin-top;
-        15px;
+        margin-top: 15px;
         font-size: 20px;
         width: 96%;
     }
@@ -148,16 +130,21 @@
     .sticky-button-container {
         height: 10%; /* 10% height for the sticky button */
         position: sticky;
-        bottom: 0;
-        background-color: white; /* Ensures the button is on top of scrollable content */
-        box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1); /* Optional: add shadow for separation effect */
+        bottom: 0; /* Ensures the button is on top of scrollable content */
+        display: flex;
+        justify-content: center; /* Center align the content horizontally */
+        align-items: center; /* Center align the content vertically */
     }
 
-    .buttonsize {
-        width: 100%; /* Full width button */
+    .buttonsize1 {
+        
+        width: 365px;
+        height: 50px;
+        border-radius: 10px;
+        /* Full width button */
     }
-
 </style>
+
 <section class="py-3">
     
     <div class="main-container">
@@ -175,7 +162,7 @@
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="d-flex justify-content-between align-items-center">
-                                        Amount: <span class="px-2 count" id="supercount">1</span>
+                                        Amount: <span class="px-2 count" id="supercount">@item.ItemQuantity</span>
                                     </div>
                                     <a href="#" class="btn btn-secondary btn-sm add-to-cart-btn" data-id="@item.ItemId" style="margin-right: 15px;">Add cart</a>
                                 </div>
@@ -186,7 +173,7 @@
             </div>
         </div>
         <!-- Your existing HTML code -->
-        <div class="container2 ">
+        <div class="container2">
             <div class="list-container">
                 <div class="scrollable-list">
                     <div id="item-names" class="text-center">
@@ -196,14 +183,14 @@
                 </div>
             </div>
             <div class="sticky-button-container">
-                <div class="text-center mx-auto">
-                    <button class="btn btn-primary mb-3 buttonsize" id="submittocart">Purchase</button>
+                <div class="text-center">
+                    <button class="btn btn-primary mb-3 buttonsize1" id="submittocart">Purchase</button>
                 </div>
             </div>
-            
         </div>
     </div>
 </section>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>

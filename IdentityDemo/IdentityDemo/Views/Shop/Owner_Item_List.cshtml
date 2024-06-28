@@ -5,47 +5,33 @@
     ViewData["Title"] = "Home Page";
     int counter = 1;
 }
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-@section Datatablecss{
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
-    <style>
-        #example_wrapper {
-            margin: 20px;
-        }
-    </style>
-}
-@section Datatablescript{
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <!-- DataTables JS -->
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-    <script>
-        // Initialize DataTable
-        $(document).ready(function () {
-            $('#shoptable').DataTable();
-        });
-    </script>
-}
 
 @section Database {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.0.8/fh-4.0.1/sb-1.7.1/datatables.min.css" rel="stylesheet">
+    <style>
+        .dataTables_filter {
+            float: left !important;
+        }
+
+    </style>
 }
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.0.8/fh-4.0.1/sb-1.7.1/datatables.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-
     <script>
         $(document).ready(function () {
-            $('#example1').DataTable({
+            $('#shoptable').DataTable({
                 responsive: true,
                 lengthChange: false,
                 autoWidth: false,
                 language: {
                     search: "_INPUT_",
                     searchPlaceholder: "Search...",
-                }
+                },
+                dom: '<"d-flex justify-content-between"f>rt<"bottom"p><"clear">'
             });
         });
 
@@ -70,18 +56,20 @@
         
     </script>
 }
-<div class="d-flex justify-content-between">
+<div class="d-flex justify-content-between ">
     <h1 style="color: black">Product</h1>
     @foreach (var item in Model)
     {
         ViewBag.id = item.Shop_Id;
     }
-    <a href="@Url.Action("CreateItem","Item",new{shopid = @ViewBag.id})" class="btn btn-primary"><i class="fa fa-circle-plus" style="height:0px;"></i> New Item</a>
+    <div class="my-auto">
+        <a href="@Url.Action("CreateItem","Item",new{shopid = @ViewBag.id})" class="btn btn-primary"><i class="fa fa-circle-plus"></i> New Item</a>
+    </div>
 </div>
 
-<hr />
 
-<table id="shoptable" class="display" style="width:100%;background-color:">
+
+<table id="shoptable" class="display" style="width:100%;">
     <thead>
         <tr style="text-align: center;">
             <th>Id</th>
