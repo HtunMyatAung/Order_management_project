@@ -333,7 +333,7 @@ else
         // Click event handler for the Purchase button
         $('#submittocart').click(function () {
             // Prepare data for submission
-            var form = $('<form action="/Order/Invoice" method="post"></form>');
+            var form = $('<form action="/Order/Order_confirm" method="post"></form>');
 
             // Add each item as a hidden input in the form
             $.each(selectedItems, function (itemId, quantity) {

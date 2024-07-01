@@ -1,6 +1,7 @@
 ﻿using IdentityDemo.Data;
 using IdentityDemo.Filters;
 using IdentityDemo.Models;
+using IdentityDemo.Services;
 using IdentityDemo.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -19,20 +20,57 @@ namespace IdentityDemo.Controllers
         private readonly AppDbContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IWebHostEnvironment _environment;
+        private readonly IEmailService _emailService;
         // private readonly IEmailSender _emailSender; // Implement an email sender service
         public Accountcontroller(UserManager<ApplicationUser> userManager,
-                                  SignInManager<ApplicationUser> signInManager,AppDbContext context, RoleManager<IdentityRole> roleManager, IWebHostEnvironment environment)
+                                  SignInManager<ApplicationUser> signInManager,AppDbContext context, RoleManager<IdentityRole> roleManager, IWebHostEnvironment environment,IEmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
             _roleManager = roleManager;
             _environment = environment;
+            _emailService = emailService;
             //_emailSender = emailSender;
         }
         public IActionResult Admin_contact()
         {
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> SendDefaultPasswordEmail(string email)
+        {
+            try
+            {
+                
+                var user=_context.Users.Where(u=>u.Email== email).FirstOrDefault();
+                Console.WriteLine(user == null);
+                if (user!=null) 
+                {
+                    Console.WriteLine(email);
+                    string toEmail = email;
+                    string subject = "Default password changed";
+                    await _emailService.SendEmailAsync(toEmail, subject, "Password123!");
+                    TempData["test"] = "hahaha";
+                    TempData["message"] = "A default password has been sent to your email address.";
+                    // Generate the password reset token
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                    // Reset the password to a default password
+                    var resetResult = await _userManager.ResetPasswordAsync(user, token, "Password123!");
+                    await _userManager.UpdateAsync(user);
+                }
+                else
+                {                  
+                    TempData["message"] = "Invalid username";
+                    
+                }
+                return RedirectToAction("Login", "Account");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
         //[HttpGet]
         public async Task<IActionResult> Register()

@@ -11,6 +11,10 @@
     <title>Login Form</title>
     
     <link href="~/css/custom_css/logincss.css" rel="stylesheet"/>
+    <link href="~/css/download_css/4_5_3_bootstrap.min.css" rel="stylesheet" />
+    <script src="~/js/download_js/3_5_1_jquery.min.js"></script>
+    <script src="~/js/download_js/4_5_3_bootstrap.min.js"></script>
+
 </head>
 <body>
     <div class="login-container">
@@ -26,9 +30,38 @@
                 <label for="show-password">Show Password</label>
             </div>
             <button type="submit">SIGN IN</button>
-            <p><a href="#">Forgot Password?</a></p>
+           
+            <p><a href="#" data-toggle="modal" data-target="#forgotPasswordModal">Forgot Password?</a></p>
             <p>Don't have an account? <a href="@Url.Action("Register", "Account")">Sign up</a></p>
         </form>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="forgotPasswordModal" tabindex="-1" role="dialog" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="forgotPasswordModalLabel">Forgot Password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="forgotPasswordForm" method="post" action="/Account/SendDefaultPasswordEmail">
+                    <div class="form-group">
+                        <div class="modal-body">
+
+                            <label for="email">Enter your Gmail address:</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+
+                        <p id="emailSentMessage" style="display: none;">A default password has been sent to your email address.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" onclick="submitForgotPasswordForm()">OK</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -42,6 +75,31 @@
                 passwordInput.type = 'password';
             }
         });
+        function submitForgotPasswordForm() {
+            const emailInput = document.getElementById('email');
+            const email = emailInput.value;
+            const emailSentMessage = document.getElementById('emailSentMessage');
+
+            if (email) {
+                // You can perform an AJAX request to submit the email
+                console.log('Gmail:', email);
+
+                // Hide the email input form and show the success message
+                emailInput.parentElement.style.display = 'none';
+                emailSentMessage.style.display = 'block';
+
+                // Optionally, close the modal after a delay
+                setTimeout(() => {
+                    $('#forgotPasswordModal').modal('hide');
+                    // Reset the form after closing
+                    emailInput.parentElement.style.display = 'block';
+                    emailSentMessage.style.display = 'none';
+                    emailInput.value = '';
+                }, 3000); // Adjust the delay as needed
+            } else {
+                alert('Please enter your Gmail address.');
+            }
+        }
     </script>
 </body>
 </html>

@@ -77,14 +77,78 @@ namespace IdentityDemo.Controllers
             }
         }
 
-        public async Task<IActionResult> Order_confirm()
+        public async Task<IActionResult> Order_confirm(Dictionary<int,int> selectedItems)
         {
-            return View();
+            TempData["SelectedItems"] = JsonConvert.SerializeObject(selectedItems);
+            if (selectedItems == null || selectedItems.Count == 0)
+            {
+                return RedirectToAction("HomePageItems", "Item");
+            }
+
+            int newOrderId = _context.Orders.Any() ? _context.Orders.Max(s => s.OrderID) + 1 : 1;
+
+            List<ItemModel> cartItems = new List<ItemModel>();
+            int tempShopId = 0;
+
+            // Fetch all item IDs to minimize database round-trips
+            var itemIds = selectedItems.Keys.ToList();
+            var items = await _context.Items.Where(i => itemIds.Contains(i.ItemId)).ToListAsync();
+
+            foreach (var itemId in itemIds)
+            {
+                var tempItem = items.FirstOrDefault(i => i.ItemId == itemId);
+                if (tempItem != null)
+                {
+                    if (tempShopId == 0)
+                    {
+                        tempShopId = tempItem.Shop_Id;
+                    }
+
+                    cartItems.Add(new ItemModel
+                    {
+                        ItemId = tempItem.ItemId,
+                        ItemName = tempItem.ItemName,
+                        ItemPrice = tempItem.ItemPrice,
+                        ItemChangedPrice = tempItem.ItemChangedPrice,
+                        ItemQuantity = selectedItems[itemId]
+                    });
+                }
+            }
+
+            var shopData = await _context.Shops.FindAsync(tempShopId);
+            if (shopData == null)
+            {
+                return NotFound(); // Handle case where shop data is not found
+            }
+
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return Unauthorized();
+            }
+
+            var invoiceViewModel = new InvoiceViewModel
+            {
+                User = currentUser,
+                OrderId = newOrderId,
+                Shop = shopData,
+                OrderDate = DateTime.Now,
+                Items = cartItems
+            };
+
+            // Store InvoiceViewModel in TempData
+            TempData["InvoiceViewModel"] = JsonConvert.SerializeObject(invoiceViewModel);
+
+            return View(invoiceViewModel); // Pass the InvoiceViewModel to the view
+            
         }
 
         //[HttpGet]
-        public async Task<IActionResult> Invoice(Dictionary<int, int> selectedItems)
+        public async Task<IActionResult> Invoice()
         {
+            var selectedItemsJson = TempData["SelectedItems"].ToString();
+            var selectedItems = JsonConvert.DeserializeObject<Dictionary<int, int>>(selectedItemsJson);//retrieve invoice dictionary data
+
             try
             {
                 if (selectedItems == null || selectedItems.Count == 0)
