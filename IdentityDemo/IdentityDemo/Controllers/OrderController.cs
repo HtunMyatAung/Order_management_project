@@ -63,7 +63,9 @@ namespace IdentityDemo.Controllers
             try
             {
                 Console.WriteLine(htmlContent);
-                string toEmail = "htunmyataung643@gmail.com";
+                var user = await _userManager.GetUserAsync(User);
+                var email = user.Email;
+                string toEmail = email;
                 string subject = "uab invoice";
 
                 await _emailService.SendEmailAsync(toEmail, subject, htmlContent);

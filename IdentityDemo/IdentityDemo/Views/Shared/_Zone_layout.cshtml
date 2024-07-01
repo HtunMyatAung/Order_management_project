@@ -5,7 +5,9 @@
 @{
     ViewData["Title"] = "Home Page";
     ApplicationUser currentUser = await UserManager.GetUserAsync(User);
-    
+    var shopname = TempData["shopname"] as string;
+    var shopadd = TempData["shopadd"] as string;
+
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -33,32 +35,41 @@
                 </div>
                 <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
-                        <li class="nav-item">
-                            <a class="nav-link mx-lg-2" aria-current="page" href="@Url.Action("Index","Home")">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link mx-lg-2" href="@Url.Action("About","Home")">About</a>
-                        </li>
-                        @if (User.Identity.IsAuthenticated)
+                        @if (!string.IsNullOrEmpty(shopname))
                         {
                             <li class="nav-item">
-                                <a class="nav-link mx-lg-2" href="@Url.Action("HomePageItems","Item")">Shop</a>
+                                <a class="nav-link mx-lg-2" aria-current="page" href="@Url.Action("Index","Home")">@shopname</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link mx-lg-2" aria-current="page" href="@Url.Action("Index","Home")">@shopadd</a>
                             </li>
                         }
-                        @*<li class="nav-item">
-                            <a class="nav-link mx-lg-2" href="@Url.Action("About","Home")">About</a>
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link mx-lg-2" aria-current="page" href="@Url.Action("Index","Home")">Home</a>
+                            </li>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link mx-lg-2" href="@Url.Action("HomePageItems","Item")">Shop</a>
+                                </li>
+                            }
+                            @*<li class="nav-item">
+                        <a class="nav-link mx-lg-2" href="@Url.Action("About","Home")">About</a>
                         </li>*@
-                        <li class="nav-item">
-                            <a class="nav-link mx-lg-2" href="@Url.Action("Test64","Home")">Test</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link mx-lg-2" href="@Url.Action("Test64","Home")">Test</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
             
             @if (User.Identity.IsAuthenticated)
             {
-                <div class="dropdown login-button">
-                    <a class="btn dropdown-toggle" href="#" role="button" id="loginDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="dropdown">
+                    <a class="btn dropdown-toggle login-button" href="#" role="button" id="loginDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                        @currentUser.UserName
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="loginDropdown" style="text-align: center;margin-right:30px;">                        
@@ -105,7 +116,7 @@
     <footer class=" text-white text-center py-3" style="background-color: black;">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <h5>Contact Us</h5>
                     <ul class="list-unstyled">
                         <li >Email: contact@uabzone.com</li>
@@ -113,7 +124,7 @@
                         <li>Address: 123 Street, City, Country</li>
                     </ul>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <h5>Follow Us</h5>
                     <ul class="list-unstyled">
                         <li><a href="#" class="text-white">Facebook</a></li>
@@ -121,11 +132,18 @@
                         <li><a href="#" class="text-white">Instagram</a></li>
                     </ul>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <h5>Legal</h5>
                     <ul class="list-unstyled">
                         <li><a href="#" class="text-white">Privacy Policy</a></li>
                         <li><a href="#" class="text-white">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Services</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="@Url.Action("About","Home")" class="text-white">Contact Us</a></li>
+                        <li><a href="@Url.Action("About","Home")" class="text-white">About Us</a></li>
                     </ul>
                 </div>
             </div>

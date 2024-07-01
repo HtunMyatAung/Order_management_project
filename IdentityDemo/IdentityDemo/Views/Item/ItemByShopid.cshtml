@@ -2,6 +2,8 @@
 @{
     Layout = "_Zone_layout";
     var isitem = TempData["items"];
+    TempData["shopname"] = Model.Shop.ShopName;
+    TempData["shopadd"] = Model.Shop.ShopAddress;
 }
 
 <style>
@@ -22,9 +24,9 @@
         margin-left: 30px;
         margin-right: 60px;
         height: 85vh;
-        border-color: gray;
+        border-color: lightgray;
         border-radius: 10px;
-        border-width: 2px;
+        border-width: 1px;
         flex-grow: 1;
         display: flex;
         flex-direction: column;
@@ -168,12 +170,11 @@
         height: 10%;
         position: sticky;
         bottom: 0;
-        background-color: white;
-        box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
     }
 
     .buttonsize {
-        width: 100%;
+        width: 370px;
+        margin-right: 15px;
     }
 </style>
 
@@ -221,7 +222,7 @@ else
                     </div>
                 </div>
                 <div class="sticky-button-container">
-                    <div class="text-center mx-auto">
+                    <div class="text-center">
                         <button class="btn btn-primary mb-3 buttonsize" id="submittocart">Purchase</button>
                     </div>
                 </div>
