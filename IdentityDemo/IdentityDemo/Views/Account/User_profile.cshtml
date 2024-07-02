@@ -26,9 +26,8 @@
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
         
-
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div style="height: 95vh;">
+        
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <div class="container-fluid">
@@ -50,18 +49,15 @@
             <section class="content">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-3">
-
+                        <div class="col-md-3" style="height: 70vh;">
                             <!-- Profile Image -->
                             <div class="card card-primary card-outline">
                                 <div class="card-body box-profile">
-                                    
-                                    <div class="text-center">
-                                        <img class="profile-user-img img-fluid img-circle"
+                                        <div class="text-center">
+                                        <img class="profile-user-img img-fluid img-circle" style="width: 100px;height:100px;"
                                              src="../../img/users/@currentUser.UserImageName"
                                              alt="User profile picture">
                                     </div>
-
                                     <h3 class="profile-username text-center">@Model.UserName</h3>
 
                                     <!--<p class="text-muted text-center">Software Engineer</p>-->
@@ -81,7 +77,7 @@
                                         </li>
                                     </ul>
                                     <form asp-controller="Account" asp-action="Logout" method="post">
-                                        <button style="text-align:center; background-color:lightgrey"type="submit" class="dropdown-item">Logout</button>
+                                        <button style="text-align:center; background-color:lightgrey; border-radius: 6px; height: 33px;" type="submit" class="dropdown-item">Logout</button>
                                     
                                     
                                     </form>
@@ -94,7 +90,7 @@
                             <!-- /.card -->
                         </div>
                         <!-- /.col -->
-                        <div class="col-md-9">
+                        <div class="col-md-9" style="height: 70vh;">
                             <div class="card">
                                 <div class="card-header p-2">
                                     <ul class="nav nav-pills">
@@ -214,7 +210,7 @@
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
-        <footer class="main-footer">
+        <footer>
             <div class="float-right d-none d-sm-block">
                 <b>Version</b> 3.2.0
             </div>
