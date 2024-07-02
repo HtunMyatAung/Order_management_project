@@ -63,12 +63,14 @@ namespace IdentityDemo.Controllers
             try
             {
                 Console.WriteLine(htmlContent);
-                string toEmail = "htunmyataung643@gmail.com";
+                var currentUser = await _userManager.GetUserAsync(User);
+                var user_mail = currentUser.Email;
+                string toEmail = user_mail;
                 string subject = "uab invoice";
 
                 await _emailService.SendEmailAsync(toEmail, subject, htmlContent);
-                TempData["test"] = "hahaha";
-                ViewBag.Message = "Email sent successfully!";
+                TempData["test"] = "hahaha";//test
+                ViewBag.Message = "Email sent successfully!";//test
                 return RedirectToAction("SaveInvoice", "Order");
             }
             catch(Exception ex)

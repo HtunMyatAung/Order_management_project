@@ -15,11 +15,14 @@
     <Optimize>True</Optimize>
   </PropertyGroup>
 
+ 
+
   <ItemGroup>
     <None Remove="Views\Item\logincss.css" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Account\Confirm_register.cshtml" />
     <None Include="wwwroot\img\HtunMyatAung\kgm_profile.jpg" />
   </ItemGroup>
 

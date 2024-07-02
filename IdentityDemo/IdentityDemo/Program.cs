@@ -1,6 +1,7 @@
 using IdentityDemo.Data;
 using IdentityDemo.Filters;
 using IdentityDemo.Initializers;
+using IdentityDemo.Extensions;
 using IdentityDemo.Services;
 using IdentityDemo.Models;
 using Microsoft.AspNetCore.Identity;
@@ -34,6 +35,17 @@ builder.Services.AddTransient<IRoleInitializer, RoleInitializer>(); // RoleIniti
 builder.Services.AddScoped<IEmailService, EmailService>(); // Register EmailService
 builder.Services.AddScoped<LogActionFilter>(); // Register LogActionFilter
 
+// Add session services
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
+    options.Cookie.HttpOnly = true; // Make the session cookie HTTP-only
+    options.Cookie.IsEssential = true; // Make the session cookie essential
+});
+
+// Add distributed memory cache (required for session state)
+builder.Services.AddDistributedMemoryCache();
+
 var app = builder.Build();
 
 // Seed roles and admin user on startup
@@ -53,7 +65,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
+// Use session middleware
+app.UseSession();
 // Authentication and Authorization
 app.UseAuthentication();
 app.UseAuthorization();

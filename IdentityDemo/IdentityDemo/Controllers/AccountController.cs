@@ -8,7 +8,10 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using IdentityDemo.Extensions;
 using Org.BouncyCastle.Bcpg;
+using System.Web.Helpers;
+using System;
 
 namespace IdentityDemo.Controllers
 {
@@ -33,6 +36,163 @@ namespace IdentityDemo.Controllers
             _emailService = emailService;
             //_emailSender = emailSender;
         }
+        public IActionResult SendOTP()
+        {
+
+        return View(); 
+        }
+        [HttpPost]
+        public async Task<IActionResult> SendOTP(string email)
+        {
+            string toEmail = email;
+            string subject = "Verify your new uab zone account";
+            var otp_code = GenerateOTP();
+            //
+            //TempData["EmailOTPCode"] = otp_code;
+            var htmlText = $@"
+   <!DOCTYPE html>
+<html lang=""en"">
+<head>
+    <meta charset=""UTF-8"">
+    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+    <title>Verify Your New Amazon Account</title>
+    <style>
+        /* Ensure styles are inline for better email client compatibility */
+        body {{
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }}
+
+        .container {{
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }}
+
+        .otp-section {{
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }}
+
+        .otp-code {{
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }}
+
+        .info-text {{
+            margin-bottom: 10px;
+        }}
+        .note {{
+            font-size: 14px;
+            color: #777;
+            margin-top: 20px;
+        }}
+    </style>
+</head>
+<body>
+    <table role=""presentation"" cellspacing=""0"" cellpadding=""0"" border=""0"" align=""center"" width=""100%"">
+        <tr>
+            <td style=""padding: 20px;"">
+                <div class=""container"">
+                    <h2 style=""text-align: center;"">Verify Your New uab zone Account</h2>
+                    <div class=""otp-section"">
+                        <p style=""text-align: center;"">To verify your email address, please use the following One Time Password (OTP):</p>
+                        <p class=""otp-code"" style=""text-align: center;"">{otp_code}</p>
+                        <p class=""info-text"" style=""text-align: center;"">Do not share this OTP with anyone.uab zone takes your account security very seriously. uab zone Customer Service will never ask you to disclose or verify your uab zone password, OTP, credit card, or banking account number. If you receive a suspicious email with a link to update your account information, do not click on the link—instead, report the email to uab zone for investigation.</p>
+                    </div>
+                    <p style=""text-align: center;"">Thank you for shopping with us! We hope to see you again soon.</p>
+                    
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+
+";
+            await _emailService.SendEmailAsync(toEmail, subject, htmlText);
+            return RedirectToAction("Confirm_register", "Account");
+        }
+        [HttpGet]
+        public IActionResult Confirm_register()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Confirm_register(string otpCode)
+        {
+            // Check if any OTP input is null or empty
+            
+            var correctOTP = TempData["EmailOTPCode"];
+            Console.WriteLine("asfasdfasdfsadfsadf",otpCode,correctOTP, TempData["EmailOTPCode"]);
+
+            // Validate OTP
+            if (otpCode != correctOTP)
+            {
+                ModelState.AddModelError(string.Empty, "Incorrect OTP. Please try again.");
+                return View();
+            }
+
+            // Retrieve rest of RegisterViewModel from session           
+            var model = HttpContext.Session.GetObject<RegisterViewModel>("Registerviewmodel");
+            Console.WriteLine($"Retrieved RegisterViewModel: {model}");
+
+            
+
+            var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+            var result = await _userManager.CreateAsync(user, model.Password);
+            Console.WriteLine(result.Succeeded);
+            if (result.Succeeded)
+            {
+                user.Role = "User";
+                user.PhoneNumber = model.PhoneNumber;
+                user.PhoneNumberConfirmed = true;
+                user.EmailConfirmed = true;
+                user.Address = model.Address;
+                user.Forgot = 0;
+                user.ShopId = 0;
+                user.UserImageName = "male_default.png";
+                //user.UserImageName = "male_default.png";
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateException ex)
+                {
+                    // Log or handle the exception
+                    Console.WriteLine("Error saving changes: " + ex.Message);
+                    Console.WriteLine("Inner exception: " + ex.InnerException?.Message);
+                    throw; // rethrow or handle the exception as needed
+                }
+
+                await _userManager.UpdateAsync(user);
+                // Sign in the user
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                var adduserole = await _userManager.AddToRoleAsync(user, "User");
+                // Redirect to appropriate page
+                // Clear session after use
+                HttpContext.Session.Remove("RegisterViewModel");
+                return RedirectToAction("User_profile", "Account");
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            // Clear session after use
+            HttpContext.Session.Remove("RegisterViewModel");
+            return View();
+        }
+
         public IActionResult Admin_contact()
         {
             return View();
@@ -77,52 +237,129 @@ namespace IdentityDemo.Controllers
         {
             return View();
         }
+        // Helper method to generate 6-digit OTP
+        private string GenerateOTP()
+        {
+            Random random = new Random();
+            int otpNumber = random.Next(100000, 999999); // Generate a random 6-digit number
+            return otpNumber.ToString("D6"); // Format as a 6-digit string
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            Console.WriteLine(ModelState.IsValid);
+            
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-                var result = await _userManager.CreateAsync(user, model.Password);
-
-                if (result.Succeeded)
-                {          
-                    user.Role = "User";
-                    user.PhoneNumber= model.PhoneNumber;
-                    user.PhoneNumberConfirmed = true;
-                    user.EmailConfirmed = true;
-                    user.Address = model.Address;
-                    user.Forgot = 0;
-                    user.ShopId = 0;
-                    user.UserImageName = "male_default.png";
-                    //user.UserImageName = "male_default.png";
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateException ex)
-                    {
-                        // Log or handle the exception
-                        Console.WriteLine("Error saving changes: " + ex.Message);
-                        Console.WriteLine("Inner exception: " + ex.InnerException?.Message);
-                        throw; // rethrow or handle the exception as needed
-                    }
-
-                    await _userManager.UpdateAsync(user);
-                    // Sign in the user
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    var adduserole = await _userManager.AddToRoleAsync(user, "User");
-                    // Redirect to appropriate page
-                    return RedirectToAction("Index", "Home");
-                }
-
-                foreach (var error in result.Errors)
+                // Check if email is already taken
+                var existingEmailUser = await _userManager.FindByEmailAsync(model.Email);
+                if (existingEmailUser != null)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    ModelState.AddModelError(string.Empty, "Email is already taken.");
+                    return View(model);
                 }
+
+                // Check if username is already taken
+                var existingUsernameUser = await _userManager.FindByNameAsync(model.UserName);
+                if (existingUsernameUser != null && existingUsernameUser is ApplicationUser)
+                {
+                    ModelState.AddModelError(string.Empty, "Username is already taken.");
+                    return View(model);
+                }
+
+                // If neither email nor username is taken, proceed with registration
+                //var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+
+                // Additional registration logic here...
+
+                //var result = await _userManager.CreateAsync(user, model.Password);
+
+                string toEmail = model.Email;
+                string subject = "Verify your new uab zone account";
+                Random random = new Random();
+                var otp_code = random.Next(100000, 999999).ToString();
+                ViewBag.Emailotpcode = otp_code;
+                Console.WriteLine("otpppppppppppppppp " + otp_code );
+                var htmlText = $@"
+   <!DOCTYPE html>
+<html lang=""en"">
+<head>
+    <meta charset=""UTF-8"">
+    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+    <title>Verify Your New Amazon Account</title>
+    <style>
+        /* Ensure styles are inline for better email client compatibility */
+        body {{
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }}
+
+        .container {{
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }}
+
+        .otp-section {{
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }}
+
+        .otp-code {{
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }}
+
+        .info-text {{
+            margin-bottom: 10px;
+        }}
+        .note {{
+            font-size: 14px;
+            color: #777;
+            margin-top: 20px;
+        }}
+    </style>
+</head>
+<body>
+    <table role=""presentation"" cellspacing=""0"" cellpadding=""0"" border=""0"" align=""center"" width=""100%"">
+        <tr>
+            <td style=""padding: 20px;"">
+                <div class=""container"">
+                    <h2 style=""text-align: center;"">Verify Your New uab zone Account</h2>
+                    <div class=""otp-section"">
+                        <p style=""text-align: center;"">To verify your email address, please use the following One Time Password (OTP):</p>
+                        <p class=""otp-code"" style=""text-align: center;"">{otp_code}</p>
+                        <p class=""info-text"" style=""text-align: center;"">Do not share this OTP with anyone.uab zone takes your account security very seriously. uab zone Customer Service will never ask you to disclose or verify your uab zone password, OTP, credit card, or banking account number. If you receive a suspicious email with a link to update your account information, do not click on the link—instead, report the email to uab zone for investigation.</p>
+                    </div>
+                    <p style=""text-align: center;"">Thank you for shopping with us! We hope to see you again soon.</p>
+                    
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+
+";
+                await _emailService.SendEmailAsync(toEmail, subject, htmlText);
+
+                // Save the model in the session
+                HttpContext.Session.SetObject("Registerviewmodel", model);
+
+                return RedirectToAction("Confirm_register", "Account");
+
+
             }
+
 
             // If registration fails, return the registration view with validation errors
             return View(model);

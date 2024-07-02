@@ -1,0 +1,156 @@
+﻿@{
+    Layout = null; // Disable layout for this view
+    var otp = 0;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Input</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+
+        .otp-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 50%;
+            height: 50vh;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .otp-inputs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .otp-input {
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin: 0 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+    </style>
+</head>
+<body>
+    <div class="otp-container">
+        <h2>Enter 6-digit code from your email</h2>
+        <h3>@(ViewBag.Emailotpcode)</h3> <!-- Displays the OTP for reference (for testing/demo purposes) -->
+        <form id="otp-form" method="post" action="/Account/Confirm_register">
+            <div class="otp-inputs">
+                <!-- Inputs for OTP digits, each with an oninput handler to move focus -->
+                <input type="text" maxlength="1" class="otp-input" id="otp1" name="otp1" oninput="moveFocus(1)">
+                <input type="text" maxlength="1" class="otp-input" id="otp2" name="otp2" oninput="moveFocus(2)">
+                <input type="text" maxlength="1" class="otp-input" id="otp3" name="otp3" oninput="moveFocus(3)">
+                <input type="text" maxlength="1" class="otp-input" id="otp4" name="otp4" oninput="moveFocus(4)">
+                <input type="text" maxlength="1" class="otp-input" id="otp5" name="otp5" oninput="moveFocus(5)">
+                <input type="text" maxlength="1" class="otp-input" id="otp6" name="otp6" oninput="moveFocus(6)">
+            </div>
+            <button type="submit">Submit</button> <!-- Submission button -->
+        </form>
+        <div id="error-message" class="error"></div> <!-- Error message container -->
+    </div>
+
+    <script>
+        function moveFocus(currentIndex) {
+            const otpInput = document.getElementById('otp' + currentIndex);
+            if (otpInput.value.length === 1 && currentIndex < 6) {
+                document.getElementById('otp' + (currentIndex + 1)).focus();
+            }
+            // Optionally, handle backspace to move focus to the previous input
+            otpInput.addEventListener('keydown', function (event) {
+                if (event.key === 'Backspace' && currentIndex > 1 && otpInput.value.length === 0) {
+                    document.getElementById('otp' + (currentIndex - 1)).focus();
+                }
+            });
+        }
+        document.getElementById('otp-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission
+
+            let enteredOTP = "";
+            let allInputsFilled = true;
+
+            for (let i = 1; i <= 6; i++) {
+                const otpInput = document.getElementById('otp' + i);
+                if (otpInput.value.trim() === '') {
+                    allInputsFilled = false;
+                    otpInput.focus();
+                    break;
+                }
+                enteredOTP += otpInput.value;
+            }
+
+            if (!allInputsFilled) {
+                document.getElementById('error-message').textContent = "Please enter the complete OTP.";
+                return;
+            }
+
+            // Post the OTP to the server for validation
+            fetch('/Account/Confirm_register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'otpCode=' + enteredOTP
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    // Handle successful response, e.g., redirect or show success message
+                    console.log('Success:', data);
+                    // Example redirect to a success page
+                    //window.location.href = '/Account/User_profile';
+                })
+                .catch(error => {
+                    // Handle error response, e.g., show error message
+                    console.error('Error:', error);
+                    document.getElementById('error-message').textContent = "Failed to verify OTP. Please try again.";
+                });
+        });
+
+    </script>
+
+</body>
+</html>
