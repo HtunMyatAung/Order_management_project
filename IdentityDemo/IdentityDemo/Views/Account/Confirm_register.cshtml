@@ -1,6 +1,7 @@
-﻿@{
+﻿
+@{
     Layout = null; // Disable layout for this view
-    var otp = 0;
+    //var otp = 0;
 }
 
 <!DOCTYPE html>
@@ -73,7 +74,7 @@
 <body>
     <div class="otp-container">
         <h2>Enter 6-digit code from your email</h2>
-        <h3>@(ViewBag.Emailotpcode)</h3> <!-- Displays the OTP for reference (for testing/demo purposes) -->
+        <h3>@TempData["otpcode"] </h3> <!-- Displays the OTP for reference (for testing/demo purposes) -->
         <form id="otp-form" method="post" action="/Account/Confirm_register">
             <div class="otp-inputs">
                 <!-- Inputs for OTP digits, each with an oninput handler to move focus -->
@@ -85,6 +86,7 @@
                 <input type="text" maxlength="1" class="otp-input" id="otp6" name="otp6" oninput="moveFocus(6)">
             </div>
             <button type="submit">Submit</button> <!-- Submission button -->
+            <input type="hidden" id="expected-otp" value="@TempData["otpcode"]" />
         </form>
         <div id="error-message" class="error"></div> <!-- Error message container -->
     </div>
@@ -122,32 +124,13 @@
                 document.getElementById('error-message').textContent = "Please enter the complete OTP.";
                 return;
             }
+            const expectedOTP = document.getElementById('expected-otp').value;
 
-            // Post the OTP to the server for validation
-            fetch('/Account/Confirm_register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'otpCode=' + enteredOTP
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    // Handle successful response, e.g., redirect or show success message
-                    console.log('Success:', data);
-                    // Example redirect to a success page
-                    //window.location.href = '/Account/User_profile';
-                })
-                .catch(error => {
-                    // Handle error response, e.g., show error message
-                    console.error('Error:', error);
-                    document.getElementById('error-message').textContent = "Failed to verify OTP. Please try again.";
-                });
+            if (enteredOTP === expectedOTP) {
+                window.location.href = '/Account/Save_register';
+            } else {
+                document.getElementById('error-message').textContent = "Invalid OTP. Please try again.";
+            }
         });
 
     </script>

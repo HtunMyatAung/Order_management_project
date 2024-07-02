@@ -12,6 +12,9 @@ using IdentityDemo.Extensions;
 using Org.BouncyCastle.Bcpg;
 using System.Web.Helpers;
 using System;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Xml.Linq;
+using MySqlX.XDevAPI;
 
 namespace IdentityDemo.Controllers
 {
@@ -127,21 +130,10 @@ namespace IdentityDemo.Controllers
         {
             return View();
         }
-        [HttpPost]
-        public async Task<IActionResult> Confirm_register(string otpCode)
+        
+        public async Task<IActionResult> Save_register()
         {
-            // Check if any OTP input is null or empty
-            
-            var correctOTP = TempData["EmailOTPCode"];
-            Console.WriteLine("asfasdfasdfsadfsadf",otpCode,correctOTP, TempData["EmailOTPCode"]);
-
-            // Validate OTP
-            if (otpCode != correctOTP)
-            {
-                ModelState.AddModelError(string.Empty, "Incorrect OTP. Please try again.");
-                return View();
-            }
-
+           
             // Retrieve rest of RegisterViewModel from session           
             var model = HttpContext.Session.GetObject<RegisterViewModel>("Registerviewmodel");
             Console.WriteLine($"Retrieved RegisterViewModel: {model}");
@@ -150,7 +142,7 @@ namespace IdentityDemo.Controllers
 
             var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
             var result = await _userManager.CreateAsync(user, model.Password);
-            Console.WriteLine(result.Succeeded);
+            //Console.WriteLine(result.Succeeded);
             if (result.Succeeded)
             {
                 user.Role = "User";
@@ -266,19 +258,14 @@ namespace IdentityDemo.Controllers
                     ModelState.AddModelError(string.Empty, "Username is already taken.");
                     return View(model);
                 }
-
-                // If neither email nor username is taken, proceed with registration
-                //var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-
-                // Additional registration logic here...
-
-                //var result = await _userManager.CreateAsync(user, model.Password);
-
                 string toEmail = model.Email;
                 string subject = "Verify your new uab zone account";
                 Random random = new Random();
                 var otp_code = random.Next(100000, 999999).ToString();
-                ViewBag.Emailotpcode = otp_code;
+                var otpmodel = new OTPViewModel { OTP = otp_code };
+                TempData["Model"] = JsonConvert.SerializeObject(otpmodel);
+                TempData["otpcode"] = otp_code;
+                //ViewBag.Emailotpcode = otp_code;
                 Console.WriteLine("otpppppppppppppppp " + otp_code );
                 var htmlText = $@"
    <!DOCTYPE html>
