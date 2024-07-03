@@ -13,6 +13,7 @@
     
     <link rel="stylesheet" href="~/css/download_css/5_2_3_bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/download_css/5_15_3_all.min.css" />
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
     
     <style>
         body {
@@ -159,12 +160,12 @@
             const icon = document.getElementById(iconId);
             if (passwordInput.type === "password") {
                 passwordInput.type = "text";
-                icon.classList.remove("fa-eye-slash");
-                icon.classList.add("fa-eye");
+                icon.querySelector('i').classList.remove("fa-eye-slash");
+                icon.querySelector('i').classList.add("fa-eye");
             } else {
                 passwordInput.type = "password";
-                icon.classList.remove("fa-eye");
-                icon.classList.add("fa-eye-slash");
+                icon.querySelector('i').classList.remove("fa-eye");
+                icon.querySelector('i').classList.add("fa-eye-slash");
             }
         }
 

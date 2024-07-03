@@ -24,6 +24,10 @@ namespace IdentityDemo.Controllers
             return imageData;
 
         }
+        public ActionResult Show_error_loading()
+        {
+            return View();
+        }
         public IActionResult Test64()
         {
             //Console.WriteLine("gg"+GetDefaultShopImage());

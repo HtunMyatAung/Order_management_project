@@ -11,8 +11,8 @@ namespace IdentityDemo.Models
         public int Id { get; set; }
         [Column("user_id")]
         public string UserId { get; set; }
-        [Column("UserName")]
-        public string UserName { get; set; }
+        [Column("LogStatus")]
+        public string LogStatus { get; set; }
         [Column("ActionName")]
         public string ActionName { get; set; }
         [Column("ControllerName")]
@@ -21,5 +21,7 @@ namespace IdentityDemo.Models
         public DateTime Timestamp { get; set; }
         [Column("RequestData")]
         public string RequestData { get; set; }
+        [Column("ResponseData")]
+        public string ResponseData { get; set; }
     }
 }

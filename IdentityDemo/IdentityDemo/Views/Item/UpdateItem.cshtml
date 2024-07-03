@@ -51,6 +51,13 @@
                             <span asp-validation-for="ItemQuantity" class="text-danger" id="quantityValidationMessage"></span>
                         </div>
                         <div class="discount_dropdown">
+
+                            <input type="radio" id="discount_price" name="discount_price" >
+                            <label for="discount_price">Discount Price</label><br>
+                            <input type="radio" id="discount_rate" name="discount_rate" >
+                            <label for="discount_rate">Discount Rate</label><br>
+                            <input type="number" id="discount_price_input"/>
+                            <input type="number" id="discount_rate_input"/>
                             <select id="discountSelect">
                                 <option value="">Select Discount Type</option>
                                 <option value="Discount_price">Discount Price (mmk)</option>

@@ -30,7 +30,7 @@ namespace IdentityDemo.Filters
             var log = new ActionLog
             {
                 UserId=userId,
-                UserName = userName,
+                LogStatus="Route",
                 ActionName = actionName,
                 ControllerName = controllerName,
                 Timestamp = timestamp,

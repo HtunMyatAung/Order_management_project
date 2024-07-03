@@ -1,10 +1,13 @@
-﻿using IdentityDemo.Data;
+﻿using Google.Protobuf.WellKnownTypes;
+using IdentityDemo.Data;
 using IdentityDemo.Models;
 using IdentityDemo.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace IdentityDemo.Controllers
 {
@@ -24,6 +27,7 @@ namespace IdentityDemo.Controllers
         {
             return View();
         }
+
         [Authorize(Roles = "Admin")]
         public IActionResult Admin_shop_list()
         {
@@ -220,13 +224,60 @@ namespace IdentityDemo.Controllers
             Console.WriteLine("gg"+viewModel.OrderData+"hh");
             return View(viewModel);
         }
+
         [Authorize(Roles = "Admin")]
         public IActionResult Admin_user_list()
         {
-            TempData["title"] = "User list";
-            var users = _context.Users.Where(u => u.Role != null && u.Role != "Admin").ToList();
-            return View(users);
+            string error = string.Empty;
+            List<ApplicationUser> users = new List<ApplicationUser>();
+
+            string requestPath = "Admin_user_list";
+            var loginUserId = _context.Users.FirstOrDefault().Id;
+            string responseData = string.Empty;
+
+            try
+            {
+                TempData["title"] = "User list";
+                
+                users = _context.Users.Where(u => u.Role != null && u.Role != "Admin").ToList();
+                responseData = JsonConvert.SerializeObject(users);
+
+                return View(users);
+            }
+            catch(Exception ex)
+            {
+                error = ex.Message;
+                responseData = error;
+                return null;
+            }
+            finally
+            {
+                var log = new ActionLog
+                {
+                    UserId = loginUserId,
+                    ActionName = requestPath,
+                    ControllerName = requestPath,
+                    Timestamp = DateTime.Now,
+                    RequestData = null,
+                    ResponseData = responseData,
+                };
+
+                if (string.IsNullOrEmpty(error))
+                {
+                    log.LogStatus = "INFO";
+                }
+                else
+                {
+                    log.LogStatus = "ERROR";
+                }
+
+                _context.ActionLogs.Add(log);
+                _context.SaveChangesAsync();
+               
+
+            }
         }
+
         [Authorize(Roles = "Admin")]
         public IActionResult Admin_owner_list()
         {
