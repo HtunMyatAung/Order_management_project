@@ -3,24 +3,24 @@
     Layout = "_Owner_layout";
     int counter=1;
 }
-<link rel="stylesheet" href="~/css/download_css/4_5_3_bootstrap.min.css"/>
-<link rel="stylesheet" href="~/css/download_css/5_2_3_bootstrap.min.css"/>
-@section Database {
-    <link href="~/css/download_css/sb_1_7_1_datatables.min.css" rel="stylesheet"/>
-    <link href="~/css/download_css/1_10_24_jquery.dataTables.min.css" rel="stylesheet"/>
-    <script src="~/js/download_js/sb_1_7_1_datatables.min.js"></script>
-}
+
 @section Scripts {
-    <script src="~/js/download_js/5_2_3_bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="~/css/download_css/5_2_3_bootstrap.min.css" />
+
+    <link rel="stylesheet" href="~/css/download_css/4_5_3_bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/download_css/1_10_24_jquery.dataTables.min.css" />
     <!-- jQuery -->
     <script src="~/js/download_js/3_5_1_jquery.min.js"></script>
     <!-- DataTables JS -->
     <script type="text/javascript" src="~/js/download_js/1_10_24_jquery.dataTables.min.js"></script>
+    <link href="~/css/download_css/sb_1_7_1_datatables.min.css" rel="stylesheet" />
+    <script src="~/js/download_js/sb_1_7_1_datatables.min.js"></script>
+    <script src="~/js/download_js/5_2_3_bootstrap.bundle.min.js"></script>
     <script>
-        // Initialize DataTable
         $(document).ready(function () {
             $('#ordertable').DataTable();
         });
+        
         let currentOrderId;
 
         function setOrderId(orderId) {
@@ -36,15 +36,15 @@
 <div style="padding-top: 15px;">
     <h1 class="">Order List</h1>
     <div class="card-body">
-        <table id="ordertable" class="table table-bordered table-striped">
-            <thead class="bg-gray">
+        <table id="ordertable" class="display" style="width:100%;">
+            <thead>
 
                 <tr style="text-align: center;">
-                    <th>No.</th>
-                    <th>Date</th>
-                    <th>Price</th>
-                    <th>Customer Id</th>
-                    <th>Delete</th>
+                    <th style ="text-align:center;">No.</thstyle>
+                    <th style="text-align:center;">Date</th>
+                    <th style="text-align:center;">Price</th>
+                    <th style="text-align:center;">Customer</th>
+                    <th style="text-align:center;">Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,11 +53,11 @@
                 {
                     <tr style="text-align: center;">
 
-                        <td>@counter</td>
-                        <td>@order.OrderDate</td>
-                        <td>@order.OrderPrice</td>
-                        <td>@order.User_Name</td>
-                        <td>
+                        <td style="text-align:center;">@counter</td>
+                        <td style="text-align:center;">@order.OrderDate</td>
+                        <td style="text-align:center;">@order.OrderPrice</td>
+                        <td style="text-align:center;">@order.User_Name</td>
+                        <td style="text-align:center;">
                             <form id="deleteOrderForm-@order.OrderID" asp-action="DeleteOrder" asp-controller="Order" method="post">
                                 <input type="hidden" name="orderid" value="@order.OrderID" />
                                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" onclick="setOrderId('@order.OrderID')">

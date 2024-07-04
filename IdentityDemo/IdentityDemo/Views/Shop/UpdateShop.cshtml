@@ -2,12 +2,20 @@
 @{
     Layout = "_Owner_layout";
 }
+
 <script src="~/js/download_js/jquery-3.6.0.min.js"></script>
 <script src="~/js/download_js/1_19_3_jquery.validate.min.js"></script>
 <script src="~/js/download_js/3_2_12_jquery.validate.unobtrusive.min.js"></script>
+<style>
+    #blah {
+        width: 150px;
+        height: 100px;
+        display: inline-block; /* Ensure the image stays inline */
+    }
+</style>
 <div class="container py-4">
     <div class="row justify-content-center">
-        <div class="col-md-7">
+        <div class="col-md-10">
             <div class="card">
                 <div class="card-header text-center">
                     <h2>Shop Update</h2>
@@ -15,10 +23,10 @@
                 <div class="card-body">
                     <form asp-action="UpdateShop" asp-controller="Shop" method="post" enctype="multipart/form-data" runat="server">
                         <input type="hidden" asp-for="ShopId" />
-                        <img id="blah" class="image-preview" src="~/img/shop/eda9047e-7587-4d4e-a938-587e3b4c9121_homeimg2.jpg" alt="Preview Image" style="max-width: 100%; max-height: 200px; display: block; margin-top: 10px;" />
+                        <img id="blah" class="img-thumbnail d-block" src="~/img/shop/homeimg2.jpg" alt="Preview Image" />
                         <!-- Image Preview Section -->
-                        <div class="form-group row">
-                            <label for="profileImage" class="col-sm-2 col-form-label">Shop Profile</label>
+                        <div class="form-group row mb-3">
+                            <label for="profileImage" class="col-sm-2 col-form-label">Profile Image</label>
                             <div class="col-sm-10">
                                 <input asp-for="ProfileImage" class="form-control-file" accept="image/*" type="file" id="imgInp" name="ProfileImage" onchange="previewImage(event)" />                                
                             </div>
@@ -26,33 +34,55 @@
 
                         <!-- Form Fields -->
                         <div class="form-group">
-                            <label asp-for="ShopName">Name</label>
-                            <input type="text" class="form-control" asp-for="ShopName" placeholder="Enter name">
-                            <span asp-validation-for="ShopName" class="text-danger"></span>
+                            <div class="mb-3 row">
+                                <label asp-for="ShopName" class="col-sm-2 col-form-label">Name</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" asp-for="ShopName" placeholder="Enter name">
+                                    <span asp-validation-for="ShopName" class="text-danger"></span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="ShopPhone">Phone</label>
-                            <input type="text" class="form-control" asp-for="ShopPhone" placeholder="Enter Phone">
-                            <span asp-validation-for="ShopPhone" class="text-danger"></span>
+                            <div class="mb-3 row">
+                                <label asp-for="ShopPhone" class="col-sm-2 col-form-label">Phone</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" asp-for="ShopPhone" placeholder="Enter Phone">
+                                    <span asp-validation-for="ShopPhone" class="text-danger"></span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="ShopEmail">Email</label>
-                            <input type="text" class="form-control" asp-for="ShopEmail" placeholder="Enter Email">
-                            <span asp-validation-for="ShopEmail" class="text-danger"></span>
+                            <div class="mb-3 row">
+                                <label asp-for="ShopEmail" class="col-sm-2 col-form-label">Email</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" asp-for="ShopEmail" placeholder="Enter Email">
+                                    <span asp-validation-for="ShopEmail" class="text-danger"></span>
+                                </div>
+                            </div>
+                            
+                            
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="ShopAddress">Address</label>
-                            <input type="text" class="form-control" asp-for="ShopAddress" placeholder="Enter address">
-                            <span asp-validation-for="ShopAddress" class="text-danger"></span>
+                            <div class="mb-3 row">
+                                <label asp-for="ShopAddress" class="col-sm-2 col-form-label">Address</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" asp-for="ShopAddress" placeholder="Enter address">
+                                    <span asp-validation-for="ShopAddress" class="text-danger"></span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="ShopDescription">Description</label>
-                            <input type="text" class="form-control" asp-for="ShopDescription" placeholder="Enter description">
-                            <span asp-validation-for="ShopDescription" class="text-danger"></span>
+                            <div class="mb-3 row">
+                                <label asp-for="ShopDescription" class="col-sm-2 col-form-label">Description</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" asp-for="ShopDescription" placeholder="Enter description">
+                                    <span asp-validation-for="ShopDescription" class="text-danger"></span>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Action Buttons -->
