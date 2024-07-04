@@ -3,99 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Swiper.js Carousel with Mouse Wheel and Image Scroll Action</title>
-
-    <!-- Include Swiper CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
-
-    <!-- Custom CSS for styling -->
+    <title>Form Submission Example</title>
     <style>
-        .swiper-container {
-            width: 100%;
-            height: 400px; /* Adjust height as needed */
-        }
-
-        .swiper-slide {
-            text-align: center;
-            font-size: 18px;
-            background: #f0f0f0;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; /* Light gray background */
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100vh;
+            margin: 0;
         }
 
-            .swiper-slide img {
-                max-width: 100%; /* Ensure images fit within the slide */
-                height: auto; /* Maintain aspect ratio */
-                display: block; /* Remove any inline spacing */
-                margin: 0 auto; /* Center images horizontally */
+        .form-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+            .form-container.success {
+                background-color: #d4edda; /* Success background color */
             }
+
+                .form-container.success::after {
+                    content: '\2714'; /* Unicode checkmark character */
+                    font-size: 24px;
+                    color: #155724; /* Dark green color */
+                    display: block;
+                    margin-top: 10px;
+                }
+
+            .form-container form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .form-container input[type="text"], .form-container button {
+                margin-top: 10px;
+                padding: 8px 16px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            .form-container button {
+                margin-top: 20px;
+                background-color: #007bff; /* Blue button color */
+                color: #ffffff;
+                border: none;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+                .form-container button:hover {
+                    background-color: #0056b3; /* Darker blue on hover */
+                }
     </style>
 </head>
 <body>
-
-    <div class="swiper-container" id="carouselExampleControls">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                <img src="img/welcome_top.png" alt="Welcome Image">
-            </div>
-            <div class="swiper-slide">
-                <img src="img/shop1.jpg" alt="Shop 1">
-                <div class="slide-caption">
-                    <h5>Shop 1</h5>
-                    <p>Phone: 123-456-7890</p>
-                    <p>Address: 123 Main St</p>
-                    <a href="#" class="btn btn-outline-secondary rounded">See Detail >></a>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <img src="img/shop2.jpg" alt="Shop 2">
-                <div class="slide-caption">
-                    <h5>Shop 2</h5>
-                    <p>Phone: 987-654-3210</p>
-                    <p>Address: 456 Elm St</p>
-                    <a href="#" class="btn btn-outline-secondary rounded">See Detail >></a>
-                </div>
-            </div>
-            <!-- Add more swiper-slide items as needed -->
-        </div>
-
-        <!-- Add Pagination -->
-        <div class="swiper-pagination"></div>
-
-        <!-- Add Navigation Buttons -->
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
+    <div class="form-container">
+        <form id="submitForm" onsubmit="handleSubmit(event)">
+            <input type="text" id="inputField" placeholder="Enter something...">
+            <button type="submit">Submit</button>
+        </form>
     </div>
 
-    <!-- Include Swiper JS -->
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-
-    <!-- Custom JavaScript -->
     <script>
-        var swiper = new Swiper('#carouselExampleControls', {
-            direction: 'horizontal',
-            loop: true,
-            mousewheel: true,
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-        });
+        function handleSubmit(event) {
+            event.preventDefault(); // Prevent form submission
 
-        // Additional scroll action on images within slides
-        document.querySelectorAll('.swiper-slide img').forEach(function (img) {
-            img.addEventListener('wheel', function (event) {
-                event.preventDefault();
-                var delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
-                img.scrollLeft -= (delta * 40); // Adjust scrolling speed as needed
-            });
-        });
+            // Simulate form submission (replace with actual AJAX call if needed)
+            // For demo purposes, just changing the class to "success"
+            const formContainer = document.querySelector('.form-container');
+            formContainer.classList.add('success');
+        }
     </script>
-
 </body>
 </html>

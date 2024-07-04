@@ -104,30 +104,30 @@
             <form asp-controller="Account" asp-action="Register" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="UserName" class="github-label">User Name</label>
+                    <label asp-for="UserName" class="github-label">User Name*</label>
                     <input type="text" class="form-control github-input" asp-for="UserName" id="nameInput" />
                     <span asp-validation-for="UserName" class="text-danger" id="nameInputValidationMessage"></span>
                 </div>
                 <div class="form-group">
                     <div class="d-flex justify-content-between">
-                        <label asp-for="Email" class="github-label">Email</label>
+                        <label asp-for="Email" class="github-label">Email*</label>
                         <span asp-validation-for="Email" class="text-danger right-margin" id="emailInputValidationMessage"></span>
                     </div>
                     <input type="email" class="form-control github-input" asp-for="Email" id="emailInput" data-error-message="Sample@gmail.com" />
                 </div>
                 <div class="form-group">
                     <div class="d-flex justify-content-between">
-                        <label asp-for="PhoneNumber" class="github-label">Phone Number</label>
+                        <label asp-for="PhoneNumber" class="github-label">Phone Number*</label>
                         <span asp-validation-for="PhoneNumber" class="text-danger right-margin" id="phoneInputValidationMessage"></span>
                     </div>
                     <input type="text" class="form-control github-input" asp-for="PhoneNumber" pattern="[0-9]*" id="phoneInput" data-error-message="09-xxxxxxxxx" />
                 </div>
                 <div class="form-group">
-                    <label asp-for="Address" class="github-label">Address</label>
+                    <label asp-for="Address" class="github-label">Address<small class="form-text text-muted">(optional)</small></label>
                     <input type="text" class="form-control github-input" asp-for="Address" id="addressInput" />
-                </div>
+                </div>                
                 <div class="form-group">
-                    <label asp-for="Password" class="github-label">Password</label>
+                    <label asp-for="Password" class="github-label">Password*</label>
                     <div class="input-group">
                         <input type="password" class="form-control github-input" asp-for="Password" id="passwordInput" data-error-message="At least 1 digit, non-alphanumeric, capital, small letter & 6 characters" />
                         <span class="input-group-text" id="togglePassword"><i class="fas fa-eye-slash"></i></span>
@@ -135,7 +135,7 @@
                     <span asp-validation-for="Password" class="text-danger" id="passwordInputValidationMessage"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="ConfirmPassword" class="github-label">Confirm Password</label>
+                    <label asp-for="ConfirmPassword" class="github-label">Confirm Password*</label>
                     
                         <div class="input-group">
                             <input type="password" class="form-control github-input" asp-for="ConfirmPassword" id="confirmPasswordInput" />

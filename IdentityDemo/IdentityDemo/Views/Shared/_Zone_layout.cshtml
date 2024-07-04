@@ -7,6 +7,7 @@
     ApplicationUser currentUser = await UserManager.GetUserAsync(User);
     var shopname = TempData["shopname"] as string;
     var shopadd = TempData["shopadd"] as string;
+    var currentyear = DateTime.Now.Year;
 
 }
 <!DOCTYPE html>
@@ -62,7 +63,7 @@
                             <a class="nav-link mx-lg-2" href="@Url.Action("Confirm_register","Account")">Test</a>
                         </li>
                             <li class="nav-item">
-                                <a class="nav-link mx-lg-2" href="@Url.Action("Test64","Home")">Test</a>
+                                <a class="nav-link mx-lg-2" href="@Url.Action("UpdatePassword","Account")">Test</a>
                             </li>
                         }
                     </ul>
@@ -151,7 +152,7 @@
                 </div>
             </div>
             <hr>
-            <p>&copy; 2024 uab zone. All rights reserved.</p>
+            <p>&copy; @(currentyear) uab zone. All rights reserved.</p>
         </div>
     </footer>
 </body>

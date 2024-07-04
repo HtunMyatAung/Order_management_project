@@ -37,7 +37,9 @@ namespace IdentityDemo.Initializers
                     UserName = adminUserEmail,
                     Email = adminUserEmail,
                     ShopId = 0,
-                    Role="Admin"
+                    Role="Admin",
+                    UserImageName= "male_default.png"
+
                 };
                 await _userManager.CreateAsync(adminUser, "Admin123!@#");
                 await _userManager.AddToRoleAsync(adminUser, "Admin");
