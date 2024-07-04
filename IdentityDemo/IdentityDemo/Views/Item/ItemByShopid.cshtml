@@ -4,6 +4,7 @@
     var isitem = TempData["items"];
     TempData["shopname"] = Model.Shop.ShopName;
     TempData["shopadd"] = Model.Shop.ShopAddress;
+    var currentyear = DateTime.Now.Year;
 }
 
 <style>
@@ -203,7 +204,7 @@ else
                                     </div>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            Amount: <span class="px-2 count" id="supercount">1</span>
+                                            Amount: <span class="px-2 count" id="supercount">@item.ItemQuantity</span>
                                         </div>
                                         <a href="#" class="btn btn-secondary btn-sm add-to-cart-btn" data-id="@item.ItemId" style="margin-right: 15px;">Add cart</a>
                                     </div>

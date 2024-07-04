@@ -28,11 +28,13 @@
             <div class="show-password-row">
                 <input type="checkbox" id="show-password" name="show-password">
                 <label for="show-password">Show Password</label>
-            </div>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>            
             <button type="submit">SIGN IN</button>
            
             <p><a href="#" data-toggle="modal" data-target="#forgotPasswordModal">Forgot Password?</a></p>
             <p>Don't have an account? <a href="@Url.Action("Register", "Account")">Sign up</a></p>
+            
         </form>
     </div>
     <!-- Modal -->
@@ -45,21 +47,24 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="forgotPasswordForm" method="post" action="/Account/SendDefaultPasswordEmail">
+                <form id="forgotPasswordForm" method="post" action="/Account/SendChangePasswordEmail">
                     <div class="form-group">
                         <div class="modal-body">
-
                             <label for="email">Enter your Gmail address:</label>
                             <input type="email" class="form-control" id="email" name="email" required>
+                            <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
 
-                        <p id="emailSentMessage" style="display: none;">A default password has been sent to your email address.</p>
+                        <p id="emailSentMessage" style="display: none;">Reset password link has been sent to your email address.</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width: 100px;">Close</button>
                         <button type="submit" class="btn btn-primary" onclick="submitForgotPasswordForm()" style="width: 100px;">OK</button>
+                        
                     </div>
+                   
                 </form>
+                
             </div>
         </div>
     </div>

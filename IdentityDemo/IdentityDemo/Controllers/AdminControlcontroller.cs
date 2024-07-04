@@ -137,7 +137,7 @@ namespace IdentityDemo.Controllers
                     // Add other shop properties as needed
                 };
                 user.ShopId= newShopId;
-                _context.Shops.Add(shop);
+                _context.Shops.Add(shop); 
             }
             if (user == null)
             {
@@ -238,7 +238,6 @@ namespace IdentityDemo.Controllers
             try
             {
                 TempData["title"] = "User list";
-                
                 users = _context.Users.Where(u => u.Role != null && u.Role != "Admin").ToList();
                 responseData = JsonConvert.SerializeObject(users);
 
@@ -248,7 +247,7 @@ namespace IdentityDemo.Controllers
             {
                 error = ex.Message;
                 responseData = error;
-                return null;
+                return RedirectToAction("Show_error_loading","Home");
             }
             finally
             {
@@ -334,7 +333,7 @@ namespace IdentityDemo.Controllers
 
             // Reset the password to a default password
             var resetResult = await _userManager.ResetPasswordAsync(user, token, "Password123!");
-
+            
             if (resetResult.Succeeded)
             {
                 // Optional: Inform the admin that the password reset was successful

@@ -75,7 +75,7 @@
     <div class="otp-container">
         <h2>Enter 6-digit code from your email</h2>
         <h3>@TempData["otpcode"] </h3> <!-- Displays the OTP for reference (for testing/demo purposes) -->
-        <form id="otp-form" method="post" action="/Account/Confirm_register">
+        <form id="otp-form" >
             <div class="otp-inputs">
                 <!-- Inputs for OTP digits, each with an oninput handler to move focus -->
                 <input type="text" maxlength="1" class="otp-input" id="otp1" name="otp1" oninput="moveFocus(1)">

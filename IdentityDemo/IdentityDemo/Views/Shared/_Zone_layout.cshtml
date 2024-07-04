@@ -5,6 +5,10 @@
 @{
     ViewData["Title"] = "Home Page";
     ApplicationUser currentUser = await UserManager.GetUserAsync(User);
+    var shopname = TempData["shopname"] as string;
+    var shopadd = TempData["shopadd"] as string;
+    var currentyear = DateTime.Now.Year;
+
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -102,7 +106,7 @@
                 </div>
             </div>
             <hr>
-            <p>&copy; 2024 uab zone. All rights reserved.</p>
+            <p>&copy; @(currentyear) uab zone. All rights reserved.</p>
         </div>
     </footer>
 </body>
