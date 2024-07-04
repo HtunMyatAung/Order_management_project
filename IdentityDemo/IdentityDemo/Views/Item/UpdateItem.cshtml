@@ -25,7 +25,7 @@
 
 <div class="container" style="padding-top: 30px;">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-md-10">
             <div class="card">
                 <div class="card-header text-center">
                     <h2>Item Update</h2>
@@ -35,7 +35,7 @@
                     <form asp-action="UpdateItem" asp-controller="Item" method="post" enctype="multipart/form-data" runat="server">
                         <input type="hidden" asp-for="ItemId" />
                         <!-- Image Preview Section -->
-                        <div class="form-group row">
+                        <div class="form-group row mb-3">
                             <div class="col-sm-10">
                                 <label for="profileImage" class="col-sm-2 col-form-label">Shop Profile</label>
                                 <!--<img id="blah" class="image-preview" src="#" alt="Preview Image" style="max-width: 100%; max-height: 200px; display: block; margin-top: 10px;" />-->
@@ -43,22 +43,29 @@
                             </div>
                         </div>
                         <!--item update form-->
-                        <div class="form-group">
-                            <label asp-for="ItemName">Name</label>
-                            <input type="text" class="form-control" asp-for="ItemName" placeholder="Enter item name" id="nameInput" />
-                            <span asp-validation-for="ItemName" class="text-danger" id="nameValidationMessage"></span>
+                        <div class="form-group row mb-3">
+                            <label asp-for="ItemName" class="col-sm-2 col-form-label">Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" asp-for="ItemName" placeholder="Enter item name" id="nameInput" />
+                                <span asp-validation-for="ItemName" class="text-danger" id="nameValidationMessage"></span>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="ItemPrice">Price</label>
-                            <input type="number" step="0.01" class="form-control" asp-for="ItemPrice" placeholder="Enter item price" id="priceInput" />
-                            <span asp-validation-for="ItemPrice" class="text-danger" id="priceValidationMessage"></span>
+                        <div class="form-group row mb-3">
+                            <label asp-for="ItemPrice" class="col-sm-2 col-form-label">Price</label>
+                            <div class="col-sm-10">
+                                <input type="number" step="0.01" class="form-control" asp-for="ItemPrice" placeholder="Enter item price" id="priceInput" />
+                                <span asp-validation-for="ItemPrice" class="text-danger" id="priceValidationMessage"></span>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="ItemQuantity">Quantity</label>
-                            <input type="number" class="form-control" asp-for="ItemQuantity" placeholder="Enter item quantity" id="quantityInput" />
-                            <span asp-validation-for="ItemQuantity" class="text-danger" id="quantityValidationMessage"></span>
+                        <div class="form-group row mb-3">
+                            <label asp-for="ItemQuantity" class="col-sm-2 col-form-label">Quantity</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" asp-for="ItemQuantity" placeholder="Enter item quantity" id="quantityInput" />
+                                <span asp-validation-for="ItemQuantity" class="text-danger" id="quantityValidationMessage"></span>
+                            </div>
+                            
                         </div>                        
-                        <div class="d-flex align-items-center">
+                        <div class="d-flex align-items-center" style="margin-left: 17%;">
                             <div class="form-check me-3">
                                 <input class="form-check-input" type="radio" name="discountType" id="discountPrice" value="DiscountPrice" onchange="toggleInputFields()" @if(Model.ItemPrice > 0) { <text>checked</text> }/>
                                 <label class="form-check-label" for="discountPrice">
@@ -72,21 +79,29 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="form-group " id="discountPriceGroup">
-                            <label asp-for="Discount_price">Discount by Price</label>
-                            <input type="number" class="form-control" asp-for="Discount_price" placeholder="Enter discount price" id="discountpriceInput" />
-                            <span asp-validation-for="Discount_price" class="text-danger"></span>
+                        <div class="form-group  row mb-3" id="discountPriceGroup">
+                            <label asp-for="Discount_price" class="col-sm-2 col-form-label">Discount Price</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" asp-for="Discount_price" placeholder="Enter discount price" id="discountpriceInput" />
+                                <span asp-validation-for="Discount_price" class="text-danger"></span>
+                            </div>
+                            
                         </div>
-                        <div class="form-group hidden" id="discountRateGroup">
-                            <label asp-for="Discount_rate">Discount Rate</label>
-                            <input type="number" class="form-control" asp-for="Discount_rate" placeholder="Enter discount rate" id="discountrateInput" />
-                            <span asp-validation-for="Discount_rate" class="text-danger"></span>
+                        <div class="form-group hidden row mb-3" id="discountRateGroup">
+                            <label asp-for="Discount_rate" class="col-sm-2 col-form-label">Discount Rate</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" asp-for="Discount_rate" placeholder="Enter discount rate" id="discountrateInput" />
+                                <span asp-validation-for="Discount_rate" class="text-danger"></span>
+                            </div>
+                            
                         </div>
 
-                        <div class="form-group">
-                            <label asp-for="ItemChangedPrice">Final price</label>
-                            <input type="number" step="0.01" class="form-control" asp-for="ItemChangedPrice" readonly id="finalPriceInput" />
-                            <span asp-validation-for="ItemChangedPrice" class="text-danger"></span>
+                        <div class="form-group row mb-3">
+                            <label asp-for="ItemChangedPrice" class="col-sm-2 col-form-label">Final price</label>
+                            <div class="col-sm-10">
+                                <input type="number" step="0.01" class="form-control" asp-for="ItemChangedPrice" readonly id="finalPriceInput" />
+                                <span asp-validation-for="ItemChangedPrice" class="text-danger"></span>
+                            </div>
                         </div>
                         <div class="text-right">
                             <button type="submit" class="btn btn-primary w-25" id="submitButton">Save</button>

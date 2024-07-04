@@ -10,7 +10,6 @@
     #blah {
         width: 150px;
         height: 100px;
-        display: inline-block; /* Ensure the image stays inline */
     }
 </style>
 <div class="container py-4">
@@ -23,7 +22,9 @@
                 <div class="card-body">
                     <form asp-action="UpdateShop" asp-controller="Shop" method="post" enctype="multipart/form-data" runat="server">
                         <input type="hidden" asp-for="ShopId" />
-                        <img id="blah" class="img-thumbnail d-block" src="~/img/shop/homeimg2.jpg" alt="Preview Image" />
+                        <div class="d-flex align-items-center" style="margin-left: 17%;">
+                            <img id="blah" class="img-thumbnail d-block" src="~/img/shop/homeimg2.jpg" alt="Preview Image" />
+                        </div>
                         <!-- Image Preview Section -->
                         <div class="form-group row mb-3">
                             <label for="profileImage" class="col-sm-2 col-form-label">Profile Image</label>
