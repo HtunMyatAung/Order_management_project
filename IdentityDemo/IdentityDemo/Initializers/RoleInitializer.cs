@@ -29,19 +29,20 @@ namespace IdentityDemo.Initializers
 
             // Create a default admin user
             var adminUserEmail = "admin@gmail.com";
-            var adminUser = await _userManager.FindByEmailAsync(adminUserEmail);
-            if (adminUser == null)
-            {
+                var adminUser = await _userManager.FindByEmailAsync(adminUserEmail);
+                if (adminUser == null)
+                {
                 adminUser = new ApplicationUser
                 {
                     UserName = adminUserEmail,
                     Email = adminUserEmail,
                     ShopId = 0,
-                    Role="Admin"
+                    Role = "Admin",
+                    UserImageName = "male_default.png"
                 };
-                await _userManager.CreateAsync(adminUser, "Admin123!@#");
-                await _userManager.AddToRoleAsync(adminUser, "Admin");
-            }
+                    await _userManager.CreateAsync(adminUser, "Admin123!@#");
+                    await _userManager.AddToRoleAsync(adminUser, "Admin");
+                }
         }
     }
 }

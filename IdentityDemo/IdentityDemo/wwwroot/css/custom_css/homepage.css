@@ -16,7 +16,6 @@
 
     .carousel-caption1 h5 {
         font-size: 80px;
-        
         letter-spacing: 4px;
         margin-top: 25px;
     }
@@ -64,12 +63,10 @@
     }
 
 .carousel-button {
-    border-start-end-radius: 50px;
-    border-end-start-radius: 50px;
     width: 180px;
     text-align: center;
     align-content: center;
-    background-color: yellow;
+    background-color: deepskyblue;
     color: black;
     font-weight: bold;
     margin-top: 20px;
@@ -78,7 +75,7 @@
 }
 
     .carousel-button:hover {
-        background-color: yellowgreen;
+        background-color: darkcyan;
     }
 
 .carousel-caption3 {

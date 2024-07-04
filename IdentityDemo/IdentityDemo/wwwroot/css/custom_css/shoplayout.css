@@ -1,15 +1,15 @@
 ﻿.navbarclass {
-    background-color: #E0E0E0;
+    background-color: black;
 
 }
 .logocss{
     font-size: 2rem;
     font-weight: 700;
-    color: Black;
+    color: white;
 }
 .login-button {
     background-color: #FF5721;
-    color: black;
+    color: white;
     margin-right:0px;
     font-size: 14px;
     padding: 8px 25px;

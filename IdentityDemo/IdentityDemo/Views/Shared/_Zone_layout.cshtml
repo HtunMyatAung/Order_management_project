@@ -5,9 +5,6 @@
 @{
     ViewData["Title"] = "Home Page";
     ApplicationUser currentUser = await UserManager.GetUserAsync(User);
-    var shopname = TempData["shopname"] as string;
-    var shopadd = TempData["shopadd"] as string;
-
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -24,58 +21,16 @@
     <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top navbarclass fixed-top">
+    <nav class="navbar navbar-expand-lg navbarclass fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand me-auto logocss" href="#">uab Zone</a>
-
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">uab zone</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
-                        @if (!string.IsNullOrEmpty(shopname))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link mx-lg-2" aria-current="page" href="@Url.Action("Index","Home")">@shopname</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link mx-lg-2" aria-current="page" href="@Url.Action("Index","Home")">@shopadd</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link mx-lg-2" aria-current="page" href="@Url.Action("Index","Home")">Home</a>
-                            </li>
+            <a class="navbar-brand me-auto logocss" href="@Url.Action("Index","Home")">uab Zone</a>
                             @if (User.Identity.IsAuthenticated)
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link mx-lg-2" href="@Url.Action("HomePageItems","Item")">Shop</a>
-                                </li>
-                            }
-                            @*<li class="nav-item">
-                        <a class="nav-link mx-lg-2" href="@Url.Action("About","Home")">About</a>
-                        </li>*@
-                        <li class="nav-item">
-                            <a class="nav-link mx-lg-2" href="@Url.Action("Confirm_register","Account")">Test</a>
-                        </li>
-                            <li class="nav-item">
-                                <a class="nav-link mx-lg-2" href="@Url.Action("Test64","Home")">Test</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-            
-            @if (User.Identity.IsAuthenticated)
-            {
-                <div class="dropdown">
-                    <a class="btn dropdown-toggle login-button" href="#" role="button" id="loginDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="btn-group">
+                    <a type="button" class="btn dropdown-toggle login-button" data-bs-toggle="dropdown" aria-expanded="false">
                        @currentUser.UserName
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="loginDropdown" style="text-align: center;margin-right:30px;">                        
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="loginDropdown">
                         @if (currentUser.Role == "Admin")
                             {
                             <li><a class="dropdown-item" href="/AdminControl/Admin_dashboard">Dashboard</a></li>
@@ -105,10 +60,6 @@
 
                 <a href="@Url.Action("Login","Account")" class="btn login-button">Login</a>
             }
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
         </div>
     </nav>
     <div style="margin-top: 74px">
