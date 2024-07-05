@@ -11,24 +11,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sample Table</title>
     <!-- DataTables CSS -->
-    <link rel="stylesheet" type="text/css" href="~/css/download_css/1_10_24_jquery.dataTables.min.css" />
-    <style>
-        /* Optional CSS for custom styling */
-        
-    </style>
+    @section Scripts {
+        <!-- DataTables CSS -->
+        <link rel="stylesheet" href="~/css/download_css/5_2_3_bootstrap.min.css" />
+
+        <link rel="stylesheet" href="~/css/download_css/4_5_3_bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="~/css/download_css/1_10_24_jquery.dataTables.min.css" />
+        <link href="~/css/download_css/sb_1_7_1_datatables.min.css" rel="stylesheet" />
+        <link href="~/css/download_css/sb_1_7_1_datatables.min.css" rel="stylesheet" />
+        <!-- jQuery -->
+        <script src="~/js/download_js/3_5_1_jquery.min.js"></script>
+        <!-- DataTables JS -->
+        <script type="text/javascript" src="~/js/download_js/1_10_24_jquery.dataTables.min.js"></script>
+
+        <script src="~/js/download_js/sb_1_7_1_datatables.min.js"></script>
+        <script src="~/js/download_js/5_2_3_bootstrap.bundle.min.js"></script>
+        <script>
+            // Initialize DataTable
+            $(document).ready(function () {
+                $('#userlisttable').DataTable();
+            });
+        </script>       
+    }
 </head>
 <body>
-    <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap4">
-        <table id="shoptable" class="display" style="width:100%">
+    <div style="padding-top: 2%;">
+        <table id="userlisttable" class="display" style="width:100%">
             <thead>
                 <tr style="text-align: center;">
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Role</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                    <th>Action</th>
+                    <th style="text-align: center;">No.</th>
+                    <th style="text-align: center;">Name</th>
+                    <th style="text-align: center;">Phone</th>
+                    <th style="text-align: center;">Role</th>
+                    <th style="text-align: center;">Email</th>
+                    <th style="text-align: center;">Address</th>
+                    <th style="text-align: center;">Action</th>
                     
                 </tr>
             </thead>
@@ -36,19 +53,19 @@
                 @foreach (var user in Model)
                 {
                     <tr style="text-align: center;">
-                        <td>@counter</td>
-                        <td>@user.UserName</td>
-                        <td>@user.PhoneNumber</td>
-                        <td style="color:@(user.Role == "User" ? "green" : user.Role == "Owner" ? "red" : "black");">
+                        <td style="text-align: center;">@counter</td>
+                        <td style="text-align: center;">@user.UserName</td>
+                        <td style="text-align: center;">@user.PhoneNumber</td>
+                        <td style="color:@(user.Role == "User" ? "green" : user.Role == "Owner" ? "red" : "black"); text-align: center;">
                             <span style="background-color: lightgray; padding: 2px; border-radius: 4px; display: inline-block;">
                                 @user.Role
                             </span>
                             
                         </td>
 
-                        <td>@user.Email</td>
-                        <td>@user.Address</td>
-                        <td>
+                        <td style="text-align: center;">@user.Email</td>
+                        <td style="text-align: center;">@user.Address</td>
+                        <td style="text-align: center;" style="text-align: center;">
                             <a href="@Url.Action("Admin_update_user_info", "AdminControl", new { userId = user.Id })" class="btn btn-link">
                                 <i class="fas fa-edit"></i> Edit
                             </a>
@@ -67,16 +84,5 @@
             </tbody>
         </table>
     </div>
-
-    <!-- jQuery -->
-    <script src="~/js/download_js/3_5_1_jquery.min.js"></script>
-    <!-- DataTables JS -->
-    <script type="text/javascript" src="~/js/download_js/1_10_24_jquery.dataTables.min.js"></script>
-    <script>
-        // Initialize DataTable
-        $(document).ready(function () {
-            $('#shoptable').DataTable();
-        });
-    </script>
 </body>
 </html>

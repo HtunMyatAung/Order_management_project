@@ -59,65 +59,30 @@
 
 </section>
 
-<div class="container">
-    <br />
-    <div class="row justify-content-left formargin">
+<div class="container-fluid mt-4">
+    <div class="row justify-content-start">
         @foreach (var item in Model.Items)
         {
             var shop = Model.Shops.FirstOrDefault(s => s.ShopId == item.Shop_Id);
-            <div class="col-lg-3 col-md-4 d-flex justify-content-center">
-                <div class="card card-custom">
+            <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
+                <div class="card shadow-sm h-100">
                     <div class="img-box">
-                    <img src="~/img/items/@item.ItemImageName" class="card-img-top" alt="Product 1">
+                        <img src="~/img/items/@item.ItemImageName" class="card-img-top" alt="@item.ItemName">
                     </div>
                     <div class="card-body">
-                        <div class="shop-name mb-2">
-                            <i class="fas fa-store"></i>: <span class="card-title"><a href="@Url.Action("ItemByShopid", "Item", new { shopId = shop.ShopId })">@shop.ShopName</a></span>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <h5 class="card-title">@item.ItemName</h5>
-                            <p class="card-text">@item.ItemChangedPrice</p>
-                        </div>
+                        <h5 class="card-title">@item.ItemName</h5>
+                        <p class="card-text">@item.ItemChangedPrice</p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <button class="btn btn-primary btn-sm custom-btn btn-round" onclick="decrementQuantity(@item.ItemId)">-</button>
-                                <span id="quantity-display-@item.ItemId" class="count">1</span>
-                                <button class="btn btn-primary btn-sm custom-btn btn-round" onclick="incrementQuantity(@item.ItemId)">+</button>
+                            <div class="shop-name">
+                                <i class="fas fa-store me-1"></i> <a href="@Url.Action("ItemByShopid", "Item", new { shopId = shop.ShopId })" class="text-decoration-none">@shop.ShopName</a>
                             </div>
-                            <a href="#" class="btn btn-primary btn-sm btn-round" onclick="prepareBuyItem(@item.ItemId, '@item.ItemName', '@item.ItemChangedPrice')">Buy Now</a>
+                            <a href="@Url.Action("ItemByShopid", "Item", new { shopId = item.Shop_Id })" class="btn btn-primary btn-sm">Get</a>
                         </div>
                     </div>
                 </div>
             </div>
         }
     </div>
-
-    <form id="buyItemForm" method="post" action="@Url.Action("Order_confirm", "Order")" style="display:none;">
-        <input type="hidden" name="selectedItems[0].Key" id="selectedItemId" />
-        <input type="hidden" name="selectedItems[0].Value" id="selectedItemQuantity" />
-    </form>
 </div>
 
-<div class="modal fade" id="buyItemModal" tabindex="-1" role="dialog" aria-labelledby="buyItemModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="buyItemModalLabel">Confirm Purchase</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>You are about to buy:</p>
-                <p hidden><strong >Item ID:</strong> <span id="modalItemId"></span></p>
-                <p><strong>Item Name:</strong> <span id="modalItemName"></span></p>
-                <p><strong>Item Price:</strong> $<span id="modalItemPrice"></span></p>
-                <p>Quantity: <span id="modalItemQuantity"></span></p>
-                <p>Do you want to proceed?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="width: 130px;">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="submitBuyItem()" style="width: 130px;">purchase</button>
-            </div>
-        </div>
-    </div>
-</div>
 <script src="~/js/Allitemlistbuy.js"></script>

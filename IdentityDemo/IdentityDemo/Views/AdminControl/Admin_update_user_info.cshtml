@@ -48,7 +48,7 @@
             font-size: 14px;
             font-weight: 600;
             color: #fff;
-            
+            background-color: #218838;
             border-color: rgba(27, 31, 35, 0.15);
             border-radius: 6px;
         }
@@ -70,35 +70,49 @@
             <form asp-controller="AdminControl" asp-action="Admin_update_user_info" method="post" class="github-login-form">
                 <h1 class="text-center">Change User Info</h1>
                 <input type="hidden" asp-for="Id" />
-                <div class="form-group">
-                    <label asp-for="UserName" class="github-label">Username</label>
-                    <input type="text" class="form-control github-input" asp-for="UserName" readonly/>
-                    <span asp-validation-for="UserName" class="text-danger"></span>
+                <div class="form-group row mb-3">
+                    <label asp-for="UserName" class="github-label col-sm-2 col-form-label">Username</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control github-input" asp-for="UserName" readonly/>
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Email" class="github-label">Email</label>
-                    <input type="email" class="form-control github-input" asp-for="Email" readonly/>
-                    <span asp-validation-for="Email" class="text-danger"></span>
+                <div class="form-group row mb-3">
+                    <label asp-for="Email" class="github-label col-sm-2">Email</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control github-input" asp-for="Email" readonly/>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Useraddress" class="github-label">Address</label>
-                    <input type="text" class="form-control github-input" asp-for="Useraddress" readonly/>
-                    <span asp-validation-for="Useraddress" class="text-danger"></span>
+                <div class="form-group row mb-3">
+                    <label asp-for="Useraddress" class="github-label col-sm-2 col-form-label">Address</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control github-input" asp-for="Useraddress" readonly/>
+                        <span asp-validation-for="Useraddress" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="UserPhone" class="github-label">Phone</label>
-                    <input type="text" class="form-control github-input" asp-for="UserPhone" readonly/>
-                    <span asp-validation-for="UserPhone" class="text-danger"></span>
+                <div class="form-group row mb-3">
+                    <label asp-for="UserPhone" class="github-label col-sm-2 col-form-label">Phone</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control github-input" asp-for="UserPhone" readonly/>
+                        <span asp-validation-for="UserPhone" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Role" class="github-label">Role</label>
-                    <select class="form-control github-input" asp-for="Role">
-                        <option value="User">User</option>
-                        <option value="Owner">Owner</option>
-                    </select>
-                    <span asp-validation-for="Role" class="text-danger"></span>
+                <div class="form-group row mb-3">
+                    <label asp-for="Role" class="github-label col-sm-2 col-form-label">Role</label>
+                    <div class="col-sm-10">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="inlineRadio1" asp-for="Role" value="User">
+                            <label class="form-check-label" for="inlineRadio1">User</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="inlineRadio2" asp-for="Role" value="Owner">
+                            <label class="form-check-label" for="inlineRadio2">Owner</label>
+                        </div>
+                        <span asp-validation-for="Role" class="text-danger"></span>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block github-btn">Submit</button>
+                <button type="submit" class="btn btn-block github-btn">Submit</button>
 
             </form>
         </div>
@@ -106,10 +120,3 @@
     </div>
 </body>
 </html>
-
-@*
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}*@
