@@ -90,7 +90,6 @@
 
     .card-text {
         font-size: 14px;
-        padding-right: 10px;
         margin-bottom: 5px; /* Adjust margin between text and buttons */
         height:50; /* Ensures text height fits dynamically */
     }
@@ -118,27 +117,6 @@
             color: gray;
             margin-bottom: 8px;
         }
-
-    .purchasebutton {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 10%;
-        background-color: blue;
-    }
-
-    .buttonsize {
-        width: 300px;
-        height: 50px;
-    }
-
-    .stickyyy {
-        position: sticky;
-        top: 90%;
-        left: 10%;
-    }
-
     .purchaseitem {
         background-color: lightgray;
         border-radius: 10px;
@@ -174,8 +152,11 @@
     }
 
     .buttonsize {
-        width: 370px;
-        margin-right: 15px;
+        width: 335px;
+        max-width: 335px;
+        height: 50px;
+        max-height: 50px;
+        margin-right: 13px;
     }
 </style>
 
@@ -200,13 +181,13 @@ else
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <h5 class="card-title">@item.ItemName</h5>
-                                        <p class="card-text">@item.ItemChangedPrice</p>
+                                        <p class="card-text">$@item.ItemChangedPrice</p>
                                     </div>
-                                    <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex justify-content-between">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            Amount: <span class="px-2 count" id="supercount">@item.ItemQuantity</span>
+                                            Available: <span class="px-2 count" id="supercount">@item.ItemQuantity</span>
                                         </div>
-                                        <a href="#" class="btn btn-secondary btn-sm add-to-cart-btn" data-id="@item.ItemId" style="margin-right: 15px;">Add cart</a>
+                                        <a href="#" class="btn btn-secondary btn-sm add-to-cart-btn" data-id="@item.ItemId">Add cart</a>
                                     </div>
                                 </div>
                             </div>

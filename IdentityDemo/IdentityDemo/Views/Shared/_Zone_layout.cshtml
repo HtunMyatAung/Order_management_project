@@ -28,26 +28,26 @@
     <nav class="navbar navbar-expand-lg navbarclass fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand me-auto logocss" href="@Url.Action("Index","Home")">uab Zone</a>
-                            @if (User.Identity.IsAuthenticated)
-                            {
+            @if (User.Identity.IsAuthenticated)
+            {
                 <div class="btn-group">
-                    <a type="button" class="btn dropdown-toggle login-button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a type="button" class="btn dropdown-toggle login-button dropdown-user" data-bs-toggle="dropdown" aria-expanded="false">
                        @currentUser.UserName
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="loginDropdown">
                         @if (currentUser.Role == "Admin")
-                            {
+                        {
                             <li><a class="dropdown-item" href="/AdminControl/Admin_dashboard">Dashboard</a></li>
-                            }
-                            else if (currentUser.Role == "Owner")
-                            {
+                        }
+                        else if (currentUser.Role == "Owner")
+                        {
                             <li><a class="dropdown-item" href="/Account/User_profile">Profile</a></li>
                             <li><a class="dropdown-item" href="/Shop/Owner_dashboard">Dashboard</a></li>
-                            }
-                            else
-                            {
+                        }
+                        else
+                        {
                             <li><a class="dropdown-item" href="/Account/User_profile">Profile</a></li>
-                            }
+                        }
                         
                         
                         <li><hr class="dropdown-divider"></li>
@@ -62,7 +62,7 @@
             else
             {
 
-                <a href="@Url.Action("Login","Account")" class="btn login-button">Login</a>
+                <a href="@Url.Action("Login","Account")" class="btn login-button dropdown-user">Login</a>
             }
         </div>
     </nav>

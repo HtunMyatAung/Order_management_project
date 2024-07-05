@@ -70,13 +70,15 @@
                         <img src="~/img/items/@item.ItemImageName" class="card-img-top" alt="@item.ItemName">
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">@item.ItemName</h5>
-                        <p class="card-text">@item.ItemChangedPrice</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="shop-name">
-                                <i class="fas fa-store me-1"></i> <a href="@Url.Action("ItemByShopid", "Item", new { shopId = shop.ShopId })" class="text-decoration-none">@shop.ShopName</a>
-                            </div>
-                            <a href="@Url.Action("ItemByShopid", "Item", new { shopId = item.Shop_Id })" class="btn btn-primary btn-sm">Get</a>
+                        <div class="shop-name">
+                            <a href="@Url.Action("ItemByShopid", "Item", new { shopId = shop.ShopId })" class="text-decoration-none" style="color:black;font-weight: bold;">@shop.ShopName</a>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">@item.ItemName</h5>
+                            <p class="card-text">$@item.ItemChangedPrice</p>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <a href="@Url.Action("ItemByShopid", "Item", new { shopId = item.Shop_Id })" class="btn btn-secondary btn-sm w-50">Get</a>
                         </div>
                     </div>
                 </div>

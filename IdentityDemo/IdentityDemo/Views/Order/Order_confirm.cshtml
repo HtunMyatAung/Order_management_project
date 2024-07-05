@@ -27,14 +27,14 @@
         .container1 { 
             padding: 20px;
             overflow-y: auto; 
-            height: 80vh;
+            height: 75vh;
         }
 
         .container2 {
             position: sticky;
             top: 20px; 
             padding: 0 10px;
-            height: 80vh;
+            height: 75vh;
         }
     </style>
 </head>
@@ -42,23 +42,48 @@
     <div class="container-fluid">
         <div class="invoice-header" style="margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px;">
             <div style="display: inline-block; width: 48%; vertical-align: top;">
-                <h1 style="margin: 0;">@Model.Shop.ShopName</h1>
-                <p style="margin: 0;">Address: @Model.Shop.ShopAddress<br>Contact Details: @Model.Shop.ShopEmail</p>
+                <table style="width: 50%;">
+                    <tr>
+                        <th><h3>Invoice</h3></th>
+
+                    </tr>
+                    <tr>
+                        <th>Invoice Number:</th>
+                        <td>@Model.OrderId</td>
+                    </tr>
+                    <tr>
+                        <th>Invoice Date: </th>
+                        <td>@Model.OrderDate</td>
+                    </tr>
+                    
+                </table>
+                
             </div>
             <div style="display: inline-block; width: 48%; vertical-align: top; text-align: right;">
-                <h3 style="margin: 0;">Invoice</h3>
-                <p style="margin: 0;">Invoice Number: @Model.OrderId<br>Invoice Date: @Model.OrderDate<br></p>
+                <table style="width: 40%; float: right;">
+                    <tr>
+                        <th style="text-align: left;"><h3>Details</h3></th>
+                        
+                    </tr>
+                    <tr>
+                        <th style="text-align: left;width:54%;">Shop: </th>
+                        <td style="text-align: left;">@Model.Shop.ShopName</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left;">Client Name:</th>
+                        <td style="text-align: left;">@Model.User.UserName</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left;">Client Address:</th>
+                        <td style="text-align: left;"> @Model.User.Address</td>
+                    </tr>
+                </table>
+                
             </div>
         </div>
         <div class="row">
             
             <div class="col-md-8 container1">
-                <!-- Client Details -->
-                <div class="client-details" style="margin-bottom: 20px;">
-                    <h2 style="margin: 0 0 10px 0;">Bill To:</h2>
-                    <p style="margin: 0;">Client Name: @Model.User.UserName<br>Client Address: @Model.User.Address<br>Client Contact Details: @Model.User.PhoneNumber</p>
-                </div>
-
                 <!-- Items Table -->
                 <div class="items" style="margin-bottom: 20px;">
                     <table style="width: 100%; border-collapse: collapse;">
@@ -85,55 +110,53 @@
                     </table>
                 </div>
                 <div>
+                    <div class="d-flex justify-content-between">
+                        <div class="summary" style="margin-bottom: 20px;">
+                            <table>
+                                <tr>
+                                    <th style="padding: 8px;">Subtotal:</th>
+                                    <td style="text-align: right; padding: 8px;">$@total</td>
+                                </tr>
+                                <tr>
+                                    <th style=" padding: 8px;">Taxes (10%):</th>
+                                    <td style="text-align: right; padding: 8px;">$@(total * taxrate)</td>
+                                </tr>
+                                <tr>
+                                    <th style=" padding: 8px;">Total Amount Due:</th>
+                                    <td style="text-align: right; padding: 8px;">$@(total + (total * taxrate))</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div style="padding-top: 8px;">
+                            <div class="d-flex justify-content-end">
+                                <div class="payment-dropdown">
+                                    <select id="payment-select" style="width:264px; height: 45px; margin-right:8px;">
+                                        <option value="kbz">KBZ pay</option>
+                                        <option value="uab">uab pay</option>
+                                        <option value="cashondelivery">Cash on Delivery</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end" style="margin-right: 8px; margin-top: 25px;">
+                                <a href="@Url.Action("HomePageItems","Item")" class="btn btn-secondary mr-1 d-flex align-items-center justify-content-center" style="width:130px;height:45px;">
+                                    Cancel
+                                </a>
+                                <a href="@Url.Action("Invoice","Order")" class="btn btn-primary d-flex align-items-center justify-content-center" style="width:130px;height:45px;">
+                                    Confirm
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
                     <!-- Summary Section -->
-                    <div class="summary" style="text-align: right; margin-bottom: 20px;">
-                        <table style="width: 50%; float: right;">
-                            <tr>
-                                <th style="padding: 8px;">Subtotal:</th>
-                                <td style="text-align: right; padding: 8px;">@total</td>
-                            </tr>
-                            <tr>
-                                <th style=" padding: 8px;">Taxes (10%):</th>
-                                <td style="text-align: right; padding: 8px;">@(total * taxrate)</td>
-                            </tr>
-                            <tr>
-                                <th style=" padding: 8px;">Total Amount Due:</th>
-                                <td style="text-align: right; padding: 8px;">@(total + (total * taxrate))</td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <!-- Notes Section -->
-                    <div class="notes" style="margin-bottom: 20px;">
-                        <h3 style="margin: 0 0 10px 0;">Notes:</h3>
-                        <p style="margin: 0;">Thank you for your business!<br>If you have any questions, please contact us at uabzone@gmail.com</p>
-                    </div>
                 </div>
-                <div class="d-flex justify-content-end w-100">
-                    <div class="payment-dropdown">
-                        <select id="payment-select" style="width:230px; height: 45px; margin-right:20px;">
-                            <option value="kbz">KBZ pay</option>
-                            <option value="uab">uab pay</option>
-                            <option value="cashondelivery">Cash on Delivery</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-end" style="margin-right: 8px; margin-top: 20px;">
-                    <a href="@Url.Action("HomePageItems","Item")" class="btn btn-secondary mr-1 d-flex align-items-center justify-content-center" style="width:130px;height:45px;">
-                        Cancel
-                    </a>
-                    <a href="@Url.Action("Invoice","Order")" class="btn btn-primary d-flex align-items-center justify-content-center" style="width:130px;height:45px;">
-                        Confirm
-                    </a>
-                </div>
-
             </div>
             <div class="col-md-4 container2">
                 <!-- 40% width on medium and larger screens -->
                 <div class="container2">
                     
                     <div class="d-flex justify-content-center">
-                        <img id="blah" class="image-preview" src="/img/pay_qr&logo/kbz_pay_qr.jpg" alt="Preview Image" style="max-width: 400px; max-height: 600px; display: block;" />
+                        <img id="blah" class="image-preview" src="/img/pay_qr&logo/kbz_pay_qr.jpg" alt="Preview Image" style="max-width: 400px; max-height: 450px; display: block;" />
                     </div>
                 </div>
             </div>

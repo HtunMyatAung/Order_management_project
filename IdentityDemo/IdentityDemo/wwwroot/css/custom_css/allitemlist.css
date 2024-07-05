@@ -39,17 +39,15 @@
 
 .card-text {
     font-size: 13px;
-    padding-right: 8px;
     margin-bottom: 5px; /* Adjust margin between text and buttons */
-    height: 50; /* Ensures text height fits dynamically */
+    height: 10; /* Ensures text height fits dynamically */
 }
 
 
 .shop-name {
-    font-weight: bold;
-    color: #333; /* Adjust text color */
     margin-bottom: 8px; /* Add margin below shop name */
 }
+
 
 /* Fix image size for carousel */
 .carousel-item img {
