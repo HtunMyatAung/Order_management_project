@@ -35,6 +35,16 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.AddTransient<IRoleInitializer, RoleInitializer>(); // RoleInitializer
 builder.Services.AddScoped<IEmailService, EmailService>(); // Register EmailService
 builder.Services.AddScoped<LogActionFilter>(); // Register LogActionFilter
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IItemService, ItemService>();
+builder.Services.AddScoped<IItemRepository, ItemRepository>();
+builder.Services.AddScoped<IShopService, ShopService>();
+builder.Services.AddScoped<IShopRepository, ShopRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IActionRepository, ActionRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 

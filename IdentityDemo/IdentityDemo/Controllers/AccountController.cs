@@ -43,6 +43,7 @@ namespace IdentityDemo.Controllers
             _emailService = emailService;
             _accountService = accountService;
         }
+        public IActionResult SendOTP() { return View(); }
         //public readonly IAccountService _accountService;
 
         /*public Accountcontroller(IAccountService accountService)
@@ -52,15 +53,18 @@ namespace IdentityDemo.Controllers
 
         public IActionResult SendOTP(){return View();}
         [HttpGet]
-        public IActionResult User_change_password(){return View();}
+        public IActionResult User_change_password()
+        {
+            return View();
+        }
         [HttpGet]
-        public IActionResult Confirm_register(){return View();}
+        public IActionResult Confirm_register() { return View(); }
         [HttpPost]
         public async Task<IActionResult> SendOTP(string email)
         {
             _accountService.SendOTP(email);
             return RedirectToAction("Confirm_register", "Account");
-        } 
+        }
         public async Task<IActionResult> Save_register()
         {
             var model = HttpContext.Session.GetObject<RegisterViewModel>("Registerviewmodel");
@@ -97,7 +101,7 @@ namespace IdentityDemo.Controllers
                     _accountService.UpdateUserAsync1(user);
                 }
                 else
-                {                  
+                {
                     TempData["message"] = "Invalid email";
                     Console.WriteLine("********************error***********");
                     
@@ -161,7 +165,7 @@ namespace IdentityDemo.Controllers
             {
                 var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
                 var isuser = await _userManager.FindByNameAsync(model.UserName);
-                if (result.Succeeded && isuser!=null)
+                if (result.Succeeded && isuser != null)
                 {
                     // Retrieve the current user
                     ApplicationUser currentUser = await _userManager.GetUserAsync(User);
@@ -172,11 +176,12 @@ namespace IdentityDemo.Controllers
                     {
                         return RedirectToAction("Admin_dashboard", "AdminControl");
                     }
-                    else if(isuser.Role== "Owner")
+                    else if (isuser.Role == "Owner")
                     {
                         return RedirectToAction("Owner_dashboard", "Shop");
                     }
-                    else { 
+                    else
+                    {
                         return RedirectToAction("Index", "Home");
                     }
                 }

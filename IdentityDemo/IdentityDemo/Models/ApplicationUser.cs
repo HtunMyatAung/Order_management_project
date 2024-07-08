@@ -10,6 +10,7 @@ namespace IdentityDemo.Models
          {
              var userIdentity =await manager.CreateIdentityAsync(this,DefaultAuthenticationTypes.ApplicationCookie);
          }*/
+        [Column("shopid")]
         public int ShopId { get; set; }
         public string? Role { get; set; }
         public string? Address {  get; set; }

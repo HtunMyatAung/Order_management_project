@@ -1,337 +1,142 @@
-﻿using IdentityDemo.Data;
+﻿// ShopController.cs
 using IdentityDemo.Models;
 using IdentityDemo.Services;
 using IdentityDemo.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace IdentityDemo.Controllers
 {
     public class ShopController : Controller
     {
-        //private readonly IShopServices _shopService;
-
-        /*public ShopController(IShopServices shopService)
+        private readonly IShopService _shopService;
+        private readonly IItemService _itemService;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IOrderService _orderService;
+        public ShopController(IShopService shopService,IItemService itemService,UserManager<ApplicationUser> userManager,IOrderService orderService)
         {
             _shopService = shopService;
-        }*/
-        private readonly AppDbContext _context;
-        private readonly IWebHostEnvironment _environment;
-
-        public ShopController(AppDbContext context, IWebHostEnvironment environment)
-        {
-            _context = context;
-            _environment = environment;
+            _itemService = itemService;
+            _userManager = userManager;
+            _orderService = orderService;
+            
         }
-        /* public async Task<ShopModel> GetShopDataAsync(string shopId)
-         {
-             // Fetch shop data based on userId
-             //return await _context.Shops.FirstOrDefaultAsync(s => s.ShopId== shopId);
-         }*/
-        [Authorize(Roles ="Owner")]
-        public IActionResult Owner_Item_List()
+
+        [Authorize(Roles = "Owner")]
+        public async Task<IActionResult> Owner_Item_List()
         {
-            var username = User.Identity.Name;
-            var user = _context.Users.FirstOrDefault(u => u.UserName == username);
-            var std = _context.Items.Where(s => s.Shop_Id == user.ShopId).ToList();
-            if (std == null)
+            var user = await _userManager.GetUserAsync(User);
+            var items =await _itemService.GetAllItemsByShopIdAsync(user.ShopId);
+            if (items == null)
             {
                 return NotFound();
             }
-            return View(std);
+            return View(items);
         }
+
         public async Task<IActionResult> Shop_view(int shopid)
         {
-            ShopModel shop = _context.Shops.SingleOrDefault(s => s.ShopId == shopid);
-            var items = await _context.Items.Where(s => s.Shop_Id == shopid).ToListAsync();
-            if (!items.Any())
-            {
-                TempData["items"] = "hello";
-            }
-            var itembyshopid = new ItemsViewModel
-            {
-                Shop = shop,
-                Items = items
-            };
-            return View(itembyshopid);
+            var shop = await _shopService.GetShopByIdAsync(shopid);
+            var items = await _itemService.GetItemNShopByShopIdAsync(shopid);
+            
+            return View(items);
         }
-        public IActionResult Owner_order_list()
+
+        public async Task<IActionResult> Owner_order_list()
         {
-            var username = User.Identity.Name;
-            var user = _context.Users.FirstOrDefault(u => u.UserName == username);
+            var user= await _userManager.GetUserAsync(User);
 
             if (user == null)
             {
-                // Handle error: user not found
                 return NotFound();
             }
 
-            // Fetch orders for the logged-in owner
-            var orders = _context.Orders
-                                 .Where(o => o.Shop_Id == user.ShopId)
-                                 .ToList();
-
-            // Create a list of OrderViewModel with User_Name
-            var orderViewModels = orders.Select(o => new OrderViewModel
-            {
-                OrderID = o.OrderID,
-                OrderDate = o.OrderDate,
-                OrderPrice = o.OrderPrice,
-                Shop_Id = o.Shop_Id,
-                User_Name = _context.Users.FirstOrDefault(u => u.Id == o.User_Id)?.UserName
-            }).ToList();
+            var orderViewModels = await _orderService.GetOrderNUserByShopIdAsync(user.ShopId);
 
             return View(orderViewModels);
         }
 
-
         [Authorize(Roles = "Owner")]
         [HttpGet]
-        public IActionResult UpdateShop()
+        public async Task<IActionResult> UpdateShop()
         {
-            var username = User.Identity.Name;
-            var user = _context.Users.FirstOrDefault(u => u.UserName == username);
-            var shop = _context.Shops.FirstOrDefault(s => s.ShopId ==user.ShopId );
-            var shopview = new ShopViewModel()
+            var user = await _userManager.GetUserAsync(User);
+            var shop = await _shopService.GetShopByIdAsync(user.ShopId);
+            var shopview = new ShopViewModel
             {
-                ShopId=shop.ShopId,
-                ShopName=shop.ShopName,
-                ShopEmail=shop.ShopEmail,
-                ShopAddress=shop.ShopAddress,
-                ShopPhone=shop.ShopPhone,
-                ShopDescription=shop.ShopDescription,
-                //ShopImageName=shop.ProfileImagePath
+                ShopId = shop.ShopId,
+                ShopName = shop.ShopName,
+                ShopEmail = shop.ShopEmail,
+                ShopAddress = shop.ShopAddress,
+                ShopPhone = shop.ShopPhone,
+                ShopDescription = shop.ShopDescription,
             };
-            
+
             if (shop == null)
             {
                 return NotFound();
             }
             return View(shopview);
         }
+
         [Authorize(Roles = "Owner")]
         [HttpPost]
         public async Task<IActionResult> UpdateShop(ShopViewModel shop)
         {
             if (ModelState.IsValid)
             {
-                var username = User.Identity.Name;
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
+                var user= await _userManager.GetUserAsync(User);
 
                 if (user == null)
                 {
-                    return NotFound(); // Handle case where user is not found
+                    return NotFound();
                 }
 
-                var shopToUpdate = await _context.Shops.FirstOrDefaultAsync(s => s.ShopId == user.ShopId);
+                await _shopService.UpdateShopAsync(shop);
 
-                if (shopToUpdate == null)
-                {
-                    return NotFound(); // Handle case where shop is not found
-                }
-                if (shop.ProfileImage != null)
-                {
-                    string uniqueFileName = null;
-
-                    // Delete old image if it exists
-                    if (!string.IsNullOrEmpty(shopToUpdate.ProfileImagePath) && shopToUpdate.ProfileImagePath != "shop_default.png")
-                    {
-                        string oldImagePath = Path.Combine(_environment.WebRootPath, "img/shop", shopToUpdate.ProfileImagePath);
-                        if (System.IO.File.Exists(oldImagePath))
-                        {
-                            System.IO.File.Delete(oldImagePath);
-                        }
-                    }
-                    // Set the uploads folder path
-                    string uploadsFolder = Path.Combine(_environment.WebRootPath, "img/shop");
-
-                    // Ensure the folder exists
-                    Directory.CreateDirectory(uploadsFolder);
-
-                    // Generate a unique file name to avoid collisions
-                    uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(shop.ProfileImage.FileName);
-
-                    // Combine folder path and file name
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                    // Copy the uploaded file to the specified path
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await shop.ProfileImage.CopyToAsync(fileStream);
-                    }
-                    shopToUpdate.ProfileImagePath = uniqueFileName;
-                }
-
-
-                    // Update other shop details
-                    shopToUpdate.ShopName = shop.ShopName;
-                shopToUpdate.ShopPhone = shop.ShopPhone;
-                shopToUpdate.ShopDescription = shop.ShopDescription;
-                shopToUpdate.ShopAddress = shop.ShopAddress;
-                shopToUpdate.ShopEmail = shop.ShopEmail;
-                
-
-                _context.Shops.Update(shopToUpdate);
-                await _context.SaveChangesAsync();
-
-                // Redirect to Owner_dashboard action in Shop controller after successful update
                 return RedirectToAction("Owner_dashboard", "Shop");
             }
-            
-            // If ModelState is not valid, return to the view with validation errors
+
             return View(shop);
         }
 
-
-
         [Authorize(Roles = "Owner")]
-        public IActionResult DeleteShop(int shopid)
+        public async Task<IActionResult> DeleteShop(int shopid)
         {
-            var std = _context.Shops.FirstOrDefault(s => s.ShopId == shopid);
-            if (std == null)
+            var shop = await _shopService.GetShopByIdAsync(shopid);
+            if (shop == null)
             {
                 return NotFound();
             }
-            
-            return View(std);
+
+            return View(shop);
         }
+
         [Authorize(Roles = "Owner")]
         [HttpPost]
-        public IActionResult DeleteShop(ShopModel shop)
+        public async Task<IActionResult> DeleteShop(ShopViewModel shop)
         {
             if (ModelState.IsValid)
             {
-                var std = _context.Shops.FirstOrDefault(s => s.ShopId == shop.ShopId);
-                if (std == null)
-                {
-                    return NotFound();
-                }
-                _context.Shops.Remove(std);
-                _context.SaveChanges();
-                return RedirectToAction("Login","Account");
+                await _shopService.DeleteShopAsync(shop.ShopId);
+                return RedirectToAction("Login", "Account");
             }
             return View();
         }
-        [Authorize(Roles = "Owner")]
-        public IActionResult Owner_dashboard()
-        {
-            var username = User.Identity.Name;
-            var user = _context.Users.FirstOrDefault(u => u.UserName == username);
 
+        [Authorize(Roles = "Owner")]
+        public async Task<IActionResult> Owner_dashboard()
+        {
+            var user = await _userManager.GetUserAsync(User); 
             if (user == null || user.ShopId == null)
             {
-                return NotFound(); // Handle case where user or shop is not found
+                return NotFound();
             }
 
-            var shopId = user.ShopId;
-
-            var orders = _context.Orders
-                                 .Where(o => o.Shop_Id == user.ShopId)
-                                 .ToList();
-
-            var items = _context.Items
-                                .Where(i => i.Shop_Id == shopId)
-                                .ToList();
-            var ordercount=orders.Count();
-            var itemcount=items.Count();
-            // Get distinct customer IDs from orders
-            var customerIds = orders.Select(o => o.User_Id).Distinct().ToList();
-            var customercount= customerIds.Count();
-            // Fetch users whose IDs are in the customerIds list
-            var customers = _context.Users
-                                    .Where(c => customerIds.Contains(c.Id))
-                                    .ToList();
-            // Prepare order data for the chart
-            var orderData = orders.Select(o => new OrderModel
-            {
-                OrderDate = o.OrderDate,
-                OrderPrice = o.OrderPrice
-            })
-            .OrderBy(o => o.OrderDate)
-            .ToList();
-            var orderCountsByDay = orders.GroupBy(o => o.OrderDate.Date)
-                             .Select(g => new { Date = g.Key, Count = g.Count() })
-                             .OrderBy(d => d.Date)
-                             .ToList();
-            //Console.WriteLine();
-            //Console.WriteLine("haha" + orderCountsByDay==null);
-            // Extract labels (dates) and data (order counts) for the chart
-            var labels = orderCountsByDay.Select(d => d.Date.ToString("yyyy-MM-dd")).ToArray();
-            var data = orderCountsByDay.Select(d => d.Count).ToArray();
-            
-            // _context.Users.Where(u => u.Role != null && u.Role != "Admin").ToList();
-            var ownerdashboardViewModel = new DashboardViewModel
-            {
-                OrderCount = ordercount,
-                ItemCount = itemcount,
-                CustomerCount= customercount,
-                OrderData = orders,
-                ItemData = items,
-                UserData = customers,
-                Labels= labels,
-                Datas= data
-            };
-
-            return View(ownerdashboardViewModel);
+            var dashboard = await _shopService.GetOwnerDashboardAsync(user.Id);
+            return View(dashboard);
         }
-        public IActionResult CreateTest()
-        {
-            return View();
-        }
-        // POST: Save Shop with Image
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateTest(ShopViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                string uniqueFileName = null;
-
-                // Check if an image is uploaded
-                if (model.ProfileImage != null)
-                {
-                    // Set the uploads folder path
-                    string uploadsFolder = Path.Combine(_environment.WebRootPath, "img/shop");
-
-                    // Ensure the folder exists
-                    Directory.CreateDirectory(uploadsFolder);
-
-                    // Generate a unique file name to avoid collisions
-                    uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.ProfileImage.FileName);
-
-                    // Combine folder path and file name
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                    // Copy the uploaded file to the specified path
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await model.ProfileImage.CopyToAsync(fileStream);
-                    }
-                }
-
-                // Create a new ShopModel object
-                var shop = new ShopModel
-                {
-                    ShopName = model.ShopName,
-                    ShopPhone = model.ShopPhone,
-                    ShopEmail = model.ShopEmail,
-                    ShopAddress = model.ShopAddress,
-                    ShopDescription = model.ShopDescription,
-                    ProfileImagePath = uniqueFileName  // Assign the file name to the model property
-                };
-
-                // Add the shop to the database
-                _context.Add(shop);
-                await _context.SaveChangesAsync();
-
-                // Redirect to a success page or another action
-                return RedirectToAction("Owner_dashboard", "Shop");
-            }
-
-            // If model state is not valid, return to the view with errors
-            return View(model);
-        }
-
     }
 }
