@@ -201,60 +201,7 @@ namespace IdentityDemo.Controllers
                     
                     string toEmail = email;
                     string subject = "Reset password link";
-                    string text= @"<!DOCTYPE html>
-<html lang=""en"">
-<head>
-    <meta charset=""UTF-8"">
-    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
-    <title>Reset Password</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #333333;
-            text-align: center;
-        }
-        p {
-            color: #555555;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-        .button {
-            display: inline-block;
-            background-color: #007bff;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            margin-top: 20px;
-        }
-        .button:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-<body>
-    <div class=""container"">
-        <h1>Reset Your Password</h1>
-        <p>Dear User,</p>
-        <p>To reset your password, please click the button below:</p>
-        <a href=""https://localhost:7030/Account/UpdatePassword"" target=""_blank"">Reset Password link</a>
-        <p>If you didn't request this change, you can safely ignore this email.</p>
-        <p>Best regards,<br>uab Zone</p>
-    </div>
-</body>
-</html>";
+                    string text= @"<a href=""https://localhost:7030/Account/UpdatePassword"" target=""_blank"">Reset Password link</a>";
                     await _emailService.SendEmailAsync(toEmail, subject, text);
                     user.Forgot = 1;
                     await _userManager.UpdateAsync(user);

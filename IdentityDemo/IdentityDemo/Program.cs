@@ -6,6 +6,7 @@ using IdentityDemo.Services;
 using IdentityDemo.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using IdentityDemo.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.AddTransient<IRoleInitializer, RoleInitializer>(); // RoleInitializer
 builder.Services.AddScoped<IEmailService, EmailService>(); // Register EmailService
 builder.Services.AddScoped<LogActionFilter>(); // Register LogActionFilter
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
 // Add session services
 builder.Services.AddSession(options =>

@@ -38,6 +38,7 @@
         </form>
     </div>
     <!-- Modal -->
+    
     <div class="modal fade" id="forgotPasswordModal" tabindex="-1" role="dialog" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -47,7 +48,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="forgotPasswordForm" method="post" action="/Account/SendChangePasswordEmail">
+                <form id="forgotPasswordForm" method="post" asp-action="SendChangePasswordEmail" asp-controller="Account">
                     <div class="form-group">
                         <div class="modal-body">
                             <label for="email">Enter your Gmail address:</label>
@@ -86,23 +87,21 @@
             const emailSentMessage = document.getElementById('emailSentMessage');
 
             if (email) {
-                // You can perform an AJAX request to submit the email
-                console.log('Gmail:', email);
+                // Perform validation and submit logic here
+                console.log('Email:', email);
 
-                // Hide the email input form and show the success message
+                // Example: Show success message and hide modal
                 emailInput.parentElement.style.display = 'none';
                 emailSentMessage.style.display = 'block';
 
-                // Optionally, close the modal after a delay
                 setTimeout(() => {
                     $('#forgotPasswordModal').modal('hide');
-                    // Reset the form after closing
                     emailInput.parentElement.style.display = 'block';
                     emailSentMessage.style.display = 'none';
                     emailInput.value = '';
                 }, 3000); // Adjust the delay as needed
             } else {
-                alert('Please enter your Gmail address.');
+                alert('Please enter your email address.');
             }
         }
     </script>
