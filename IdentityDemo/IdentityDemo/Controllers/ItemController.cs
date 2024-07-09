@@ -45,7 +45,7 @@ namespace IdentityDemo.Controllers
             var updateItemViewModel = await _itemService.GetItemForUpdateAsync(itemid, user.Id);
             if (updateItemViewModel == null)
             {
-                return Forbid();
+                return RedirectToAction("Show_error_loading", "Home");
             }
             return View(updateItemViewModel);
         }

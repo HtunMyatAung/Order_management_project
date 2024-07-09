@@ -15,33 +15,13 @@ namespace IdentityDemo.Controllers
         {
             _logger = logger;
             _context = context;
-        }        
-        public ActionResult Show_error_loading()
-        {
-            return View();
         }
-        public IActionResult Test64()
-        {           
-            return View();
-        }
-        public IActionResult About()
-        {
-            return View();
-        }
-        public IActionResult Index()
-        {
-            return View();
-        }
-        public IActionResult Shop()
-        {
-            return View();
-        }
-        public IActionResult Privacy()
-        {
-            
-            return View();
-            
-        }
+        public ActionResult Show_error_loading() => View();
+        public IActionResult Test64() => View();
+        public IActionResult About() => View();
+        public IActionResult Index() => View();        
+        public IActionResult Shop()=>View();
+        public IActionResult Privacy=> View();
         
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

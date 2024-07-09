@@ -1,86 +1,340 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Submission Example</title>
+    <title>Hover Effect Example</title>
+    <link rel="stylesheet" href="~/css/download_css/4_5_3_bootstrap.min.css" />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0; /* Light gray background */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .form-container {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        .item-container {
+            position: relative;
+            width: 200px;
             text-align: center;
-            transition: background-color 0.3s ease;
+            margin: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            transition: transform 0.2s;
         }
 
-            .form-container.success {
-                background-color: #d4edda; /* Success background color */
+            .item-container:hover {
+                transform: scale(1.15);
             }
 
-                .form-container.success::after {
-                    content: '\2714'; /* Unicode checkmark character */
-                    font-size: 24px;
-                    color: #155724; /* Dark green color */
-                    display: block;
-                    margin-top: 10px;
-                }
-
-            .form-container form {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
+            .item-container img {
+                max-width: 100%;
+                max-height: 150px;
             }
 
-            .form-container input[type="text"], .form-container button {
-                margin-top: 10px;
-                padding: 8px 16px;
-                font-size: 16px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-            }
+        .item-details {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            box-sizing: border-box;
+            z-index: 10;
+            text-align: left;
+        }
 
-            .form-container button {
-                margin-top: 20px;
-                background-color: #007bff; /* Blue button color */
-                color: #ffffff;
-                border: none;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-            }
+        .item-container:hover .item-details {
+            display: block;
+        }
 
-                .form-container button:hover {
-                    background-color: #0056b3; /* Darker blue on hover */
-                }
+        .normal-details {
+            display: block;
+        }
+
+        .item-container:hover .normal-details {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div class="form-container">
-        <form id="submitForm" onsubmit="handleSubmit(event)">
-            <input type="text" id="inputField" placeholder="Enter something...">
-            <button type="submit">Submit</button>
-        </form>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="item-container">                    
+                    <div class="normal-details">
+                        <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
+                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
+                    </div>
+                    <div class="item-details">
+                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
+                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
+                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
+                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
+                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="item-container">
+                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
+                    <div class="normal-details">
+                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
+                    </div>
+                    <div class="item-details">
+                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
+                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
+                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
+                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
+                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="item-container">
+                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
+                    <div class="normal-details">
+                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
+                    </div>
+                    <div class="item-details">
+                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
+                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
+                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
+                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
+                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="item-container">
+                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
+                    <div class="normal-details">
+                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
+                    </div>
+                    <div class="item-details">
+                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
+                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
+                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
+                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
+                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="item-container">
+                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
+                    <div class="normal-details">
+                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
+                    </div>
+                    <div class="item-details">
+                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
+                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
+                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
+                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
+                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="item-container">
+                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
+                    <div class="normal-details">
+                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
+                    </div>
+                    <div class="item-details">
+                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
+                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
+                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
+                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
+                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="item-container">
+                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
+                    <div class="normal-details">
+                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
+                    </div>
+                    <div class="item-details">
+                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
+                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
+                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
+                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
+                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="item-container">
+                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
+                    <div class="normal-details">
+                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
+                    </div>
+                    <div class="item-details">
+                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
+                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
+                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
+                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
+                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="item-container">
+                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
+                    <div class="normal-details">
+                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
+                    </div>
+                    <div class="item-details">
+                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
+                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
+                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
+                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
+                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="item-container">
+                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
+                    <div class="normal-details">
+                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
+                    </div>
+                    <div class="item-details">
+                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
+                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
+                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
+                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
+                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="item-container">
+                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
+                    <div class="normal-details">
+                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
+                    </div>
+                    <div class="item-details">
+                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
+                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
+                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
+                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
+                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="item-container">
+                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
+                    <div class="normal-details">
+                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
+                    </div>
+                    <div class="item-details">
+                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
+                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
+                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
+                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
+                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="item-container">
+                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
+                    <div class="normal-details">
+                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
+                    </div>
+                    <div class="item-details">
+                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
+                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
+                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
+                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
+                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="item-container">
+                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
+                    <div class="normal-details">
+                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
+                    </div>
+                    <div class="item-details">
+                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
+                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
+                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
+                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
+                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="item-container">
+                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
+                    <div class="normal-details">
+                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
+                    </div>
+                    <div class="item-details">
+                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
+                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
+                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
+                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
+                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="item-container">
+                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
+                    <div class="normal-details">
+                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
+                    </div>
+                    <div class="item-details">
+                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
+                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
+                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
+                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
+                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
+                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Repeat similar structure for other items -->
+        </div>
     </div>
 
-    <script>
-        function handleSubmit(event) {
-            event.preventDefault(); // Prevent form submission
-
-            // Simulate form submission (replace with actual AJAX call if needed)
-            // For demo purposes, just changing the class to "success"
-            const formContainer = document.querySelector('.form-container');
-            formContainer.classList.add('success');
-        }
-    </script>
+    <script src="~/js/download_js/3_5_1_jquery.min.js"></script>
 </body>
 </html>

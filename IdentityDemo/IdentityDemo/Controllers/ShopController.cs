@@ -39,6 +39,11 @@ namespace IdentityDemo.Controllers
         public async Task<IActionResult> Shop_view(int shopid)
         {
             var shop = await _shopService.GetShopByIdAsync(shopid);
+            var user=await _userManager.GetUserAsync(User);
+            if (shopid != user.ShopId)
+            {
+                return RedirectToAction("Show_error_loading", "Home");
+            }
             var items = await _itemService.GetItemNShopByShopIdAsync(shopid);
             
             return View(items);

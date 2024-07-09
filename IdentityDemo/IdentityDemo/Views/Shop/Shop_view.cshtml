@@ -24,7 +24,7 @@
 
         .card-custom {
             position: relative;
-            height: 330px; /* Fixed height for the card */
+            height: 300px; /* Fixed height for the card */
             border-radius: 15px;
             margin-bottom: 30px;
             overflow: hidden;
@@ -34,7 +34,7 @@
             align-content:center;
         }
             .card-custom img {
-                width: 100%; /* Fill the entire width of the card */
+                width: 90%; /* Fill the entire width of the card */
                 height: 250; /* Fill the entire height of the card */
                 object-fit: cover; /* Cover the entire space, maintaining aspect ratio */
                 transition: filter 0.3s ease; /* Smooth transition */
@@ -99,29 +99,34 @@
                     <div class="row formargin">
                         @foreach (var item in Model.Items)
                         {
-                            <div class="col-lg-2 col-md-4 col-sm-6 d-flex justify-content-center">
-                                <div class="card card-custom" data-id="@item.ItemId">
-                                    <div class="img-box">
-                                    <img src="~/img/items/@item.ItemImageName" class="card-img-top" alt="Product 1">
+                            <div class="normal-details">
+                                <div class="col-lg-2 col-md-4 col-sm-6 d-flex justify-content-center">
+                                    <div class="card card-custom" data-id="@item.ItemId">
+                                        <div class="img-box">
+                                            <img src="~/img/items/@item.ItemImageName" class="card-img-top" alt="Product 1">
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title" style="text-align:left;">@item.ItemName</h5>
+                                            <div class="d-flex justify-content-between">
+                                                <h5 class="card-title">Price:</h5>
+                                                <p class="card-text">MMK @item.ItemChangedPrice</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="card-body">
-                                        
-                                        <h5 class="card-title"style="text-align:left;">@item.ItemName</h5>
-                                        <div class="d-flex justify-content-between">
-                                            <h5 class="card-title">Price:</h5>
-                                            <p class="card-text">MMK @item.ItemChangedPrice</p>
+                                </div>
+                            </div>
+                            <div class="item-details">
+                                <div class="col-lg-2 col-md-4 col-sm-6 d-flex justify-content-center">
+                                    <div class="card card-custom" data-id="@item.ItemId">
+                                        <div class="img-box">
+                                            <img src="~/img/items/@item.ItemImageName" class="card-img-top" alt="Product 1">
                                         </div>
-                                        <div class="d-flex justify-content-between ">
-                                            <p class="card-title "> Amount:</p>
-                                            <p class="card-text"><span class="px-2 count" id="supercount">@item.ItemQuantity</span></p>
-                                        </div>
-                                        <div class="d-flex justify-content-between ">
-                                            <p class="card-title "> Discount price:</p>
-                                            <p class="card-text"><span class="px-2 count" id="supercount">@item.Discount_price</span></p>
-                                        </div>
-                                        <div class="d-flex justify-content-between ">
-                                            <p class="card-title "> Discount rate:</p>
-                                            <p class="card-text"><span class="px-2 count" id="supercount">@item.Discount_rate</span></p>
+                                        <div class="card-body">
+                                            <h5 class="card-title" style="text-align:left;">@item.ItemName</h5>
+                                            <div class="d-flex justify-content-between">
+                                                <h5 class="card-title">Price:</h5>
+                                                <p class="card-text">MMK @item.ItemChangedPrice</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

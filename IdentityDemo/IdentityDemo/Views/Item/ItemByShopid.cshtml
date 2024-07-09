@@ -156,8 +156,7 @@
         width: 310px;
         max-width: 310px;
         height: 50px;
-        max-height: 50px;
-        
+        max-height: 50px;       
        
     }
 </style>
@@ -175,7 +174,7 @@ else
                 <div class="row justify-content-left formargin">
                     @foreach (var item in Model.Items)
                     {
-                        <div class="col-lg-4 col-md-6 d-flex justify-content-center">
+                        <div class="col-lg-4 col-md-8 d-flex justify-content-center">
                             <div class="card card-custom" data-id="@item.ItemId">
                                 <div class="img-box">
                                 <img src="~/img/items/@item.ItemImageName" class="card-img-top" alt="Product 1">
