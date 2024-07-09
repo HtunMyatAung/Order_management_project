@@ -149,14 +149,16 @@
         height: 10%;
         position: sticky;
         bottom: 0;
+        align-self: center;
     }
 
     .buttonsize {
-        width: 335px;
-        max-width: 335px;
+        width: 310px;
+        max-width: 310px;
         height: 50px;
         max-height: 50px;
-        margin-right: 13px;
+        
+       
     }
 </style>
 
@@ -278,16 +280,15 @@ else
                 var buttonContainer = $('<div></div>').addClass('d-flex align-items-center marginname2');
 
                 // Decrement button in cart
-                var decrementButtonCart = $('<button>-</button>').addClass('btn btn-primary btn-sm custom-btn mx-1 decrement-btn');
-
+                var decrementButtonCart = $('<button>-</button>').addClass('btn btn-circle btn-secondary btn-sm custom-btn mx-1 decrement-btn ');
                 // Quantity display in cart
                 var quantityDisplayCart = $('<span></span>').addClass('px-2 count').text(itemQuantity);
 
                 // Increment button in cart
-                var incrementButtonCart = $('<button>+</button>').addClass('btn btn-primary btn-sm custom-btn mx-1 increment-btn');
+                var incrementButtonCart = $('<button  style="width:25px;height:27px;align:center;">+</button>').addClass('btn btn-secondary btn-sm custom-btn mx-1 increment-btn');
 
                 // Delete button in cart
-                var deleteButtonCart = $('<button><i class="fas fa-trash-alt"></i></button>').addClass('btn btn-danger ml-1 delete-item-btn');
+                var deleteButtonCart = $('<i class="fas fa-trash-alt btn" style="color:red;"></i>').addClass(' ml-1 delete-item-btn');
 
                 // Append buttons to button container
                 buttonContainer.append(decrementButtonCart, quantityDisplayCart, incrementButtonCart, deleteButtonCart);

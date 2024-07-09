@@ -23,12 +23,38 @@
         <!-- Invoice Header -->
         <div class="invoice-header" style="margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px;">
             <div style="display: inline-block; width: 48%; vertical-align: top;">
-                <h1 style="margin: 0;">@Model.Shop.ShopName</h1>
-                <p style="margin: 0;">Address: @Model.Shop.ShopAddress<br>Contact Details: @Model.Shop.ShopEmail</p>
+                <table style="width: 60%;">
+                    <tr>
+                        <td colspan="2" style="text-align:left;"><h1>@Model.Shop.ShopName</h1></td>
+                    </tr>
+                    <tr>
+                        <th>Address:</th>
+                        <td>@Model.Shop.ShopAddress</td>
+                    </tr>
+                    <tr>
+                        <th>Contact Details:</th>
+                        <td>@Model.Shop.ShopEmail</td>
+                    </tr>
+                    
+                </table>
             </div>
             <div style="display: inline-block; width: 48%; vertical-align: top; text-align: right;">
-                <h3 style="margin: 0;">Invoice</h3>
-                <p style="margin: 0;">Invoice Number: @Model.OrderId<br>Invoice Date: @Model.OrderDate<br></p>
+                
+                <table style="width: 40%; float: right;">
+                    <tr>
+                        <td colspan="2" style="text-align: right;"><h1>Invoice</h1></td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left;width:54%;">Invoice Id: </th>
+                        <td style="text-align: right;">@Model.OrderDate.ToString("ddyyyyMM")@Model.OrderId</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left;">Invoice Date:</th>
+                        <td style="text-align: right;">@Model.OrderDate.ToString("yyyy-MM-dd")</td>
+                    </tr>
+                    
+                </table>
+                
             </div>
         </div>
 
@@ -43,20 +69,20 @@
             <table style="width: 100%; border-collapse: collapse;">
                 <thead>
                     <tr style="background-color: #f2f2f2;">
-                        <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Item Description</th>
-                        <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Quantity</th>
-                        <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Unit Price</th>
-                        <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Total</th>
+                        <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Item Description</th>
+                        <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Quantity</th>
+                        <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Unit Price</th>
+                        <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model.Items)
                     {
                         <tr>
-                            <td style="border: 1px solid #ddd; padding: 8px;">@item.ItemName</td>
-                            <td style="border: 1px solid #ddd; padding: 8px;">@item.ItemQuantity</td>
-                            <td style="border: 1px solid #ddd; padding: 8px;">@item.ItemChangedPrice</td>
-                            <td style="border: 1px solid #ddd; padding: 8px;">@(item.ItemQuantity * item.ItemChangedPrice)</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;text-align:center">@item.ItemName</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;text-align:center">@item.ItemQuantity</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;text-align:center">@item.ItemChangedPrice</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;text-align:center">@(item.ItemQuantity * item.ItemChangedPrice)</td>
                         </tr>
                         total += (item.ItemQuantity * item.ItemChangedPrice);
                     }

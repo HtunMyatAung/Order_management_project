@@ -44,15 +44,11 @@
             <div style="display: inline-block; width: 48%; vertical-align: top;">
                 <table style="width: 50%;">
                     <tr>
-                        <th><h3>Invoice</h3></th>
-
+                        <th>InvoiceId:</th>
+                        <td>@Model.OrderDate.ToString("ddyyyMM")@Model.OrderId</td>
                     </tr>
                     <tr>
-                        <th>Invoice Number:</th>
-                        <td>@Model.OrderId</td>
-                    </tr>
-                    <tr>
-                        <th>Invoice Date: </th>
+                        <th>Date: </th>
                         <td>@Model.OrderDate</td>
                     </tr>
                     
@@ -60,22 +56,19 @@
                 
             </div>
             <div style="display: inline-block; width: 48%; vertical-align: top; text-align: right;">
-                <table style="width: 40%; float: right;">
-                    <tr>
-                        <th style="text-align: left;"><h3>Details</h3></th>
-                        
-                    </tr>
+                <table style="width: 30%; float: right;">
+                    
                     <tr>
                         <th style="text-align: left;width:54%;">Shop: </th>
-                        <td style="text-align: left;">@Model.Shop.ShopName</td>
+                        <td style="text-align: right;">@Model.Shop.ShopName</td>
                     </tr>
                     <tr>
-                        <th style="text-align: left;">Client Name:</th>
-                        <td style="text-align: left;">@Model.User.UserName</td>
+                        <th style="text-align: left;">Client:</th>
+                        <td style="text-align: right;">@Model.User.UserName</td>
                     </tr>
                     <tr>
-                        <th style="text-align: left;">Client Address:</th>
-                        <td style="text-align: left;"> @Model.User.Address</td>
+                        <th style="text-align: left;">Phone:</th>
+                        <td style="text-align: right;"> @Model.User.PhoneNumber</td>
                     </tr>
                 </table>
                 
@@ -130,21 +123,25 @@
                         <div style="padding-top: 8px;">
                             <div class="d-flex justify-content-end">
                                 <div class="payment-dropdown">
-                                    <select id="payment-select" style="width:264px; height: 45px; margin-right:8px;">
+                                    <select id="payment-select" style="width:264px; height: 45px; margin-right:8px;margin-bottom:10px;">
                                         <option value="kbz">KBZ pay</option>
                                         <option value="uab">uab pay</option>
                                         <option value="cashondelivery">Cash on Delivery</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-end" style="margin-right: 8px; margin-top: 25px;">
+                            <form action="/Order/Invoice" method="post">
+                                <input type="text" placeholder="Enter your current address" style="width:264px; height: 45px; margin-right:8px; margin-bottom:10px;" required />
+
+                                <div class="d-flex justify-content-end" style="margin-right: 8px; margin-top: 25px;">
                                 <a href="@Url.Action("HomePageItems","Item")" class="btn btn-secondary mr-1 d-flex align-items-center justify-content-center" style="width:130px;height:45px;">
                                     Cancel
                                 </a>
-                                <a href="@Url.Action("Invoice","Order")" class="btn btn-primary d-flex align-items-center justify-content-center" style="width:130px;height:45px;">
+                                <button class="btn btn-primary d-flex align-items-center justify-content-center" style="width:130px;height:45px;" type="submit">
                                     Confirm
-                                </a>
+                                </button>
                             </div>
+                            </form>
                         </div>
                     </div>
                     <hr />

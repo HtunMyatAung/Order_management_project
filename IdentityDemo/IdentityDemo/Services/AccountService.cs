@@ -460,7 +460,7 @@ namespace IdentityDemo.Services
                 <h1>Reset Your Password</h1>
                 <p>Dear User,</p>
                 <p>To reset your password, please click the button below:</p>
-                <a href=""https://localhost:7030/Account/UpdatePassword"" target=""_blank"">Reset Password link</a>
+                <a href=""http://10.235.151.97:5000/Account/UpdatePassword"" target=""_blank"">Reset Password link</a>
                 <p>If you didn't request this change, you can safely ignore this email.</p>
                 <p>Best regards,<br>uab Zone</p>
             </div>

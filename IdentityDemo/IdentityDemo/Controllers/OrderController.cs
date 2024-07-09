@@ -60,6 +60,10 @@ namespace IdentityDemo.Controllers
 
         public async Task<IActionResult> Invoice()
         {
+            if (TempData["SelectedItems"] == null)
+            {
+                return RedirectToAction("Show_error_loading", "Home");
+            }
             var selectedItemsJson = TempData["SelectedItems"].ToString();
             var selectedItems = JsonConvert.DeserializeObject<Dictionary<int, int>>(selectedItemsJson); // Retrieve invoice dictionary data
 

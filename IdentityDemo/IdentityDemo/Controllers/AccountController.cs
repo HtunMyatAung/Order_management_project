@@ -43,15 +43,7 @@ namespace IdentityDemo.Controllers
             _emailService = emailService;
             _accountService = accountService;
         }
-        public IActionResult SendOTP() { return View(); }
-        //public readonly IAccountService _accountService;
-
-        /*public Accountcontroller(IAccountService accountService)
-        {
-            _accountService = accountService;
-        }*/
-
-        public IActionResult SendOTP(){return View();}
+        public IActionResult SendOTP() => View();
         [HttpGet]
         public IActionResult User_change_password()
         {

@@ -97,7 +97,7 @@
 
 
 <div class="d-flex justify-content-between">
-    <h1 style="color: black">Product</h1>
+    <h1 style="color: black">Items</h1>
     @foreach (var item in Model)
     {
         ViewBag.id = item.Shop_Id;
@@ -185,12 +185,16 @@
                 </button>
             </div>
             <div class="modal-body">
-                <img id="modalImage" src="" alt="Item Image" style="max-width: 100%; max-height: 200px;" />
+                <div style="text-align:center">
+                    <img id="modalImage" src="" alt="Item Image" style="max-width: 100%; max-height: 200px;" />
+                </div>
+                
                 <p><strong>Item Name:</strong> <span id="modalItemName"></span></p>
                 <p><strong>Price:</strong> <span id="modalItemPrice"></span></p>
                 <p><strong>Quantity:</strong> <span id="modalItemQuantity"></span></p>
                 <p><strong>Final Price:</strong> <span id="modalFinalPrice"></span></p>
                 <p><strong>Updated Date:</strong> <span id="modalUpdatedDate"></span></p>
+                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>

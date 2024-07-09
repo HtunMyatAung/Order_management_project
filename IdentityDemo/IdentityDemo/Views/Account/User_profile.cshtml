@@ -38,7 +38,7 @@
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
-                                <li class="breadcrumb-item active">User Profile</li>
+                                <li class="breadcrumb-item active"><a href="@Url.Action("User_profile","Account")">User Profile</a></li>
                             </ol>
                         </div>
                     </div>
@@ -48,17 +48,17 @@
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-3" style="height: 70vh;">
+                    <div class="row d-flex h-130">
+                        <div class="col-md-3 h-130 d-flex flex-column flex-grow-1">
                             <!-- Profile Image -->
                             <div class="card card-primary card-outline">
                                 <div class="card-body box-profile">
-                                        <div class="text-center">
-                                        <img class="profile-user-img img-fluid img-circle" style="width: 100px;height:100px;"
+                                        <div class="text-center mb-3">
+                                        <img class="profile-user-img img-fluid img-circle" style="width: 110px;height:110px;"
                                              src="../../img/users/@currentUser.UserImageName"
                                              alt="User profile picture">
                                     </div>
-                                    <h3 class="profile-username text-center">@Model.UserName</h3>
+                                    <h3 class="profile-username text-center mb-3">@Model.UserName</h3>
 
                                     <!--<p class="text-muted text-center">Software Engineer</p>-->
 
@@ -72,9 +72,16 @@
                                         <li class="list-group-item">
                                             <b>Address</b> <a class="float-right">@Model.Address</a>
                                         </li>
-                                        <li class="list-group-item">
-                                            <b>Orders</b><a class="float-right">@Model.OrderCount</a>
-                                        </li>
+                                        @if (Model.OrderCount==null){
+                                            <li class="list-group-item">
+                                                <b>Orders</b><a class="float-right">0</a>
+                                            </li>
+                                        }else{
+                                            <li class="list-group-item">
+                                                <b>Orders</b><a class="float-right">@Model.OrderCount</a>
+                                            </li>
+                                        }
+                                        
                                     </ul>
                                     <form asp-controller="Account" asp-action="Logout" method="post">
                                         <button style="text-align:center; background-color:lightgrey; border-radius: 6px; height: 33px;" type="submit" class="dropdown-item">Logout</button>
@@ -90,8 +97,8 @@
                             <!-- /.card -->
                         </div>
                         <!-- /.col -->
-                        <div class="col-md-9" style="height: 70vh;">
-                            <div class="card">
+                        <div class="col-md-9 col-md-9 h-130 d-flex flex-column">
+                            <div class="card flex-grow-1">
                                 <div class="card-header p-2">
                                     <ul class="nav nav-pills">
                                         <li class="nav-item"><a class="nav-link" href="#history" data-toggle="tab">Order History</a></li>
@@ -108,7 +115,9 @@
                                                 <div class="row">
                                                     <div class="col-12">
                                                         <div style="max-height: 600px; overflow-y: auto; text-align:center">    
+
                                                            @{ if (Model.Orders ==null ||!Model.Orders.Any()){
+                                                               <img src="~/img/no_item.png" style="width:300px;height:300px" /><br />
                                                                 <label>Oops! you haven't ordered anything yet!</label>
                                                             }
                                                             else{

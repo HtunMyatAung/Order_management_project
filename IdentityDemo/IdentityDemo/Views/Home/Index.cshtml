@@ -16,7 +16,14 @@
                 <div class="carousel-caption carousel-caption1">
                     <h5>uab Zone</h5>
                     <p>Discover a treasure trove of handmade wonders, where colors dance and textures weave tales of timeless beauty.</p>
-                    <a href="@Url.Action("HomePageItems","Item")" class="btn carousel-button rounded-pill">Shop Now</a>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a href="@Url.Action("HomePageItems","Item")" class="btn btn-primary carousel-button rounded-pill">Shop Now</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Login","Account")" class="btn btn-primary carousel-button rounded-pill">Shop Now</a>
+                    }
                 </div>
             </div>
             <div class="carousel-item" data-bs-interval="2000">
@@ -24,7 +31,14 @@
                 <div class="carousel-caption carousel-caption2">
                     <h5>uab Zone</h5>
                     <p>Embark on a journey through our curated collection, where every item whispers tales of adventure and dreams.</p>
-                    <a href="@Url.Action("HomePageItems","Item")" class="btn btn-primary carousel-button rounded-pill">Shop Now</a>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a href="@Url.Action("HomePageItems","Item")" class="btn btn-primary carousel-button rounded-pill">Shop Now</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Login","Account")" class="btn btn-primary carousel-button rounded-pill">Shop Now</a>
+                    }
                 </div>
             </div>
             <div class="carousel-item">
@@ -32,7 +46,13 @@
                 <div class="carousel-caption carousel-caption3">
                     <h5>uab Zone</h5>
                     <p>Embark on a journey through our curated collection, where every item whispers tales of adventure and dreams.</p>
-                    <a href="@Url.Action("HomePageItems","Item")" class="btn btn-primary carousel-button rounded-pill">Shop Now</a>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a href="@Url.Action("HomePageItems","Item")" class="btn btn-primary carousel-button rounded-pill">Shop Now</a>
+                    }else{
+                        <a href="@Url.Action("Login","Account")" class="btn btn-primary carousel-button rounded-pill">Shop Now</a>
+                    }
+                   
                 </div>
             </div>
         </div>
