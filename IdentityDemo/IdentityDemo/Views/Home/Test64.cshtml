@@ -9,332 +9,248 @@
     <title>Hover Effect Example</title>
     <link rel="stylesheet" href="~/css/download_css/4_5_3_bootstrap.min.css" />
     <style>
-        .item-container {
-            position: relative;
-            width: 200px;
-            text-align: center;
-            margin: 20px;
-            border: 1px solid #ddd;
-            padding: 10px;
-            transition: transform 0.2s;
+        .img-box {
+            height: 320px;
+            align-content: center;
         }
+        .card-body {
+            padding: 1.35rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            height: 80px; /* Ensures card body fills available space */
 
-            .item-container:hover {
-                transform: scale(1.15);
-            }
-
-            .item-container img {
-                max-width: 100%;
-                max-height: 150px;
-            }
-
-        .item-details {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
+        }
+        .card img {
             width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px;
-            box-sizing: border-box;
-            z-index: 10;
-            text-align: left;
+            height: 100%; /* Ensures image fits container height */
+            object-fit: fill;
         }
 
-        .item-container:hover .item-details {
-            display: block;
+        .card-title {
+            font-size: 16px;
+            margin-bottom: 5px; /* Adjust margin between title and text */
+            height: 10; /* Ensures text height fits dynamically */
         }
-
-        .normal-details {
-            display: block;
+        .card-text {
+            font-size: 14px;
+            margin-bottom: 5px; /* Adjust margin between text and buttons */
+            height: 10; /* Ensures text height fits dynamically */
         }
-
-        .item-container:hover .normal-details {
-            display: none;
+        .shop-name {
+            margin-bottom: 8px; /* Add margin below shop name */
+        }
+        .card {
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 1;
+            width: 220px;
+            height: 400px;
+        }
+            .card:hover {
+                transform: scale(1.3); /* Scale the card to 110% on hover */
+                z-index: 100; /* Ensure the hovered card appears on top */
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Optional: Add a shadow for emphasis */
+            }
+        .container-fluid {
+            display: flex;
+            flex-wrap: wrap;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="item-container">                    
-                    <div class="normal-details">
-                        <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
-                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
+    <div class="container-fluid mt-4">
+        <div class="row justify-content-start">
+            <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="img-box">
+                        <img src="https://fakeimg.pl/250x400?text=250x400" class="card-img-top">
                     </div>
-                    <div class="item-details">
-                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
-                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
-                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
-                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
-                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="item-container">
-                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
-                    <div class="normal-details">
-                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
-                    </div>
-                    <div class="item-details">
-                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
-                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
-                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
-                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
-                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Name:</h5>
+                            <p class="card-text">name</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Price:</h5>
+                            <p class="card-text">1mmk</p>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="item-container">
-                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
-                    <div class="normal-details">
-                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
+            <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="img-box">
+                        <img src="https://fakeimg.pl/250x400?text=250x400" class="card-img-top">
                     </div>
-                    <div class="item-details">
-                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
-                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
-                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
-                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
-                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="item-container">
-                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
-                    <div class="normal-details">
-                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
-                    </div>
-                    <div class="item-details">
-                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
-                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
-                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
-                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
-                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Name:</h5>
+                            <p class="card-text">name</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Price:</h5>
+                            <p class="card-text">1mmk</p>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="item-container">
-                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
-                    <div class="normal-details">
-                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
+            <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="img-box">
+                        <img src="https://fakeimg.pl/250x400?text=250x400" class="card-img-top">
                     </div>
-                    <div class="item-details">
-                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
-                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
-                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
-                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
-                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="item-container">
-                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
-                    <div class="normal-details">
-                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
-                    </div>
-                    <div class="item-details">
-                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
-                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
-                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
-                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
-                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="item-container">
-                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
-                    <div class="normal-details">
-                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
-                    </div>
-                    <div class="item-details">
-                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
-                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
-                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
-                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
-                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="item-container">
-                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
-                    <div class="normal-details">
-                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
-                    </div>
-                    <div class="item-details">
-                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
-                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
-                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
-                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
-                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="item-container">
-                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
-                    <div class="normal-details">
-                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
-                    </div>
-                    <div class="item-details">
-                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
-                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
-                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
-                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
-                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="item-container">
-                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
-                    <div class="normal-details">
-                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
-                    </div>
-                    <div class="item-details">
-                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
-                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
-                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
-                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
-                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="item-container">
-                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
-                    <div class="normal-details">
-                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
-                    </div>
-                    <div class="item-details">
-                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
-                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
-                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
-                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
-                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="item-container">
-                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
-                    <div class="normal-details">
-                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
-                    </div>
-                    <div class="item-details">
-                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
-                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
-                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
-                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
-                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="item-container">
-                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
-                    <div class="normal-details">
-                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
-                    </div>
-                    <div class="item-details">
-                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
-                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
-                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
-                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
-                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="item-container">
-                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
-                    <div class="normal-details">
-                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
-                    </div>
-                    <div class="item-details">
-                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
-                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
-                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
-                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
-                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="item-container">
-                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
-                    <div class="normal-details">
-                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
-                    </div>
-                    <div class="item-details">
-                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
-                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
-                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
-                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
-                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="item-container">
-                    <img id="itemImage" src="path/to/image.jpg" alt="Item Image">
-                    <div class="normal-details">
-                        <p><strong>Item Name:</strong> <span id="itemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="itemPrice">$100</span></p>
-                    </div>
-                    <div class="item-details">
-                        <img id="hoverImage" src="path/to/image.jpg" alt="Item Image">
-                        <p><strong>Item Name:</strong> <span id="hoverItemName">Sample Item</span></p>
-                        <p><strong>Price:</strong> <span id="hoverItemPrice">$100</span></p>
-                        <p><strong>Quantity:</strong> <span id="hoverItemQuantity">10</span></p>
-                        <p><strong>Discount Price:</strong> <span id="hoverItemDiscountPrice">$80</span></p>
-                        <p><strong>Rate:</strong> <span id="hoverItemRate">4.5</span></p>
-                    </div>
-                </div>
-            </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Name:</h5>
+                            <p class="card-text">name</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Price:</h5>
+                            <p class="card-text">1mmk</p>
+                        </div>
 
-            <!-- Repeat similar structure for other items -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="img-box">
+                        <img src="https://fakeimg.pl/250x400?text=250x400" class="card-img-top">
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Name:</h5>
+                            <p class="card-text">name</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Price:</h5>
+                            <p class="card-text">1mmk</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="img-box">
+                        <img src="https://fakeimg.pl/250x400?text=250x400" class="card-img-top">
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Name:</h5>
+                            <p class="card-text">name</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Price:</h5>
+                            <p class="card-text">1mmk</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="img-box">
+                        <img src="https://fakeimg.pl/250x400?text=250x400" class="card-img-top">
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Name:</h5>
+                            <p class="card-text">name</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Price:</h5>
+                            <p class="card-text">1mmk</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="img-box">
+                        <img src="https://fakeimg.pl/250x400?text=250x400" class="card-img-top">
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Name:</h5>
+                            <p class="card-text">name</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Price:</h5>
+                            <p class="card-text">1mmk</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="img-box">
+                        <img src="https://fakeimg.pl/250x400?text=250x400" class="card-img-top">
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Name:</h5>
+                            <p class="card-text">name</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Price:</h5>
+                            <p class="card-text">1mmk</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
+
     <script src="~/js/download_js/3_5_1_jquery.min.js"></script>
+    <script>
+        // Select all elements with class "card"
+        const cards = document.querySelectorAll('.card');
+
+        // Loop through each card and add event listeners
+        cards.forEach(card => {
+            // Event listener for when mouse enters (hover)
+            card.addEventListener('mouseenter', function () {
+                // Create the content to be added
+                const detailsContent = `
+                        <div class="get-details">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="card-title get-button">Quantity:</h5>
+                                <p class="card-text get-button">10</p>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <h5 class="card-title get-button">Discount:</h5>
+                                <p class="card-text get-button">20mmk</p>
+                            </div>
+                        </div>
+                    `;
+
+                // Append the content to the card-body
+                card.querySelector('.card-body').insertAdjacentHTML('beforeend', detailsContent);
+                card.querySelector('.img-box').style.height = '280px';
+                card.querySelector('.card-body').style.height = '120px';
+            });
+
+            // Event listener for when mouse leaves (hover out)
+            card.addEventListener('mouseleave', function () {
+                // Remove the added content when mouse leaves
+                const getDetails = card.querySelector('.get-details');
+                if (getDetails) {
+                    getDetails.remove();
+                    card.querySelector('.img-box').style.height = '320px';
+                    card.querySelector('.card-body').style.height = '80px';
+                }
+
+            });
+        });
+    </script>
+
 </body>
 </html>
