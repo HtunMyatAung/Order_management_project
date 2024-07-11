@@ -5,6 +5,7 @@ namespace IdentityDemo.Services
 {
     public interface IItemService
     {
+        Task<SingleItemViewModel> getSingleItemViewModelAsync(int shopId);
         Task<int> AllItemCount();//from owner,admin calls
         Task<List<ItemModel>> GetAllItemsByShopIdAsync(int shopId);//from user view ,owner view show calls
         Task<ItemsViewModel> GetHomePageItemsAsync();// home page call

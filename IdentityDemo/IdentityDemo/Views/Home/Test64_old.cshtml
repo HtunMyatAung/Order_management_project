@@ -1,0 +1,18 @@
+﻿@model IdentityDemo.Models.CategoryModel
+<form method="post" asp-action="Admin_add_category" asp-controller="AdminControl">
+    <div class="d-flex justify-content-between">
+        <h3>Category List</h3>
+        <div class="d-flex flex-row-reverse">
+            <input asp-for="Id" type="hidden" value="2"/>
+            <input asp-for="Item_count" value="0" />
+            <div class="p-2">
+                <input asp-for="Name" type="text" required />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="p-2">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-plus fa-sm"></i> Add</button>
+            </div>
+        </div>
+    </div>
+
+</form>

@@ -1,18 +1,131 @@
-﻿@model IdentityDemo.Models.CategoryModel
-<form method="post" asp-action="Admin_add_category" asp-controller="AdminControl">
-    <div class="d-flex justify-content-between">
-        <h3>Category List</h3>
-        <div class="d-flex flex-row-reverse">
-            <input asp-for="Id" type="hidden" value="2"/>
-            <input asp-for="Item_count" value="0" />
-            <div class="p-2">
-                <input asp-for="Name" type="text" required />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="p-2">
-                <button type="submit" class="btn btn-primary"><i class="fas fa-plus fa-sm"></i> Add</button>
-            </div>
-        </div>
-    </div>
+﻿@model IdentityDemo.ViewModels.SingleItemViewModel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autocomplete Search Box (Starts with)</title>
+    <style>
+        /* Basic styling for the search box and results dropdown */
+        .autocomplete {
+            position: relative;
+            width: 500px;
+            margin: 20px auto;
+        }
 
-</form>
+            .autocomplete input[type="text"] {
+                width: 100%;
+                padding: 10px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .autocomplete .autocomplete-items {
+                display: none;
+                position: absolute;
+                background-color: white;
+                border: 1px solid #ccc;
+                max-height: 300px;
+                overflow-y: auto;
+                z-index: 99;
+                width: calc(100% - 2px); /* Adjust for border width */
+                box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+                border-bottom-left-radius: 4px;
+                border-bottom-right-radius: 4px;
+            }
+
+                .autocomplete .autocomplete-items.active {
+                    display: block;
+                }
+
+            .autocomplete .autocomplete-item {
+                padding: 10px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+                .autocomplete .autocomplete-item:hover {
+                    background-color: #f1f1f1;
+                }
+    </style>
+</head>
+<body>
+    <div class="autocomplete">
+        <input type="text" id="searchBox" placeholder="Search for products...">
+        <div class="autocomplete-items" id="autocomplete-items"></div>
+    </div>
+    <script>
+        // Sample data for autocomplete suggestions (in real scenario, this data would be fetched from backend)
+        var products = @Html.Raw(Json.Serialize(Model.Categories));
+        // Function to filter the suggestions based on user input
+        function autocomplete(input, products) {
+            const searchTerm = input.value.trim().toLowerCase();
+            // If searchTerm is empty or only contains whitespace, return all products
+            if (searchTerm === '') {
+                return products;
+            }
+
+            const suggestions = products.filter(product =>
+                product.toLowerCase().startsWith(searchTerm)
+            );
+            return suggestions;
+        }
+        // Function to update the autocomplete dropdown with filtered suggestions
+        function updateAutocompleteDropdown(input) {
+            const autocompleteDropdown = document.getElementById('autocomplete-items');
+            autocompleteDropdown.innerHTML = '';
+            const suggestions = autocomplete(input, products);
+            suggestions.forEach(suggestion => {
+                const autocompleteItem = document.createElement('div');
+                autocompleteItem.classList.add('autocomplete-item');
+                autocompleteItem.textContent = suggestion;
+                autocompleteItem.addEventListener('click', function () {
+                    input.value = suggestion;
+                    autocompleteDropdown.classList.remove('active');
+                });
+                autocompleteDropdown.appendChild(autocompleteItem);
+            });
+            if (input.value.trim() !== '' && suggestions.length > 0) {
+                autocompleteDropdown.classList.add('active');
+            } else {
+                autocompleteDropdown.classList.remove('active'); // Hide dropdown if no suggestions
+            }
+        }
+        // Event listeners for input changes
+        const searchBox = document.getElementById('searchBox');
+        searchBox.addEventListener('input', function () {
+            updateAutocompleteDropdown(this);
+        });
+
+        // Event listener for focusing on the input field
+        searchBox.addEventListener('focus', function () {
+            if (this.value.trim() !== '') {
+                updateAutocompleteDropdown(this);
+            } else {
+                // Show all items when input is empty and focused
+                const autocompleteDropdown = document.getElementById('autocomplete-items');
+                autocompleteDropdown.innerHTML = '';
+                products.forEach(product => {
+                    const autocompleteItem = document.createElement('div');
+                    autocompleteItem.classList.add('autocomplete-item');
+                    autocompleteItem.textContent = product;
+                    autocompleteItem.addEventListener('click', function () {
+                        searchBox.value = product;
+                        autocompleteDropdown.classList.remove('active');
+                    });
+                    autocompleteDropdown.appendChild(autocompleteItem);
+                });
+                autocompleteDropdown.classList.add('active');
+            }
+        });
+        // Close the dropdown if the user clicks outside of it
+        document.addEventListener('click', function (event) {
+            if (!event.target.closest('.autocomplete')) {
+                document.getElementById('autocomplete-items').classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

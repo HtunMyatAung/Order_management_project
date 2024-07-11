@@ -16,5 +16,7 @@ namespace IdentityDemo.ViewModels
         public int Discount_rate { get; set; }
         public decimal Discount_price { get; set; }
         public IFormFile? ItemImage { get; set; } // Property for image upload
+        public string Category { get; set; }
+        public List<string>? Categories { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using IdentityDemo.Models;
+﻿using IdentityDemo.Data;
+using IdentityDemo.Models;
 using IdentityDemo.Repositories;
 using IdentityDemo.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -11,11 +12,24 @@ namespace IdentityDemo.Services
         private readonly IItemRepository _itemRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebHostEnvironment _environment;
-
-        public ItemService(IItemRepository itemRepository, UserManager<ApplicationUser> userManager)
+        private readonly ICategoryRepository _categroyRepository;
+        private readonly AppDbContext _context;
+        public ItemService(IItemRepository itemRepository, UserManager<ApplicationUser> userManager,ICategoryRepository categoryRepository,AppDbContext context)
         {
             _itemRepository = itemRepository;
             _userManager = userManager;
+            _categroyRepository = categoryRepository;
+            _context = context;
+        }
+        public async Task<SingleItemViewModel> getSingleItemViewModelAsync(int shopId)
+        {
+            var categories = await _categroyRepository.GetCategoryNamesAsync();
+            return new SingleItemViewModel()
+            {
+                Shop_Id = shopId,
+                Categories = categories
+            };
+            
         }
         public async Task<int> AllItemCount()
         {
@@ -113,8 +127,10 @@ namespace IdentityDemo.Services
                 Shop_Id = item.Shop_Id,
                 Discount_rate = 0,
                 Discount_price = 0,
-                ItemImageName = uniqueFileName
+                ItemImageName = uniqueFileName,
+                Category= item.Category,
             };
+            var updatecategory = _categroyRepository.GetCategoryByNameAsync(item.Category);
             await _itemRepository.AddItemAsync(newItem);
         }
 

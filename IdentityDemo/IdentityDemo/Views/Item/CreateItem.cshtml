@@ -1,7 +1,16 @@
 ﻿@model IdentityDemo.ViewModels.SingleItemViewModel
 @{
     Layout = "_Owner_layout";
+    
 }
+<style>
+        .autocomplete { position: relative; width: 500px; margin: 20px auto; }
+        .autocomplete input[type="text"] { width: 100%; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .autocomplete .autocomplete-items { display: none; position: absolute; background-color: white; border: 1px solid #ccc; max-height: 300px; overflow-y: auto; z-index: 99; width: calc(100% - 2px); box-shadow: 0 5px 10px rgba(0,0,0,0.2); border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; }
+        .autocomplete .autocomplete-items.active { display: block; }
+        .autocomplete .autocomplete-item { padding: 10px; cursor: pointer; transition: background-color 0.3s ease; }
+        .autocomplete .autocomplete-item:hover { background-color: #f1f1f1; }
+</style>
 <div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-md-7">
@@ -19,13 +28,18 @@
                                 <!--<img id="blah" class="image-preview" src="#" alt="Preview Image" style="max-width: 100%; max-height: 200px; display: block; margin-top: 10px;" />-->
                                 <input asp-for="ItemImage" class="form-control-file" accept="image/*" type="file" id="imgInp" name="ItemImage" onchange="previewImage(event)" />
                                 <span asp-validation-for="ItemImage" class="text-danger"></span>
-
                             </div>
                         </div>
                         <div class="form-group">
                             <label asp-for="ItemName">Name*</label>
                             <input type="text" class="form-control" asp-for="ItemName" placeholder="Enter item name" id="nameInput" data-error-message="Enter valid Name">
                             <span asp-validation-for="ItemName" class="text-danger" id="nameValidationMessage"></span>
+                        </div>
+                        <div class="form-group autocomplete">
+                            <label asp-for="Category">Category*</label>
+                            <input asp-for="Category" type="text" id="searchBox">
+                            <span asp-validation-for="Category" class="text-danger" id="categoryValidationMessage"></span>
+                            <div class="autocomplete-items" id="autocomplete-items"></div>
                         </div>
                         <div class="form-group">
                             <label asp-for="ItemPrice">Price*</label>
@@ -68,7 +82,55 @@
     }
 
 </script>
-
+<script>//category js
+    var products = @Html.Raw(Json.Serialize(Model.Categories));
+    function autocomplete(input, products) {
+        const searchTerm = input.value.trim().toLowerCase();
+        return searchTerm === '' ? products : products.filter(product => product.toLowerCase().startsWith(searchTerm));
+    }
+    function updateAutocompleteDropdown(input) {
+        const autocompleteDropdown = document.getElementById('autocomplete-items');
+        autocompleteDropdown.innerHTML = '';
+        const suggestions = autocomplete(input, products);
+        suggestions.forEach(suggestion => {
+            const autocompleteItem = document.createElement('div');
+            autocompleteItem.classList.add('autocomplete-item');
+            autocompleteItem.textContent = suggestion;
+            autocompleteItem.addEventListener('click', () => {
+                input.value = suggestion;
+                autocompleteDropdown.classList.remove('active');
+            });
+            autocompleteDropdown.appendChild(autocompleteItem);
+        });
+        autocompleteDropdown.classList.toggle('active', input.value.trim() !== '' && suggestions.length > 0);
+    }
+    const searchBox = document.getElementById('searchBox');
+    searchBox.addEventListener('input', () => updateAutocompleteDropdown(searchBox));
+    searchBox.addEventListener('focus', () => {
+        if (searchBox.value.trim() !== '') {
+            updateAutocompleteDropdown(searchBox);
+        } else {
+            const autocompleteDropdown = document.getElementById('autocomplete-items');
+            autocompleteDropdown.innerHTML = '';
+            products.forEach(product => {
+                const autocompleteItem = document.createElement('div');
+                autocompleteItem.classList.add('autocomplete-item');
+                autocompleteItem.textContent = product;
+                autocompleteItem.addEventListener('click', () => {
+                    searchBox.value = product;
+                    autocompleteDropdown.classList.remove('active');
+                });
+                autocompleteDropdown.appendChild(autocompleteItem);
+            });
+            autocompleteDropdown.classList.add('active');
+        }
+    });
+    document.addEventListener('click', (event) => {
+        if (!event.target.closest('.autocomplete')) {
+            document.getElementById('autocomplete-items').classList.remove('active');
+        }
+    });
+</script>
 
 
 

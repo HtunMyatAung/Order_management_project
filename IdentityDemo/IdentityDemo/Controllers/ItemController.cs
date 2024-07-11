@@ -1,4 +1,5 @@
 ﻿using IdentityDemo.Models;
+using IdentityDemo.Repositories;
 using IdentityDemo.Services;
 using IdentityDemo.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -15,12 +16,15 @@ namespace IdentityDemo.Controllers
         private readonly IItemService _itemService;
         private readonly IWebHostEnvironment _environment;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public ItemController(IItemService itemService, IWebHostEnvironment environment, UserManager<ApplicationUser> userManager)
+        public ItemController(IItemService itemService, IWebHostEnvironment environment, UserManager<ApplicationUser> userManager,ICategoryRepository categoryRepository)
         {
             _itemService = itemService;
             _environment = environment;
             _userManager = userManager;
+            _categoryRepository = categoryRepository;
+
         }
 
         public async Task<IActionResult> HomePageItems()
@@ -67,18 +71,20 @@ namespace IdentityDemo.Controllers
             await _itemService.UpdateItemAsync(updateItem, uniqueFileName);
             return RedirectToAction("Owner_Item_List", "Shop");
         }
-
         [Authorize(Roles = "Owner")]
-        public IActionResult CreateItem()
+        [HttpGet]
+        public async Task<IActionResult> CreateItem()
         {
-            var username = User.Identity.Name;
-            var user = _userManager.Users.FirstOrDefault(u => u.UserName == username);
-            var view = new SingleItemViewModel
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null && user.Role != "Owner")
             {
-                Shop_Id = user.ShopId
-            };
-            return View(view);
+                return RedirectToAction("Login", "Account");
+            }
+            var viewModel = await _itemService.getSingleItemViewModelAsync(user.ShopId); // Ensure await here
+
+            return View(viewModel); // Pass the resolved SingleItemViewModel to the view
         }
+        
 
         [Authorize(Roles = "Owner")]
         [HttpPost]
@@ -95,11 +101,13 @@ namespace IdentityDemo.Controllers
                 {
                     uniqueFileName = "item_default.png";
                 }
-
+                //item.Categories = item.Categories;
 
                 await _itemService.AddItemAsync(item, uniqueFileName);
                 return RedirectToAction("Owner_item_List", "Shop");
             }
+            
+            item.Categories= await _categoryRepository.GetCategoryNamesAsync();
             return View(item);
         }
 
