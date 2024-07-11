@@ -9,26 +9,30 @@ namespace IdentityDemo.Services
 {
     public class AdminService:IAdminService
     {
+        private readonly ICategoryRepository _categoryRepository;
         private readonly IItemService _itemService;
-        private readonly IUserRepository _userRepository;
-        private readonly IUserService _userService;
         private readonly IOrderService _orderService;
         private readonly IShopRepository _shopRepository;
         private readonly IShopService _shopService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IOrderRepository _orderRepository;
+        private readonly IAccountService _accountService;
+        private readonly IAccountRepository _accountRepository;
 
-        public AdminService(IUserRepository userRepository, IShopRepository shopRepository, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,IUserService userService,IOrderService orderService,IShopService shopService,IItemService itemService)
+        public AdminService( IShopRepository shopRepository, UserManager<ApplicationUser> userManager, 
+            SignInManager<ApplicationUser> signInManager,IOrderService orderService,IShopService shopService,
+            IItemService itemService,IAccountService accountService,ICategoryRepository categoryRepository,IAccountRepository accountRepository)
         {
             _shopService = shopService;
             _itemService = itemService;
-            _userService = userService;
             _orderService = orderService;
-            _userRepository = userRepository;
             _shopRepository = shopRepository;
             _userManager = userManager;
             _signInManager = signInManager;
+            _accountService = accountService;
+            _categoryRepository = categoryRepository;
+            _accountRepository = accountRepository;
             
         }
         public async Task<TableCountsViewModel> GetAdminDashboardDataAsync()
@@ -43,9 +47,9 @@ namespace IdentityDemo.Services
             var labels = orderCountsByDay.Select(d => d.Date.ToString("yyyy-MM-dd")).ToArray();
             var data = orderCountsByDay.Select(d => d.Count).ToArray();
 
-            var normalCount = await _userRepository.GetUserCountByRoleAsync("User");
-            var ownerCount = await _userRepository.GetUserCountByRoleAsync("Owner");
-            var userCount =  _userRepository.GetUsers().Count();
+            //var normalCount = await _userRepository.GetUserCountByRoleAsync("User");
+            //var ownerCount = await _userRepository.GetUserCountByRoleAsync("Owner");
+            var userCount = _accountService.GetAllUser().Count();
             var orderCount = orders.Count();
             var shopCount = await _shopService.ShopCount();
             var itemCount = await _itemService.AllItemCount();
@@ -56,16 +60,25 @@ namespace IdentityDemo.Services
                 OrderCount = orderCount,
                 ShopCount = shopCount,
                 ItemCount = itemCount,
-                NormalCount = normalCount,
-                OwnerCount = ownerCount,
-                OrderData = orders,
+                NormalCount = 0,//test for pie chart
+                OwnerCount = 0,//test fro pie chart
+                OrderData = orders, 
                 Labels = labels,
                 Datas = data
             };
         }
+        public async Task<List<CategoryModel>> GetCategoriesList()
+        {
+            var list= await _categoryRepository.GetAllCategories();
+            return list;
+        }
+        public async Task AddCategoryAsync(CategoryModel category)
+        {
+            await _categoryRepository.AddCategoryAsync(category);
+        }
         public async Task<List<ApplicationUser>> GetForgotPasswordUsersAsync()
         {
-            var users = _userRepository.GetUsers();
+            var users = _accountService.GetAllUser();
             var fogotusers = users.Where(u => u.Forgot == 1).ToList();
             return fogotusers;
         }
@@ -74,7 +87,7 @@ namespace IdentityDemo.Services
         public async Task<List<ShopViewModel>> GetShopViewModelsAsync()
         {
             var shops = _shopRepository.GetAllShopsAsync();
-            var users =  _userRepository.GetUsers();
+            var users = _accountService.GetAllUser();
 
             return (from shop in shops
                     join user in users on shop.ShopId equals user.ShopId
@@ -88,27 +101,11 @@ namespace IdentityDemo.Services
                         ShopDescription = shop.ShopDescription,
                         ShopOwnerName = user.UserName
                     }).ToList();
-        }
+        }      
 
-        public async Task<UpdateUserViewModel> GetUpdateUserViewModelAsync(string userId)
+        public async Task AdminUpdateUserAsync(UpdateUserViewModel model)
         {
-            var user = _userRepository.GetUserById(userId);
-            if (user == null) return null;
-
-            return new UpdateUserViewModel
-            {
-                Id = userId,
-                UserName = user.UserName,
-                Email = user.Email,
-                UserPhone = user.PhoneNumber,
-                Role = user.Role,
-                Useraddress = user.Address
-            };
-        }
-
-        public async Task UpdateUserAsync(UpdateUserViewModel model)
-        {
-            var user = _userRepository.GetUserById(model.Id);
+            var user = await _accountService.GetUserByIdAsync(model.Id);
             if (model.Role == "Owner")
             {
                 await _userManager.RemoveFromRoleAsync(user, "User");
@@ -123,9 +120,10 @@ namespace IdentityDemo.Services
                         ShopName = "Shopname",
                         ShopPhone = user.PhoneNumber,
                         ShopDescription = "nice shop",
-                        ShopAddress = user.Address,
+                        ShopAddress = " ",
                         ShopEmail = user.Email,
-                        ProfileImagePath = "shop_default.png"
+                        ProfileImagePath = "shop_default.png",
+                        Is_confirm=0,
                     };
                     user.ShopId = newShopId;
                     await _shopRepository.AddShopAsync(shop);
@@ -138,18 +136,19 @@ namespace IdentityDemo.Services
             }
 
             user.Role = model.Role;
-            await _userRepository.UpdateUser(user);
+            await _accountRepository.UpdateNewUser(user);
         }
 
         public async Task DeleteUserAsync(string userId)
         {
-            var user = _userRepository.GetUserById(userId);
-            await _userRepository.DeleteUser(user);
+            var user = await _accountService.GetUserByIdAsync(userId);            
+            user.Deleted = 1;
+            await _accountRepository.DeleteUser(user);
         }
 
         public async Task<IdentityResult> ResetPasswordAsync(string userId)
         {
-            var user = _userRepository.GetUserById(userId);
+            var user =await _accountService.GetUserByIdAsync(userId);
             if (user == null) return IdentityResult.Failed(new IdentityError { Description = "User not found." });
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -157,14 +156,14 @@ namespace IdentityDemo.Services
             if (resetResult.Succeeded)
             {
                 user.Forgot = 0;
-                await _userRepository.UpdateUser(user);
+                await _accountRepository.UpdateNewUser(user);
             }
             return resetResult;
         }
 
         public async Task<IdentityResult> ChangePasswordAsync(string userId,UpdateUserViewModel model)
         {
-            var user = _userRepository.GetUserById(userId);
+            var user = await _accountService.GetUserByIdAsync(userId);
             if (user == null) return IdentityResult.Failed(new IdentityError { Description = "User not found." });
 
             var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);

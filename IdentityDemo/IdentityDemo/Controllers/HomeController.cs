@@ -17,6 +17,7 @@ namespace IdentityDemo.Controllers
             _context = context;
         }
         public ActionResult Show_error_loading() => View();
+        public ActionResult Show_email_error_loading() => View();
         public IActionResult Test64() => View();
         public IActionResult About() => View();
         public IActionResult Index() => View();        

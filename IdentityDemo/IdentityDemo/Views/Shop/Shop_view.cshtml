@@ -1,6 +1,6 @@
 ﻿@model IdentityDemo.ViewModels.ItemsViewModel
 @{
-    Layout = "_Zone_layout";
+    Layout = "_owner_layout";
     var isitem = TempData["items"];
 }
 
@@ -14,71 +14,71 @@
         .main-container {
             display: flex;
             justify-content: center;
+            flex-wrap: wrap;
             width: 100%;
         }
 
-        .container1 {
-            width: 100%;
-            position: relative; /* Ensure relative positioning for absolute overlays */
-        }
-
-        .card-custom {
+        .card {
             position: relative;
-            height: 300px; /* Fixed height for the card */
+            height: 400px;
+            width: 200px;
             border-radius: 15px;
-            margin-bottom: 30px;
-            overflow: hidden;
+            margin: 15px; /* Ensure margin around each card */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s ease;
+            z-index: 1;
         }
-        .img-box{
-            height:100px;
-            align-content:center;
-        }
-            .card-custom img {
-                width: 90%; /* Fill the entire width of the card */
-                height: 250; /* Fill the entire height of the card */
-                object-fit: cover; /* Cover the entire space, maintaining aspect ratio */
-                transition: filter 0.3s ease; /* Smooth transition */
+
+            .card:hover {
+                transform: scale(1.1); /* Scale the card on hover */
+                z-index: 100; /* Ensure the hovered card appears on top */
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Optional: Add a shadow for emphasis */
             }
 
-
-
-
-        .card-body {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.5); /* Semi-transparent background for blur effect */
-            padding: 10px;
-            transition: background 0.3s ease; /* Smooth transition */
-            visibility: visible; /* Initially hidden */
-            opacity: 1; /* Initially transparent */
-            color: white; /* Text color */
+        .img-box {
+            height: 320px;
+            align-content: center;
         }
 
-        .card-custom:hover .card-body {
-            visibility: visible;
-            opacity: 1;
+        .card img {
+            width: 100%;
+            height: 100%; /* Ensures image fits container height */
+            object-fit: fill;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .card-body {
+            padding: 1.35rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            height: 80px; /* Ensures card body fills available space */
         }
 
         .card-title {
-            font-size: 16px;
-            margin-bottom: 5px;
-            opacity: 1; /* Ensure text is fully visible */
+            font-size: 13px;
+            margin-bottom: 5px; /* Adjust margin between title and text */
+            height: 10px; /* Ensures text height fits dynamically */
         }
 
         .card-text {
-            font-size: 14px;
-            color: white; /* Text color */
-            opacity: 1; /* Ensure text is fully visible */
+            font-size: 13px;
+            margin-bottom: 5px; /* Adjust margin between text and buttons */
+            height: 10px; /* Ensures text height fits dynamically */
         }
 
-        .formargin {
-            margin-top: 10px;
+        .shop-name {
+            margin-bottom: 8px; /* Add margin below shop name */
         }
 
-
-       
+        /* Ensure row elements are separated */
+        .row > .col-lg-2,
+        .row > .col-md-3,
+        .row > .col-sm-6 {
+            padding: 15px; /* Add padding around columns */
+        }
     </style>
 </head>
 <body>
@@ -86,59 +86,93 @@
     {
         <div class="main-container">
             <img src="~/img/no_item.png" style="width:100%;height:90vh;align:center;" />
-            @*<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
-                <h3 style="background-color: rgba(0, 0, 0, 0.5); padding: 20px; color: white;">No item yet!</h3>
-        </div>*@
         </div>
     }
     else
     {
-        <section class="py-3">
-            <div class="main-container">
-                <div class="container1">
-                    <div class="row formargin">
-                        @foreach (var item in Model.Items)
-                        {
-                            <div class="normal-details">
-                                <div class="col-lg-2 col-md-4 col-sm-6 d-flex justify-content-center">
-                                    <div class="card card-custom" data-id="@item.ItemId">
-                                        <div class="img-box">
-                                            <img src="~/img/items/@item.ItemImageName" class="card-img-top" alt="Product 1">
-                                        </div>
-                                        <div class="card-body">
-                                            <h5 class="card-title" style="text-align:left;">@item.ItemName</h5>
-                                            <div class="d-flex justify-content-between">
-                                                <h5 class="card-title">Price:</h5>
-                                                <p class="card-text">MMK @item.ItemChangedPrice</p>
-                                            </div>
-                                        </div>
+        <div class="main-container pt-4">
+            <div class="container-fluid">
+                <div class="row justify-content-start">
+                    @foreach (var item in Model.Items)
+                    {
+                        <div class="col-lg-3 col-md-3 col-sm-6 mb-4">
+                            <div class="card shadow-sm" data-itemid="@item.ItemId"
+                                 data-final_price="@item.ItemPrice"
+                                 data-itemquantity="@item.ItemQuantity" data-discount_rate="@item.Discount_rate" data-discount_price="@item.Discount_price">
+                                <div class="img-box">
+                                    <img src="~/img/items/@item.ItemImageName" class="card-img-top" alt="@item.ItemName">
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <h5 class="card-title">Name:</h5>
+                                        <p class="card-text">@item.ItemName</p>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="card-title">Price:</h5>
+                                        <p class="card-text">@item.ItemChangedPrice MMK</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="item-details">
-                                <div class="col-lg-2 col-md-4 col-sm-6 d-flex justify-content-center">
-                                    <div class="card card-custom" data-id="@item.ItemId">
-                                        <div class="img-box">
-                                            <img src="~/img/items/@item.ItemImageName" class="card-img-top" alt="Product 1">
-                                        </div>
-                                        <div class="card-body">
-                                            <h5 class="card-title" style="text-align:left;">@item.ItemName</h5>
-                                            <div class="d-flex justify-content-between">
-                                                <h5 class="card-title">Price:</h5>
-                                                <p class="card-text">MMK @item.ItemChangedPrice</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    </div>
+                        </div>
+                    }
                 </div>
             </div>
-        </section>
+        </div>
     }
 
     <script src="~/js/download_js/jquery-3.6.0.min.js"></script>
     <script src="~/js/download_js/4_5_3_bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Select all elements with class "card"
+            $('.card').each(function () {
+                var card = $(this);
+
+                // Event listener for when mouse enters (hover)
+                card.on('mouseenter', function () {
+                    var itemQuantity = card.data('itemquantity');
+                    var discountRate = card.data('discount_rate');
+                    var discountPrice = card.data('discount_price');
+                    var finalPrice = card.data('final_price');
+
+                    // Determine which discount value to display
+                    var discountValue = (discountRate !== 0) ? `${discountRate}%` : `${discountPrice}MMK`;
+
+                    // Create the content to be added
+                    var detailsContent = `
+                                <div class="get-details">
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="card-title">Start Price:</h5>
+                                        <p class="card-text">${finalPrice}MMK</p>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="card-title get-button">Quantity:</h5>
+                                        <p class="card-text get-button">${itemQuantity}</p>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="card-title get-button">Discount:</h5>
+                                        <p class="card-text get-button">${discountValue}</p>
+                                    </div>
+                                </div>
+                            `;
+
+                    // Append the content to the card-body
+                    card.find('.card-body').append(detailsContent);
+                    card.find('.img-box').css('height', '250px');
+                    card.find('.card-body').css('height', '150px');
+                    card.find('.card').css('width', '350px');
+                });
+
+                // Event listener for when mouse leaves (hover out)
+                card.on('mouseleave', function () {
+                    // Remove the added content when mouse leaves
+                    card.find('.get-details').remove();
+                    card.find('.img-box').css('height', '320px');
+                    card.find('.card-body').css('height', '80px');
+                    card.find('.card').css('width', '1000px');
+                });
+            });
+        });
+    </script>
 </body>
 </html>

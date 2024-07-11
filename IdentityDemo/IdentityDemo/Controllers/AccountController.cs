@@ -45,16 +45,21 @@ namespace IdentityDemo.Controllers
         }
         public IActionResult SendOTP() => View();
         [HttpGet]
-        public IActionResult User_change_password()
-        {
-            return View();
-        }
+        public IActionResult User_change_password()=> View();
         [HttpGet]
-        public IActionResult Confirm_register() { return View(); }
+        public IActionResult Confirm_register() => View();
         [HttpPost]
         public async Task<IActionResult> SendOTP(string email)
         {
-            _accountService.SendOTP(email);
+            try
+            {
+                _accountService.SendOTP(email);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Show_email_error_loading", "Home");
+            }
+            
             return RedirectToAction("Confirm_register", "Account");
         }
         public async Task<IActionResult> Save_register()
@@ -72,11 +77,11 @@ namespace IdentityDemo.Controllers
 
             if (result)
             {
-                return RedirectToAction("User_profile", "Account");
+                return RedirectToAction("Index", "Home");
             }
             else
             {
-                return View();
+                return RedirectToAction("Show_error_loading","Home");
             }
             
         }        
@@ -106,10 +111,7 @@ namespace IdentityDemo.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> Register()
-        {
-            return View();
-        }        
+        public async Task<IActionResult> Register() => View();
         
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -137,19 +139,22 @@ namespace IdentityDemo.Controllers
                 var otpmodel = new OTPViewModel { OTP = otp_code };
                 TempData["Model"] = JsonConvert.SerializeObject(otpmodel);
                 TempData["otpcode"] = otp_code;
-                _accountService.SendRegisterConfirmEmail(model.Email,otp_code);               
-                // Save the model in the session
-                HttpContext.Session.SetObject("Registerviewmodel", model);
-                return RedirectToAction("Confirm_register", "Account");
+                try
+                {
+                    await _accountService.SendRegisterConfirmEmail(model.Email, otp_code);
+                    // Save the model in the session
+                    HttpContext.Session.SetObject("Registerviewmodel", model);
+                    return RedirectToAction("Confirm_register", "Account");
+                }
+                catch (Exception ex) {
+                    return RedirectToAction("Show_email_error_loading", "Home");
+                }
             }
             // If registration fails, return the registration view with validation errors
             return View(model);
         }
         [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
+        public IActionResult Login() => View();
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -157,7 +162,7 @@ namespace IdentityDemo.Controllers
             {
                 var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
                 var isuser = await _userManager.FindByNameAsync(model.UserName);
-                if (result.Succeeded && isuser != null)
+                if (result.Succeeded && isuser != null && isuser.Deleted!=1)
                 {
                     // Retrieve the current user
                     ApplicationUser currentUser = await _userManager.GetUserAsync(User);

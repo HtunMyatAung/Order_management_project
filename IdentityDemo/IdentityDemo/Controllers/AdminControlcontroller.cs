@@ -14,25 +14,47 @@ namespace IdentityDemo.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminControlController : Controller
     {
-        private readonly IUserService _userService;
+        private readonly IAccountService _accountService;
         private readonly IAdminService _adminService;
         private readonly IShopService _shopService;
         private readonly IActionRepository _actionRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        public AdminControlController(IUserService userService, IAdminService adminService,IShopService shopService,UserManager<ApplicationUser> userManager,IActionRepository actionRepository,SignInManager<ApplicationUser> signInManager)
+        public AdminControlController( IAdminService adminService,IShopService shopService,UserManager<ApplicationUser> userManager,IActionRepository actionRepository,SignInManager<ApplicationUser> signInManager,IAccountService accountService)
         {
-            _userService = userService;
+           
             _adminService = adminService;
             _shopService = shopService;
             _userManager = userManager;
             _actionRepository = actionRepository;
             _signInManager = signInManager;
+            _accountService = accountService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index() => View();
+        [HttpGet]
+        public async Task<IActionResult> Admin_category_list(){
+            var model = new CategoryListViewModel
+            {
+                List = await _adminService.GetCategoriesList(),
+                NewCategory = new IdentityDemo.Models.CategoryModel()
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Admin_add_category(string category_name)
         {
-            return View();
+            
+            var model = new CategoryModel()
+            {
+                
+                Name = category_name,
+                Item_count = 0
+            };
+            await _adminService.AddCategoryAsync(model);
+            return RedirectToAction("Admin_category_List", "AdminControl"); 
+            
         }
 
         public async Task<IActionResult> Admin_shop_list()
@@ -57,7 +79,7 @@ namespace IdentityDemo.Controllers
             {
                 return BadRequest("User ID cannot be null or empty.");
             }
-            var model = await _adminService.GetUpdateUserViewModelAsync(userId);
+            var model = await _accountService.GetUpdateUserViewModelAsync(userId);
             return View(model);
         }
 
@@ -69,7 +91,7 @@ namespace IdentityDemo.Controllers
             {
                 return View(model);
             }
-            await _adminService.UpdateUserAsync(model);
+            await _adminService.AdminUpdateUserAsync(model);
             return RedirectToAction("Admin_user_list");
         }
 
@@ -87,8 +109,8 @@ namespace IdentityDemo.Controllers
             string responseData = string.Empty;
             try
             {
-                TempData["title"] = "User list";
-                var users = _userService.GetAllUser();
+                TempData["title"] = "User List";
+                var users = _accountService.GetAllUser();
                 responseData = JsonConvert.SerializeObject(users);
 
                 return View(users);

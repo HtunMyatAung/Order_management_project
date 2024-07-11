@@ -26,6 +26,8 @@ namespace IdentityDemo.Models
         public string ShopAddress { get; set; }
         [Column("shopimage")]
         public string ProfileImagePath { get; set; }
+        [Column("confirm")]
+        public int Is_confirm { get; set; }
         
 
         

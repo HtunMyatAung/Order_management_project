@@ -60,7 +60,7 @@ namespace IdentityDemo.Repositories
 
         public async Task<int> GetMaxItemIdAsync()
         {
-            return await _context.Items.MaxAsync(s => s.ItemId);
+            return _context.Items.Any()?await _context.Items.MaxAsync(s => s.ItemId):0;
         }
     }
 }

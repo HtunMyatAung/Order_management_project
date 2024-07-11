@@ -38,6 +38,7 @@ namespace IdentityDemo.Initializers
                     Email = adminUserEmail,
                     ShopId = 0,
                     Role="Admin",
+                    Deleted=0,
                     UserImageName= "male_default.png"
 
                 };
