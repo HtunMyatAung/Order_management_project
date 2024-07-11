@@ -108,6 +108,7 @@ namespace IdentityDemo.Controllers
             }
             
             item.Categories= await _categoryRepository.GetCategoryNamesAsync();
+
             return View(item);
         }
 

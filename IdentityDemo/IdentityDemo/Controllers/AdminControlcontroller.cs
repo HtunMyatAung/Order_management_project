@@ -1,4 +1,5 @@
-﻿using IdentityDemo.Models;
+﻿using IdentityDemo.Data;
+using IdentityDemo.Models;
 using IdentityDemo.Repositories;
 using IdentityDemo.Services;
 using IdentityDemo.ViewModels;
@@ -20,7 +21,11 @@ namespace IdentityDemo.Controllers
         private readonly IActionRepository _actionRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        public AdminControlController( IAdminService adminService,IShopService shopService,UserManager<ApplicationUser> userManager,IActionRepository actionRepository,SignInManager<ApplicationUser> signInManager,IAccountService accountService)
+        private readonly AppDbContext _context;
+        private readonly ICategoryRepository _categoryRepository;
+        public AdminControlController( IAdminService adminService,IShopService shopService,
+            UserManager<ApplicationUser> userManager,IActionRepository actionRepository,
+            SignInManager<ApplicationUser> signInManager,IAccountService accountService,AppDbContext context,ICategoryRepository categoryRepository)
         {
            
             _adminService = adminService;
@@ -29,6 +34,8 @@ namespace IdentityDemo.Controllers
             _actionRepository = actionRepository;
             _signInManager = signInManager;
             _accountService = accountService;
+            _context = context;
+            _categoryRepository = categoryRepository;
         }
 
         public IActionResult Index() => View();
@@ -45,7 +52,12 @@ namespace IdentityDemo.Controllers
         [HttpPost]
         public async Task<IActionResult> Admin_add_category(string category_name)
         {
-            
+            var existingCategory = await _categoryRepository.GetCategoryByNameAsync(category_name);
+            if (existingCategory != null)
+            {
+                TempData["error_category"] = "This category is already exsit";
+                return RedirectToAction("Admin_category_List", "AdminControl");
+            }
             var model = new CategoryModel()
             {
                 

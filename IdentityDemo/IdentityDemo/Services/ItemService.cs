@@ -130,7 +130,9 @@ namespace IdentityDemo.Services
                 ItemImageName = uniqueFileName,
                 Category= item.Category,
             };
-            var updatecategory = _categroyRepository.GetCategoryByNameAsync(item.Category);
+            var updatecategory = await _categroyRepository.GetCategoryByNameAsync(item.Category);
+            updatecategory.Item_count = updatecategory.Item_count + 1;
+            await _categroyRepository.UpdateCategoryAsync(updatecategory);
             await _itemRepository.AddItemAsync(newItem);
         }
 
