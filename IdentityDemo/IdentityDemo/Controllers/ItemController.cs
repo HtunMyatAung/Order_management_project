@@ -102,7 +102,19 @@ namespace IdentityDemo.Controllers
                     uniqueFileName = "item_default.png";
                 }
                 //item.Categories = item.Categories;
+                if (item.ItemPrice == 0 )
+                {
+                    TempData["amount_error"] = "Price amount can't be 0.";
+                    item.Categories = await _categoryRepository.GetCategoryNamesAsync();
+                    return View(item);
 
+                }
+                else if (item.ItemQuantity == 0)
+                {
+                    TempData["amount_error"] = "Quantity amount can't  0.";
+                    item.Categories = await _categoryRepository.GetCategoryNamesAsync();
+                    return View(item);
+                }
                 await _itemService.AddItemAsync(item, uniqueFileName);
                 return RedirectToAction("Owner_item_List", "Shop");
             }

@@ -1,7 +1,7 @@
 ﻿@model IdentityDemo.ViewModels.SingleItemViewModel
 @{
     Layout = "_Owner_layout";
-    
+    var error = TempData["amount_error"];
 }
 <style>
         .autocomplete { position: relative; width: 500px; margin: 20px auto; }
@@ -51,7 +51,9 @@
                             <input type="number" class="form-control" asp-for="ItemQuantity" placeholder="Enter item quantity" id="quantityInput" data-error-message="Enter quantity number">
                             <span asp-validation-for="ItemQuantity" class="text-danger" id="quantityValidationMessage"></span>
                         </div>
-                        
+                        <div class="d-flex justify-content-start" >
+                            <label style="color:red;"><small>@error</small></label>
+                        </div>
                         <div class="text-right">
                             <a href="@Url.Action("Owner_item_list","Shop")" class="btn btn-secondary mr-1" style="width: 130px;">Cancel</a>
                             <button type="submit" class="btn btn-primary" id="submitButton" style="width: 130px;">Save</button>
@@ -82,12 +84,24 @@
     }
 
 </script>
-<script>//category js
+<script>//category auto complete js
     var products = @Html.Raw(Json.Serialize(Model.Categories));
+
+    // Function to filter the suggestions based on user input
     function autocomplete(input, products) {
         const searchTerm = input.value.trim().toLowerCase();
-        return searchTerm === '' ? products : products.filter(product => product.toLowerCase().startsWith(searchTerm));
+        // If searchTerm is empty or only contains whitespace, return all products
+        if (searchTerm === '') {
+            return products;
+        }
+
+        const suggestions = products.filter(product =>
+            product.toLowerCase().startsWith(searchTerm)
+        );
+        return suggestions;
     }
+
+    // Function to update the autocomplete dropdown with filtered suggestions
     function updateAutocompleteDropdown(input) {
         const autocompleteDropdown = document.getElementById('autocomplete-items');
         autocompleteDropdown.innerHTML = '';
@@ -96,27 +110,54 @@
             const autocompleteItem = document.createElement('div');
             autocompleteItem.classList.add('autocomplete-item');
             autocompleteItem.textContent = suggestion;
-            autocompleteItem.addEventListener('click', () => {
+            autocompleteItem.addEventListener('click', function () {
                 input.value = suggestion;
                 autocompleteDropdown.classList.remove('active');
             });
             autocompleteDropdown.appendChild(autocompleteItem);
         });
+
+        // Show or hide dropdown based on suggestions
         autocompleteDropdown.classList.toggle('active', input.value.trim() !== '' && suggestions.length > 0);
     }
+
+    // Event listener for input changes
     const searchBox = document.getElementById('searchBox');
-    searchBox.addEventListener('input', () => updateAutocompleteDropdown(searchBox));
-    searchBox.addEventListener('focus', () => {
-        if (searchBox.value.trim() !== '') {
-            updateAutocompleteDropdown(searchBox);
+    searchBox.addEventListener('input', function () {
+        const inputText = this.value.trim().toLowerCase();
+        if (inputText === '') {
+            // If input is empty, clear dropdown and hide it
+            document.getElementById('autocomplete-items').classList.remove('active');
+            return;
+        }
+
+        // Check if inputText is a valid suggestion
+        const isSuggestion = products.some(product =>
+            product.toLowerCase() === inputText
+        );
+
+        if (isSuggestion) {
+            updateAutocompleteDropdown(this);
         } else {
+            // Clear input if it's not a valid suggestion
+            this.value = '';
+            document.getElementById('autocomplete-items').classList.remove('active');
+        }
+    });
+
+    // Event listener for focusing on the input field
+    searchBox.addEventListener('focus', function () {
+        if (this.value.trim() !== '') {
+            updateAutocompleteDropdown(this);
+        } else {
+            // Show all items when input is empty and focused
             const autocompleteDropdown = document.getElementById('autocomplete-items');
             autocompleteDropdown.innerHTML = '';
             products.forEach(product => {
                 const autocompleteItem = document.createElement('div');
                 autocompleteItem.classList.add('autocomplete-item');
                 autocompleteItem.textContent = product;
-                autocompleteItem.addEventListener('click', () => {
+                autocompleteItem.addEventListener('click', function () {
                     searchBox.value = product;
                     autocompleteDropdown.classList.remove('active');
                 });
@@ -125,12 +166,18 @@
             autocompleteDropdown.classList.add('active');
         }
     });
-    document.addEventListener('click', (event) => {
+
+    // Event listener for mouse enter on the input field
+    searchBox.addEventListener('mouseenter', function () {
+        updateAutocompleteDropdown(this);
+    });
+
+    // Close the dropdown if the user clicks outside of it
+    document.addEventListener('click', function (event) {
         if (!event.target.closest('.autocomplete')) {
             document.getElementById('autocomplete-items').classList.remove('active');
         }
     });
 </script>
-
 
 
