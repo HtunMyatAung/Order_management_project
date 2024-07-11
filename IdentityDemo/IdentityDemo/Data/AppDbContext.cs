@@ -13,6 +13,7 @@ namespace IdentityDemo.Data
         public DbSet<OrderModel> Orders { get; set; }
         public DbSet<ItemModel> Items { get; set; }
         public DbSet<OrderDetailModel> OrderDetails { get; set; }
+        public DbSet<CategoryModel> Categories { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options)
        : base(options)
         {

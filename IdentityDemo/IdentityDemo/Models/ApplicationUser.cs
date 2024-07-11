@@ -17,5 +17,7 @@ namespace IdentityDemo.Models
         public int? Forgot {  get; set; }
         [Column("user_image")]
         public string UserImageName { get; set; }
+        [Column("delete")]
+        public int Deleted { get; set; }
     }
 }

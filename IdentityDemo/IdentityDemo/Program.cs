@@ -9,13 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using IdentityDemo.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddControllersWithViews(options =>
-{
-    options.Filters.Add<LogActionFilter>(); // Register LogActionFilter globally
-});
-
 // Configure the database context
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -23,14 +16,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connection, ServerVersion.AutoDetect(connection));
 });
 
-// Configure ASP.NET Identity
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+// Add services to the container.
+builder.Services.AddControllersWithViews(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false;
-})
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
-
+    options.Filters.Add<LogActionFilter>(); // Register LogActionFilter globally
+});
 // Register your services
 builder.Services.AddTransient<IRoleInitializer, RoleInitializer>(); // RoleInitializer
 builder.Services.AddScoped<IEmailService, EmailService>(); // Register EmailService
@@ -47,7 +37,15 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IActionRepository, ActionRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
+// Configure ASP.NET Identity
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+})
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 // Add session services
 builder.Services.AddSession(options =>
 {

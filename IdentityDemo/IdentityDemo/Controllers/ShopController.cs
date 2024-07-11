@@ -139,7 +139,11 @@ namespace IdentityDemo.Controllers
             {
                 return NotFound();
             }
-
+            var shop = await _shopService.GetShopByIdAsync(user.ShopId);
+            if (shop.Is_confirm == 0)
+            {
+                return RedirectToAction("UpdateShop", "Shop");
+            }
             var dashboard = await _shopService.GetOwnerDashboardAsync(user.Id);
             return View(dashboard);
         }

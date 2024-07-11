@@ -37,9 +37,9 @@
         function openPopup(itemName, itemPrice, itemQuantity, finalprice, updatedDate, itemImageName) {
             // Set the text content of the modal
             $('#modalItemName').text(itemName);
-            $('#modalItemPrice').text(itemPrice);
+            $('#modalItemPrice').text(itemPrice+" MMK");
             $('#modalItemQuantity').text(itemQuantity);
-            $('#modalFinalPrice').text(finalprice);
+            $('#modalFinalPrice').text(finalprice+" MMK");
             $('#modalUpdatedDate').text(new Date(updatedDate).toLocaleString());
 
             // Set the image source
@@ -188,12 +188,28 @@
                 <div style="text-align:center">
                     <img id="modalImage" src="" alt="Item Image" style="max-width: 100%; max-height: 200px;" />
                 </div>
-                
-                <p><strong>Item Name:</strong> <span id="modalItemName"></span></p>
-                <p><strong>Price:</strong> <span id="modalItemPrice"></span></p>
-                <p><strong>Quantity:</strong> <span id="modalItemQuantity"></span></p>
-                <p><strong>Final Price:</strong> <span id="modalFinalPrice"></span></p>
-                <p><strong>Updated Date:</strong> <span id="modalUpdatedDate"></span></p>
+                <table>
+                    <tr>
+                        <th><strong>Item Name:</strong></th>
+                        <td style=" margin-left:100px;"><span id="modalItemName"></span></td>
+                    </tr>
+                    <tr>
+                        <th><strong>Price:</strong></th>
+                        <td style="margin-left:10px;"> <span id="modalItemPrice"></span></td>
+                    </tr>
+                    <tr>
+                        <th><strong>Quantity:</strong></th>
+                        <td style="margin-left:10px;"><span id="modalItemQuantity"></span></td>
+                    </tr>
+                    <tr>
+                        <th><strong>Final Price:</strong></th>
+                        <td style="margin-left:10px;"><span id="modalFinalPrice"></span></td>
+                    </tr>
+                    <tr>
+                        <th><strong>Updated Date:</strong></th>
+                        <td style="margin-left:10px;"><span id="modalUpdatedDate"></span></td>
+                    </tr>
+                </table>
                 
             </div>
             <div class="modal-footer">

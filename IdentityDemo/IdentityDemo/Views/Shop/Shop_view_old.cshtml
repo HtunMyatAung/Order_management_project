@@ -1,0 +1,133 @@
+﻿@model IdentityDemo.ViewModels.ItemsViewModel
+@{
+    Layout = "_Owner_layout";
+    var isitem = TempData["items"];
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overlay Text on Image with Blur</title>
+    <style>
+       
+        .main-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .container1 {
+            width: 100%;
+            position: relative; /* Ensure relative positioning for absolute overlays */
+        }
+
+        .card-custom {
+            position: relative;
+            height: 250px; /* Fixed height for the card */
+            border-radius: 15px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        .img-box{
+            height:100px;
+            align-content:center;
+        }
+            .card-custom img {
+                width: 90%; /* Fill the entire width of the card */
+                height: 250; /* Fill the entire height of the card */
+                object-fit: cover; /* Cover the entire space, maintaining aspect ratio */
+                transition: filter 0.3s ease; /* Smooth transition */
+            }
+
+
+
+
+        .card-body {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent background for blur effect */
+            padding: 10px;
+            transition: background 0.3s ease; /* Smooth transition */
+            visibility: visible; /* Initially hidden */
+            opacity: 1; /* Initially transparent */
+            color: white; /* Text color */
+        }
+
+        .card-custom:hover .card-body {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .card-title {
+            font-size: 16px;
+            margin-bottom: 5px;
+            opacity: 1; /* Ensure text is fully visible */
+        }
+
+        .card-text {
+            font-size: 14px;
+            color: white; /* Text color */
+            opacity: 1; /* Ensure text is fully visible */
+        }
+
+        .formargin {
+            margin-top: 10px;
+        }
+
+
+       
+    </style>
+</head>
+<body>
+    @if (isitem != null)
+    {
+        <div class="main-container">
+            <img src="~/img/no_item.png" style="width:100%;height:90vh;align:center;" />
+            @*<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                <h3 style="background-color: rgba(0, 0, 0, 0.5); padding: 20px; color: white;">No item yet!</h3>
+        </div>*@
+        </div>
+    }
+    else
+    {
+        <section class="py-3">
+            <div class="main-container">
+                <div class="container1">
+                    <div class="row formargin">
+                        @if (Model.Items.Count == 0)
+                        {
+                            <div style="align-items:center">
+                                <img src="~/img/no_item.png" style="height:450px;width:150%" />
+                            </div>
+                        }
+                        @foreach (var item in Model.Items)
+                        {
+                            <div class="col-lg-2 col-md-4 col-sm-6 d-flex justify-content-center">
+                                <div class="card card-custom" data-id="@item.ItemId">
+                                    <div class="img-box">
+                                        <img src="~/img/items/@item.ItemImageName" class="card-img-top" alt="Product 1">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title" style="text-align:left;">@item.ItemName</h5><br />
+                                        <div class="d-flex justify-content-between">
+                                            <h5 class="card-title">Price:</h5>
+                                            <p class="card-text">MMK @item.ItemChangedPrice</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+
+    <script src="~/js/download_js/jquery-3.6.0.min.js"></script>
+    <script src="~/js/download_js/4_5_3_bootstrap.min.js"></script>
+</body>
+</html>

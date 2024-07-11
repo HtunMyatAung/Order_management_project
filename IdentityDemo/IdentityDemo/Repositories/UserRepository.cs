@@ -14,7 +14,7 @@ namespace IdentityDemo.Repositories
 
         public IEnumerable<ApplicationUser> GetUsers()
         {
-            return _context.Users.Where(u=> u.Role != "Admin").ToList();
+            return _context.Users.Where(u=> u.Role != "Admin"&& u.Deleted!=1).ToList();
         }
 
         public ApplicationUser GetUserById(string userId)
@@ -30,7 +30,7 @@ namespace IdentityDemo.Repositories
 
         public async Task DeleteUser(ApplicationUser user)
         {
-            _context.Users.Remove(user);
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
         public async Task<int> GetUserCountByRoleAsync(string role)

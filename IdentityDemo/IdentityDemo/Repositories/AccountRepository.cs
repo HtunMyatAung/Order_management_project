@@ -26,6 +26,15 @@ namespace IdentityDemo.Repositories
             _environment = environment;
             _emailService = emailService;
         }
+        public async Task DeleteUser(ApplicationUser user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+        public IEnumerable<ApplicationUser> GetUsers()
+        {
+            return _context.Users.Where(u => u.Role != "Admin" && u.Deleted != 1).ToList();
+        }
 
         public async Task<ApplicationUser> CreateNewUser(ApplicationUser user, string password)
         {
@@ -33,7 +42,7 @@ namespace IdentityDemo.Repositories
             return result.Succeeded ? user : null;
         }
 
-        public async Task UpdateNewUser(ApplicationUser user)
+        public async Task UpdateNewUser(ApplicationUser user)//normal user update
         {
             try
             {
@@ -46,13 +55,14 @@ namespace IdentityDemo.Repositories
                 throw new Exception("Error updating user", ex);
             }
         }
+        
 
-        public async Task<ApplicationUser> GetUserByIdAsync(string userId)
+        public ApplicationUser GetUserById(string userId)
         {
-            return await _userManager.FindByIdAsync(userId);
+            return _context.Users.FirstOrDefault(u => u.Id == userId);
         }
 
-        public async Task<bool> UpdateUserAsync(ApplicationUser user)
+        public async Task<bool> UpdateUserAsync(ApplicationUser user)// return boolean user update
         {
             var result = await _userManager.UpdateAsync(user);
             return result.Succeeded;

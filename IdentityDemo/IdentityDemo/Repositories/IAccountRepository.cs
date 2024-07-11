@@ -6,9 +6,11 @@ namespace IdentityDemo.Repositories
 {
     public interface IAccountRepository
     {
+        Task DeleteUser(ApplicationUser user);
+        IEnumerable<ApplicationUser> GetUsers();
         Task<ApplicationUser> CreateNewUser(ApplicationUser user, string password);
         Task UpdateNewUser(ApplicationUser user);
-        Task<ApplicationUser> GetUserByIdAsync(string userId);
+        ApplicationUser GetUserById(string userId);
         Task<ApplicationUser> GetUserAsync(ClaimsPrincipal user);
         Task<bool> UpdateUserAsync(ApplicationUser user);
         Task<ApplicationUser> FindByEmailAsync1(string email);

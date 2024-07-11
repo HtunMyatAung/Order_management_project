@@ -2,9 +2,11 @@
 using IdentityDemo.Models;
 using IdentityDemo.Repositories;
 using IdentityDemo.ViewModels;
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Net.Sockets;
 using System.Security.Claims;
 using System.Web.Mvc;
 using System.Xml;
@@ -31,7 +33,32 @@ namespace IdentityDemo.Services
             _emailService = emailService;
             _accountRepository = accountRepository;
         }
+        public async Task<UpdateUserViewModel> GetUpdateUserViewModelAsync(string userId)
+        {
+            var user = _accountRepository.GetUserById(userId);
+            if (user == null) return null;
 
+            return new UpdateUserViewModel
+            {
+                Id = userId,
+                UserName = user.UserName,
+                Email = user.Email,
+                UserPhone = user.PhoneNumber,
+                Role = user.Role,
+                Useraddress = user.Address
+            };
+        }
+        public async Task DeleteUserAsync(string userId)
+        {
+            var user = _accountRepository.GetUserById(userId);
+            user.Deleted = 1;
+            await _accountRepository.DeleteUser(user);
+        }
+
+        public IEnumerable<ApplicationUser> GetAllUser()
+        {
+            return _accountRepository.GetUsers();
+        }
 
         public async void SendOTP(string email)
         {
@@ -108,7 +135,7 @@ namespace IdentityDemo.Services
 
         
 
-        public async void SendRegisterConfirmEmail(string email,string otpcode)
+        public async Task SendRegisterConfirmEmail(string email,string otpcode)
         {
             string toEmail = email;
             string subject = "Verify your new uab zone account";
@@ -185,14 +212,25 @@ namespace IdentityDemo.Services
 </html>
 
 ";
-            await _emailService.SendEmailAsync(toEmail, subject, htmlText);
+            try
+            {
+
+                await _emailService.SendEmailAsync(toEmail, subject, htmlText);
+            }
+            
+            catch (Exception ex)
+            {
+                // Handle other errors
+                Console.WriteLine($"Unexpected Error: {ex.Message}");
+                // Log or take appropriate actions
+                throw;
+            }
         }
 
         public async Task<bool> CreateNewUser(RegisterViewModel model)
         {
             var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-
-            var result = await _accountRepository.CreateNewUser(user, model.Password);
+            var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result != null)
             {
@@ -203,6 +241,7 @@ namespace IdentityDemo.Services
                 user.Address = model.Address;
                 user.Forgot = 0;
                 user.ShopId = 0;
+                user.Deleted = 0;
                 user.UserImageName = "male_default.png";
 
                 try
@@ -242,7 +281,7 @@ namespace IdentityDemo.Services
         }
         public async Task<ApplicationUser> GetUserByIdAsync(string userId)
         {
-            return await _accountRepository.GetUserByIdAsync(userId);
+            return  _accountRepository.GetUserById(userId);
         }
 
         public async Task<bool> UpdateUserAsync(ApplicationUser user, UpdateUserViewModel model)
@@ -380,20 +419,6 @@ namespace IdentityDemo.Services
 
             return viewModel;
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         private string GenerateOTP()// Helper method to generate 6-digit OTP
         {
             Random random = new Random();

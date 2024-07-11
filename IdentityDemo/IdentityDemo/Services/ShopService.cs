@@ -93,7 +93,14 @@ namespace IdentityDemo.Services
             shop.ShopDescription = shopViewModel.ShopDescription;
             shop.ShopAddress = shopViewModel.ShopAddress;
             shop.ShopEmail = shopViewModel.ShopEmail;
-
+            if (shop.Is_confirm == 0)
+            {
+                shop.Is_confirm = 1;
+            }
+            else
+            {
+                shop.Is_confirm = shop.Is_confirm;
+            }
             await _shopRepository.UpdateShopAsync(shop);
         }
         public Task<int> ShopCount()

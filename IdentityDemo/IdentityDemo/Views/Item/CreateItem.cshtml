@@ -15,7 +15,7 @@
                         <input type="hidden" asp-for="Shop_Id" />
                         <div class="form-group row">
                             <div class="col-sm-10">
-                                <label for="profileImage" class="col-sm-2 col-form-label">Shop Profile</label>
+                                <label for="profileImage" class="col-sm-2 col-form-label">Item Image*</label>
                                 <!--<img id="blah" class="image-preview" src="#" alt="Preview Image" style="max-width: 100%; max-height: 200px; display: block; margin-top: 10px;" />-->
                                 <input asp-for="ItemImage" class="form-control-file" accept="image/*" type="file" id="imgInp" name="ItemImage" onchange="previewImage(event)" />
                                 <span asp-validation-for="ItemImage" class="text-danger"></span>
@@ -23,17 +23,17 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label asp-for="ItemName">Name</label>
+                            <label asp-for="ItemName">Name*</label>
                             <input type="text" class="form-control" asp-for="ItemName" placeholder="Enter item name" id="nameInput" data-error-message="Enter valid Name">
                             <span asp-validation-for="ItemName" class="text-danger" id="nameValidationMessage"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="ItemPrice">Price</label>
+                            <label asp-for="ItemPrice">Price*</label>
                             <input type="number" step="0.01" class="form-control" asp-for="ItemPrice" placeholder="Enter item price" id="priceInput" data-error-message="Enter price number">
                             <span asp-validation-for="ItemPrice" class="text-danger" id="priceValidationMessage"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="ItemQuantity">Quantity</label>
+                            <label asp-for="ItemQuantity">Quantity*</label>
                             <input type="number" class="form-control" asp-for="ItemQuantity" placeholder="Enter item quantity" id="quantityInput" data-error-message="Enter quantity number">
                             <span asp-validation-for="ItemQuantity" class="text-danger" id="quantityValidationMessage"></span>
                         </div>

@@ -91,6 +91,11 @@ namespace IdentityDemo.Controllers
                 {
                     uniqueFileName = await ProcessUploadedFile(item.ItemImage);
                 }
+                else
+                {
+                    uniqueFileName = "item_default.png";
+                }
+
 
                 await _itemService.AddItemAsync(item, uniqueFileName);
                 return RedirectToAction("Owner_item_List", "Shop");
