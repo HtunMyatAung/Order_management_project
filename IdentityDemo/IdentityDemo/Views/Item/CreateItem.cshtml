@@ -1,7 +1,7 @@
 ﻿@model IdentityDemo.ViewModels.SingleItemViewModel
 @{
     Layout = "_Owner_layout";
-    
+    var error = TempData["amount_error"];
 }
 <style>
     .autocomplete {
@@ -94,7 +94,9 @@
                                 <span asp-validation-for="ItemQuantity" class="text-danger" id="quantityValidationMessage"></span>
                             </div>
                         </div>
-                        
+                        <div class="d-flex justify-content-start" >
+                            <label style="color:red;"><small>@error</small></label>
+                        </div>
                         <div class="text-right">
                             <a href="@Url.Action("Owner_item_list","Shop")" class="btn btn-secondary mr-1" style="width: 130px;">Cancel</a>
                             <button type="submit" class="btn btn-primary" id="submitButton" style="width: 130px;">Save</button>
@@ -125,14 +127,12 @@
     }
 
 </script>
-<script>
+<script>//category js
     var products = @Html.Raw(Json.Serialize(Model.Categories));
-
     function autocomplete(input, products) {
         const searchTerm = input.value.trim().toLowerCase();
         return searchTerm === '' ? products : products.filter(product => product.toLowerCase().startsWith(searchTerm));
     }
-
     function updateAutocompleteDropdown(input) {
         const autocompleteDropdown = document.getElementById('autocomplete-items');
         autocompleteDropdown.innerHTML = '';
@@ -142,23 +142,21 @@
             const autocompleteItem = document.createElement('div');
             autocompleteItem.classList.add('autocomplete-item');
             autocompleteItem.textContent = suggestion;
-            autocompleteItem.addEventListener('click', () => {
+            autocompleteItem.addEventListener('click', function () {
                 input.value = suggestion;
                 autocompleteDropdown.classList.remove('active');
             });
             autocompleteDropdown.appendChild(autocompleteItem);
         });
-
         autocompleteDropdown.classList.toggle('active', input.value.trim() !== '' && suggestions.length > 0);
     }
-
     const searchBox = document.getElementById('searchBox');
     searchBox.addEventListener('input', () => updateAutocompleteDropdown(searchBox));
-
     searchBox.addEventListener('focus', () => {
         if (searchBox.value.trim() !== '') {
             updateAutocompleteDropdown(searchBox);
         } else {
+            // Show all items when input is empty and focused
             const autocompleteDropdown = document.getElementById('autocomplete-items');
             autocompleteDropdown.innerHTML = '';
 
@@ -166,7 +164,7 @@
                 const autocompleteItem = document.createElement('div');
                 autocompleteItem.classList.add('autocomplete-item');
                 autocompleteItem.textContent = product;
-                autocompleteItem.addEventListener('click', () => {
+                autocompleteItem.addEventListener('click', function () {
                     searchBox.value = product;
                     autocompleteDropdown.classList.remove('active');
                 });
@@ -176,14 +174,12 @@
             autocompleteDropdown.classList.add('active');
         }
     });
-
     document.addEventListener('click', (event) => {
         if (!event.target.closest('.autocomplete')) {
             document.getElementById('autocomplete-items').classList.remove('active');
         }
     });
 </script>
-
 
 
 

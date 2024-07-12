@@ -59,6 +59,7 @@
     <script>
         // Sample data for autocomplete suggestions (in real scenario, this data would be fetched from backend)
         var products = @Html.Raw(Json.Serialize(Model.Categories));
+
         // Function to filter the suggestions based on user input
         function autocomplete(input, products) {
             const searchTerm = input.value.trim().toLowerCase();
@@ -72,6 +73,7 @@
             );
             return suggestions;
         }
+
         // Function to update the autocomplete dropdown with filtered suggestions
         function updateAutocompleteDropdown(input) {
             const autocompleteDropdown = document.getElementById('autocomplete-items');
@@ -87,16 +89,33 @@
                 });
                 autocompleteDropdown.appendChild(autocompleteItem);
             });
-            if (input.value.trim() !== '' && suggestions.length > 0) {
-                autocompleteDropdown.classList.add('active');
-            } else {
-                autocompleteDropdown.classList.remove('active'); // Hide dropdown if no suggestions
-            }
+
+            // Show or hide dropdown based on suggestions
+            autocompleteDropdown.classList.toggle('active', input.value.trim() !== '' && suggestions.length > 0);
         }
-        // Event listeners for input changes
+
+        // Event listener for input changes
         const searchBox = document.getElementById('searchBox');
         searchBox.addEventListener('input', function () {
-            updateAutocompleteDropdown(this);
+            const inputText = this.value.trim().toLowerCase();
+            if (inputText === '') {
+                // If input is empty, clear dropdown and hide it
+                document.getElementById('autocomplete-items').classList.remove('active');
+                return;
+            }
+
+            // Check if inputText is a valid suggestion
+            const isSuggestion = products.some(product =>
+                product.toLowerCase() === inputText
+            );
+
+            if (isSuggestion) {
+                updateAutocompleteDropdown(this);
+            } else {
+                // Clear input if it's not a valid suggestion
+                this.value = '';
+                document.getElementById('autocomplete-items').classList.remove('active');
+            }
         });
 
         // Event listener for focusing on the input field
@@ -120,6 +139,12 @@
                 autocompleteDropdown.classList.add('active');
             }
         });
+
+        // Event listener for mouse enter on the input field
+        searchBox.addEventListener('mouseenter', function () {
+            updateAutocompleteDropdown(this);
+        });
+
         // Close the dropdown if the user clicks outside of it
         document.addEventListener('click', function (event) {
             if (!event.target.closest('.autocomplete')) {

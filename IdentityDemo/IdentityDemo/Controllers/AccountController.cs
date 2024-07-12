@@ -160,7 +160,7 @@ namespace IdentityDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, lockoutOnFailure: true);
                 var isuser = await _userManager.FindByNameAsync(model.UserName);
                 if (result.Succeeded && isuser != null && isuser.Deleted!=1)
                 {
@@ -181,6 +181,10 @@ namespace IdentityDemo.Controllers
                     {
                         return RedirectToAction("Index", "Home");
                     }
+                }
+                if (result.IsLockedOut)
+                {
+                    return RedirectToAction("LoginError", "Home");
                 }
                 else
                 {

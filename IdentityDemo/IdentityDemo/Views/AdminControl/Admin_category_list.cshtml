@@ -2,6 +2,7 @@
 @{
     Layout = "_Admin_layout";
     int counter = 1;
+    var error = TempData["error_category"];
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -10,6 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Change Password</title>
     <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/download_css/1_10_24_jquery.dataTables.min.css" />
     <style>
         .github-login-form {
             margin-top: 50px;
@@ -61,6 +63,14 @@
             margin-top: 5px;
             font-size: 12px;
         }
+        .catinput{
+            border-radius: 3px;
+            border-color: gray;
+            border-width: 0.9px;
+            background-color: transparent;
+            width: 190px; 
+            height: 35px;
+        }
     </style>
 </head>
 <body>
@@ -68,13 +78,16 @@
         <div class="d-flex justify-content-between">
             <h3>Category List</h3>
             <div class="d-flex flex-row-reverse">
-                <div class="p-2">
-                    <input id="category_name" name="category_name" type="text" required/>
+                <div class="py-2 pl-2">
+                    <input id="category_name" name="category_name" type="text" required class="catinput"/>
                 </div>
                 <div class="p-2">
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-plus fa-sm"></i> Add</button>
+                    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-plus fa-sm"></i> Add</button>
                 </div>
             </div>
+        </div>
+        <div class="d-flex justify-content-end">
+            <label style="color:red; margin-right:20px"><small>@error</small></label>
         </div>
         
     </form>
@@ -105,7 +118,6 @@
             </tbody>
         </table>
     </div>
-
     <!-- jQuery -->
     <script src="~/js/download_js/3_5_1_jquery.min.js"></script>
     <!-- DataTables JS -->

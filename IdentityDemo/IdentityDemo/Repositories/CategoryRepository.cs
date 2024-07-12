@@ -13,7 +13,7 @@ namespace IdentityDemo.Repositories
         }
         public async Task<CategoryModel> GetCategoryByNameAsync(string category)
         {
-            return await _context.Categories.FirstOrDefaultAsync(c => c.Name == category);
+            return  await _context.Categories.FirstOrDefaultAsync(c => c.Name == category);
         }
         public async Task<List<string>> GetCategoryNamesAsync()
         {
