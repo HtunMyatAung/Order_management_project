@@ -48,6 +48,13 @@ namespace IdentityDemo.Controllers
             };
             return View(model);
         }
+        [HttpPost]
+        [ActionName("DeleteCategory")]
+        public async Task<IActionResult> DeleteCategory(int categoryid)
+        {
+            await _categoryRepository.DeleteCategoryAsync(categoryid);
+            return RedirectToAction("Admin_category_list", "AdminControl");
+        }
 
         [HttpPost]
         public async Task<IActionResult> Admin_add_category(string category_name)

@@ -227,7 +227,7 @@ namespace IdentityDemo.Services
             }
         }
 
-        public async Task<bool> CreateNewUser(RegisterViewModel model)
+        public async Task<bool> CreateNewUserAsync(RegisterViewModel model)
         {
             var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -243,25 +243,11 @@ namespace IdentityDemo.Services
                 user.ShopId = 0;
                 user.Deleted = 0;
                 user.UserImageName = "male_default.png";
-
-                try
-                {
-                    _accountRepository.UpdateNewUser(user);
-                }
-                catch (DbUpdateException ex)
-                {
-                    // Log or handle the exception
-                    Console.WriteLine("Error saving changes: " + ex.Message);
-                    Console.WriteLine("Inner exception: " + ex.InnerException?.Message);
-                    throw; // rethrow or handle the exception as needed
-                }
-
+                await _accountRepository.UpdateNewUserAsync(user);       
                 // Sign in the user
                 await _signInManager.SignInAsync(user, isPersistent: false);
-
                 // Add user to role
                 await _userManager.AddToRoleAsync(user, "User");
-
                 return true;
             }
             else
@@ -429,7 +415,7 @@ namespace IdentityDemo.Services
         public async void UpdateUserAsync1(ApplicationUser user)
         {
             user.Forgot = 1;
-            _accountRepository.UpdateNewUser(user);
+            _accountRepository.UpdateNewUserAsync(user);
         }
 
         public async void ChangePasswordSendEmail(string email)

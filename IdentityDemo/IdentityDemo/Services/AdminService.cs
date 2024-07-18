@@ -136,7 +136,7 @@ namespace IdentityDemo.Services
             }
 
             user.Role = model.Role;
-            await _accountRepository.UpdateNewUser(user);
+            await _accountRepository.UpdateNewUserAsync(user);
         }
 
         public async Task DeleteUserAsync(string userId)
@@ -156,7 +156,7 @@ namespace IdentityDemo.Services
             if (resetResult.Succeeded)
             {
                 user.Forgot = 0;
-                await _accountRepository.UpdateNewUser(user);
+                await _accountRepository.UpdateNewUserAsync(user);
             }
             return resetResult;
         }

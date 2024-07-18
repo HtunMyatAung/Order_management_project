@@ -65,7 +65,15 @@
                                 <span asp-validation-for="ItemQuantity" class="text-danger" id="quantityValidationMessage"></span>
                             </div>
                             
-                        </div>                        
+                        </div>    
+                        <div class="form-group row mb-3">
+                            <label asp-for="Category" class="col-sm-2 col-form-label">Category*</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" asp-for="Category" placeholder="Enter category" id="categoryInput" />
+                                <span asp-validation-for="Category" class="text-danger" id="categoryValidationMessage"></span>
+                            </div>
+
+                        </div>
                         <div class="d-flex align-items-center" style="margin-left: 17%;">
                             <div class="form-check me-3">
                                 <input class="form-check-input" type="radio" name="discountType" id="discountPrice" value="DiscountPrice" onchange="toggleInputFields()" @if(Model.ItemPrice > 0) { <text>checked</text> }/>

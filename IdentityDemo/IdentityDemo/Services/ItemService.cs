@@ -14,12 +14,13 @@ namespace IdentityDemo.Services
         private readonly IWebHostEnvironment _environment;
         private readonly ICategoryRepository _categroyRepository;
         private readonly AppDbContext _context;
-        public ItemService(IItemRepository itemRepository, UserManager<ApplicationUser> userManager,ICategoryRepository categoryRepository,AppDbContext context)
+        public ItemService(IItemRepository itemRepository, UserManager<ApplicationUser> userManager,ICategoryRepository categoryRepository,AppDbContext context,IWebHostEnvironment environment)
         {
             _itemRepository = itemRepository;
             _userManager = userManager;
             _categroyRepository = categoryRepository;
             _context = context;
+            _environment = environment;
         }
         public async Task<SingleItemViewModel> getSingleItemViewModelAsync(int shopId)
         {
@@ -81,37 +82,58 @@ namespace IdentityDemo.Services
                 ItemChangedPrice = item.ItemChangedPrice,
                 Shop_Id = item.Shop_Id,
                 Discount_rate = item.Discount_rate,
-                Discount_price = item.Discount_price
+                Discount_price = item.Discount_price,
+                Category = item.Category,
             };
         }
 
         public async Task UpdateItemAsync(SingleItemViewModel updateItem, string uniqueFileName)
         {
+            // Fetch the item from the repository by its ID
             var item = await _itemRepository.GetItemByIdAsync(updateItem.ItemId);
-            if (item != null)
+            if (item == null)
             {
-                if (uniqueFileName != null)
+                throw new ArgumentException("Item not found", nameof(updateItem.ItemId));
+            }
+
+            // Handle the image update if a new file name is provided
+            if (!string.IsNullOrEmpty(uniqueFileName))
+            {
+                // Check if there is an existing image that is not the default image
+                if (!string.IsNullOrEmpty(item.ItemImageName) && item.ItemImageName != "item_default.png")
                 {
-                    if (!string.IsNullOrEmpty(item.ItemImageName) && item.ItemImageName != "item_default.png")
+                    // Construct the path to the old image
+                    string oldImagePath = Path.Combine(_environment.WebRootPath, "img/items", item.ItemImageName);
+                    if (File.Exists(oldImagePath))
                     {
-                        string oldImagePath = Path.Combine(_environment.WebRootPath, "img/items", item.ItemImageName);
-                        if (File.Exists(oldImagePath))
+                        try
                         {
                             File.Delete(oldImagePath);
                         }
+                        catch (Exception ex)
+                        {
+                            // Log the error or handle it as needed
+                            //_logger.LogError(ex, "Error deleting old image file.");
+                            throw;
+                        }
                     }
-                    item.ItemImageName = uniqueFileName;
                 }
-                item.ItemName = updateItem.ItemName;
-                item.ItemPrice = updateItem.ItemPrice;
-                item.ItemQuantity = updateItem.ItemQuantity;
-                item.ItemChangedPrice = updateItem.ItemChangedPrice;
-                item.Discount_rate = updateItem.Discount_rate;
-                item.Discount_price = updateItem.Discount_price;
-                item.ItemUpdatedDate = DateTime.Now;
-               
-                await _itemRepository.UpdateItemAsync(item);
+
+                // Update the item's image name to the new unique file name
+                item.ItemImageName = uniqueFileName;
             }
+
+            // Update other properties of the item
+            item.ItemName = updateItem.ItemName;
+            item.ItemPrice = updateItem.ItemPrice;
+            item.ItemQuantity = updateItem.ItemQuantity;
+            item.ItemChangedPrice = updateItem.ItemChangedPrice;
+            item.Discount_rate = updateItem.Discount_rate;
+            item.Discount_price = updateItem.Discount_price;
+            item.ItemUpdatedDate = DateTime.Now;
+
+            // Save the updated item to the repository
+            await _itemRepository.UpdateItemAsync(item);
         }
 
         public async Task AddItemAsync(SingleItemViewModel item, string uniqueFileName)

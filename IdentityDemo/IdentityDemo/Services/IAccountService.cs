@@ -13,7 +13,7 @@ namespace IdentityDemo.Services
         void SendOTP(string email);//
         void ChangePasswordSendEmail(string email);//from user call
         Task SendRegisterConfirmEmail(string email, string otpcode);//from user call
-        Task<bool> CreateNewUser(RegisterViewModel model);//from user call
+        Task<bool> CreateNewUserAsync(RegisterViewModel model);//from user call
         void UpdateUserAsync1(ApplicationUser user);//from send email call
         void LoginRole(LoginViewModel model);// user,owner,admin call
         Task<ApplicationUser> GetUserByIdAsync(string userId);//

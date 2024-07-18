@@ -9,6 +9,8 @@ namespace IdentityDemo.Repositories
         Task AddCategoryAsync(CategoryModel category);
         Task<List<string>> GetCategoryNamesAsync();
         Task UpdateCategoryAsync(CategoryModel category);
-        
+        Task DeleteCategoryAsync(int categoryId);
+
+
         }
 }

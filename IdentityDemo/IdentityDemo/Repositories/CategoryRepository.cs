@@ -15,6 +15,10 @@ namespace IdentityDemo.Repositories
         {
             return  await _context.Categories.FirstOrDefaultAsync(c => c.Name == category);
         }
+        public async Task<CategoryModel>GetCategoryByIdAsync(int id)
+        {
+            return await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
+        }
         public async Task<List<string>> GetCategoryNamesAsync()
         {
             return await _context.Categories.Select(c => c.Name).ToListAsync();
@@ -33,5 +37,15 @@ namespace IdentityDemo.Repositories
             _context.Categories.Update(category);
             await _context.SaveChangesAsync();
         }
+        public async Task DeleteCategoryAsync(int categoryId)
+        {
+            var category = await GetCategoryByIdAsync(categoryId);
+            if (category != null)
+            {
+                _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
+            }
+        }
+
     }
 }

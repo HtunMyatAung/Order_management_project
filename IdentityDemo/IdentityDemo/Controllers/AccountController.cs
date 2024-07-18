@@ -70,17 +70,19 @@ namespace IdentityDemo.Controllers
                 return View(model);
             }
 
-            var result = await _accountService.CreateNewUser(model);
+            var result = await _accountService.CreateNewUserAsync(model);
 
             // Clear session after use
-            HttpContext.Session.Remove("RegisterViewModel");
+            
 
             if (result)
             {
+                HttpContext.Session.Remove("RegisterViewModel");
                 return RedirectToAction("Index", "Home");
             }
             else
             {
+                HttpContext.Session.Remove("RegisterViewModel");
                 return RedirectToAction("Show_error_loading","Home");
             }
             

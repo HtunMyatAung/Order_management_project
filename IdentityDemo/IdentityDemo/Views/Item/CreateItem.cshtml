@@ -175,11 +175,10 @@
             return;
         }
 
-        // Check if inputText is a valid suggestion
+        // Check if inputText is a valid suggestion       
         const isSuggestion = products.some(product =>
-            product.toLowerCase() === inputText
+            product.toLowerCase().startsWith(inputText)
         );
-
         if (isSuggestion) {
             updateAutocompleteDropdown(this);
         } else {

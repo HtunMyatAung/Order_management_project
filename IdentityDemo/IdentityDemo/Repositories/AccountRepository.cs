@@ -42,7 +42,7 @@ namespace IdentityDemo.Repositories
             return result.Succeeded ? user : null;
         }
 
-        public async Task UpdateNewUser(ApplicationUser user)//normal user update
+        public async Task UpdateNewUserAsync(ApplicationUser user)//normal user update
         {
             try
             {
