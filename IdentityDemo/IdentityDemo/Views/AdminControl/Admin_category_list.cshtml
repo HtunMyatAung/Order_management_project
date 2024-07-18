@@ -63,6 +63,14 @@
             margin-top: 5px;
             font-size: 12px;
         }
+        .catinput{
+            border-radius: 3px;
+            border-color: gray;
+            border-width: 0.9px;
+            background-color: transparent;
+            width: 190px; 
+            height: 35px;
+        }
     </style>
 </head>
 <body>
@@ -70,11 +78,11 @@
         <div class="d-flex justify-content-between">
             <h3>Category List</h3>
             <div class="d-flex flex-row-reverse">
-                <div class="p-2">
-                    <input id="category_name" name="category_name" type="text" required/>
+                <div class="py-2 pl-2">
+                    <input id="category_name" name="category_name" type="text" required class="catinput"/>
                 </div>
                 <div class="p-2">
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-plus fa-sm"></i> Add</button>
+                    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-plus fa-sm"></i> Add</button>
                 </div>
             </div>
         </div>

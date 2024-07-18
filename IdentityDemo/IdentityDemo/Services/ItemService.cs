@@ -39,10 +39,12 @@ namespace IdentityDemo.Services
         {
             var shops = await _itemRepository.GetAllShopsAsync();
             var items = await _itemRepository.GetAllItemsAsync();
+            var category = await _categroyRepository.GetCategoryNamesAsync();
             return new ItemsViewModel
             {
                 Shops = shops,
-                Items = items
+                Items = items,
+                Categories = category
             };
         }
         public async Task<List<ItemModel>> GetAllItemsByShopIdAsync(int shopId)

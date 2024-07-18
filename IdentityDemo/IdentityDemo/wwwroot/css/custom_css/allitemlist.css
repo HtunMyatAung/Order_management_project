@@ -32,13 +32,13 @@
 }
 
 .card-title {
-    font-size: 13px;
+    font-size: 16px;
     margin-bottom: 5px; /* Adjust margin between title and text */
     height: 10; /* Ensures text height fits dynamically */
 }
 
 .card-text {
-    font-size: 13px;
+    font-size: 16px;
     margin-bottom: 5px; /* Adjust margin between text and buttons */
     height: 10; /* Ensures text height fits dynamically */
 }

@@ -22,6 +22,7 @@ namespace IdentityDemo.Controllers
             _logger = logger;
             _context = context;
         }
+        public ActionResult LoginError() => View();
         public ActionResult Show_error_loading() => View();
         public ActionResult Show_email_error_loading() => View();
         public async Task<IActionResult> Test64() {
